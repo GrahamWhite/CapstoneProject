@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm install && node server.js"
   },
-  "author": "Graham White",
-  "license": "ISC",
+  "author": "Triad Development",
+  "license": "Triad Development",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
