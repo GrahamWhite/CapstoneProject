@@ -1,28 +1,27 @@
-let bodyParser = require('body-parser');
-let mongoose = require('mongoose');
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
 
+//require('dotenv').config();
 
-//let controller = require('./controllers/api_controller');
-// let routes = require('./routes/main_route');
+const app = express();
+const port = process.env.PORT || 5000;
 
-let express = require('express'),
-    app = express(),
-    port = process.env.PORT || 80;
+app.use(cors());
+app.use(express.json());
 
-// let Crime = require('./models/crime_model');
+const uri = process.env.ATLAS_URI;
+//const uri = "mongodb+srv://dbAdmin:eRc09oXGHJQqXIwU@realmcluster.tze3d.mongodb.net/capstonedb?retryWrites=true&w=majority";
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
+);
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log("MongoDB database connection established successfully");
+})
 
-// // mongoose instance connection url connection
-// mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://localhost:27017/dbCrime').then(msg =>{
-//     console.log("Database Connected");
-// });
+// app.use('/exercises', exercisesRouter);
+// app.use('/users', usersRouter);
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-//routes(app); //register the route
-
-app.listen(port);
-
-
-console.log('Capstone Project RESTful API server started on: ' + port);
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+});
