@@ -1,0 +1,3 @@
+setup framework
+create basic homepage
+figure out nav design
