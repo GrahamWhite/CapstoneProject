@@ -1,6 +1,12 @@
-const res = require("express");
+let express = require('express');
+let db = require('mongoose');
 
 
-let users = User.find().then(r => {
-    res.send(r);
-})
+const User = require('../backend/Schemas/User');
+
+
+async function FindAllUsers(name) {
+    let user = User.find().then(r => {
+        return r;
+    })
+};
