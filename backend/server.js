@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const res = require("express");
+const ePwd = require("encrypt-password");
 
 
 
@@ -16,7 +17,7 @@ const port = process.env.PORT || 5000;
 //Schema Imports
 const User = require('../backend/Schemas/User');
 const Game = require('../backend/Schemas/Game');
-const Library = require('../backend/Schemas/Library');
+const UserGame = require('./Schemas/UserGame');
 
 
 
@@ -77,7 +78,7 @@ app.post('/addLibraryItem', (req, res) => {
 
         console.log(r[0]._id);
 
-        let libItem = new Library({
+        let libItem = new UserGame({
             userId: r[0]._id,
             gameId: b[0]._id
         });
@@ -93,9 +94,11 @@ app.post('/addLibraryItem', (req, res) => {
 app.post('/user', (req, res) => {
 
 
+    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
+
     let user = new User({
         username: req.body.username,
-        password: req.body.password,
+        password: encryptedPwd,
         email: req.body.email,
         isAdmin: false,
         steamKey: ""

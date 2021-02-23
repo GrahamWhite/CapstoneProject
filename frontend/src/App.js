@@ -8,6 +8,7 @@ import RegisterPage from './components/pages/RegisterPage'
 import LoginPage from './components/pages/LoginPage';
 import UserProfile from './components/pages/UserProfile';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
+import Admin from "./components/pages/Admin";
 
 const useStyles = makeStyles((theme) => ({
   root: {

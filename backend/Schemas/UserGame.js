@@ -10,4 +10,4 @@ const UserGameSchema = new Schema({
 });
 
 //Export function to create "SomeModel" model class
-module.exports = mongoose.model('Library', UserGameSchema);
+module.exports = mongoose.model('UserGame', UserGameSchema);
