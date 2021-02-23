@@ -50,28 +50,40 @@ app.post('/userId', (req, res) => {
 });
 
 
-app.post('/user', async (req, res) => {
+function LogGames(gameArr)
+{
+    let games = [];
+    for(let x = 0; x < gameArr.length; x++)
+    {
+       let game = gameArr[x];
+       Game.find({"name": game.name}).then(res => console.log(res));
+    }
+
+
+}
+
+app.post('/user', (req, res) => {
+
+
+    let example = {
+        name: "crysis"
+    }
 
     let user = new User({
         username: req.body.username,
         password: req.body.password,
         email: req.body.email,
-        games: [],
         isAdmin: false,
-        steamKey: ""
+        steamKey: "",
+        games: [],
+        friends: []
     });
 
 
 
+    user.save();
 
-
-
-
-    user.save().then(r => {
-        //console.log(r);
-        res.send(r);
-    });
-
+    res.send(user);
 });
 
 app.get('/games', (req, res) => {
