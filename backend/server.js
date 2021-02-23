@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const res = require("express");
 
 
+
 const Schema = mongoose.Schema;
 const app = express();
 const port = process.env.PORT || 5000;
@@ -24,6 +25,12 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 
+async function GetGameId(game) {
+    Game.find(game).then(res => {
+        return res[0]._id;
+    });
+}
+
 //THESE WILL BE MOVED TO A NEW DIRECTORY FOR ROUTES
 //User Routes
 app.get('/users', (req, res) => {
@@ -32,17 +39,50 @@ app.get('/users', (req, res) => {
         res.send(r);
     })
 });
-app.post('/user', (req, res) => {
+app.post('/userId', (req, res) => {
 
-    let user = new User({
-        username: req.query.username,
-        password: req.query.password,
-        email: req.query.email,
-        games: {}
+    let userName = req.query.name;
+
+    Game.findOne({username: userName}).then(r => {
+        res.send(r.id);
     });
 
+});
+
+
+app.post('/user', async (req, res) => {
+
+    let user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email,
+        games: []
+    });
+
+
+    // let games = req.body.games;
+    //
+    //
+    //
+    // let list = [];
+    //
+    //
+    //
+    // games.forEach(game => {
+    //     Game.find(game).then(x => {
+    //         return x[0]._id;
+    //     }).then(x => {
+    //         //console.log(x);
+    //         list += x;
+    //     });
+    // });
+
+
+
+
+
     user.save().then(r => {
-        console.log(r);
+        //console.log(r);
         res.send(r);
     });
 
@@ -56,18 +96,17 @@ app.get('/games', (req, res) => {
 });
 app.get('/gameId', (req, res) => {
 
-    let gameName = req.query.name;
+    let gameName = req.body.name;
 
     Game.findOne({name: gameName}).then(r => {
         res.send(r.id);
     });
 });
-
 app.post('/game', (req, res) => {
 
     let game = new Game({
-        name: req.query.name,
-        platform: req.query.platform
+        name: req.body.name,
+        platform: req.body.platform
     });
 
     game.save().then(r => {
