@@ -62,6 +62,15 @@ function LogGames(gameArr)
 
 }
 
+app.get('/user', (req, res) => {
+    let userReq = req.body.username;
+
+    User.find({username: userReq}).then(r => {
+        res.send(r);
+    });
+
+});
+
 app.post('/user', (req, res) => {
 
 
