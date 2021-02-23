@@ -12,20 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link, useHistory } from "react-router-dom";
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {'Copyright © '}
-//       {'Tink'}
-//       {' '}*
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,26 +38,104 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RegisterForm() {
+function LoginForm() {
   // Constants
   // Note: Find a global place to store server url for repeated use.
   const url =
     "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
 
+  // Hooks
+  const [formInfo, setFormInfo] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
   // Helps with programatically changing what page you're on
   let history = useHistory();
 
   // Custom CSS
   const classes = useStyles();
 
-  async function sendToServer(values) {
+  //Events
+  function onChange(i) {
+    setFormInfo({ ...formInfo, [i.target.name]: i.target.value });
+    handleValidation();
+    console.log(formInfo);
+  }
+
+  function validateUsername() {
+    let isValid = true;
+
+    if (!formInfo["username"]) {
+      isValid = false;
+      setErrors["username"] = "Cannot be empty";
+    }
+
+    if (!formInfo["username"]) {
+      if (!formInfo["username"].match(/^[a-zA-Z]+$/)) {
+        if (isValid) setErrors["username"] = "Only letters, numbers and underscores";
+        isValid = false;
+      }
+    }
+
+    return isValid;
+  }
+
+  function validateEmail() {
+    let isValid = true;
+
+    if (!formInfo["email"]) {
+      isValid = false;
+      setErrors["email"] = "Cannot be empty";
+    }
+
+    if (formInfo["email"] !== "undefined") {
+      let lastAtPos = formInfo["email"].lastIndexOf("@");
+      let lastDotPos = formInfo["email"].lastIndexOf(".");
+
+      if (
+        !(
+          lastAtPos < lastDotPos &&
+          lastAtPos > 0 &&
+          formInfo["email"].indexOf("@@") == -1 &&
+          lastDotPos > 2 &&
+          formInfo["email"].length - lastDotPos > 2
+        )
+      ) {
+        if (isValid) {
+          setErrors["email"] = "Email is not valid";
+          isValid = false;
+        }
+      }
+    }
+
+    return isValid;
+  }
+
+  function handleValidation() {
+    let formIsValid = true;
+
+    // Username
+    formIsValid = validateUsername();
+
+    // Email
+    formIsValid = validateEmail();
+
+    return formIsValid;
+  }
+
+  async function handleSubmit(e) {
     let isValid = false;
+    if (e) e.preventDefault();
+    isValid = handleValidation();
+
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body:JSON.stringify(values)
+      body: JSON.stringify(formInfo),
     };
 
     let responseData = "";
@@ -83,39 +147,12 @@ function RegisterForm() {
       console.log(err);
     }
 
-    // if (isValid) {
-    //   history.push("/login");
-    // }
-  }
-
-  const validationSchema = yup.object({
-    username: yup
-      .string('Username must be a string')
-      .min(5, 'Username must be at least 5 characters long')
-      .required('Enter your username'),
-    email: yup
-      .string('Enter your email')
-      .email('Must be a valid email')
-      .required('Email is required'),
-    password: yup
-      .string('Enter a new password')
-      .min(8, 'Password must be at least 8 characters long')
-      .required('Password is required')
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      username: 'aadasddadads',
-      email: 'asdasdasd@asdasd.com',
-      password: 'asdasdasdadas',
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      console.log(JSON.stringify(values));
-      sendToServer(values);
+    console.log(isValid);
+    console.log(responseData);
+    if (isValid) {
+      history.push("/login");
     }
-  })
+  }
 
   return (
     <Container className={classes.root} component="main" maxWidth="xs">
@@ -135,76 +172,33 @@ function RegisterForm() {
             variant="h5"
             style={{ marginTop: ".5rem" }}
           >
-            Sign up
+            Login
           </Typography>
         </Box>
-        <form className={classes.form} onSubmit={formik.handleSubmit} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
                 id="username"
                 label="Username"
                 name="username"
                 autoComplete="username"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                error={formik.touched.username && Boolean(formik.errors.username)}
-                helperText={formik.touched.username && formik.errors.username}
-              />
-            </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid> */}
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
+                onChange={onChange}
+                error={errors['username'] != ""}
+                helperText={""}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
                 name="password"
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="new-password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
+                autoComplete="current-password"
               />
             </Grid>
             {/* <Grid item xs={12}>
@@ -222,24 +216,21 @@ function RegisterForm() {
             className={classes.submit}
             size="large"
           >
-            Create Account
+            Login
           </Button>
           <Button
             fullWidth
             variant="contained"
             color="secondary"
             component={Link}
-            to={"/login"}
+            to={"/register"}
           >
-            Already have an account? Sign in
+            Dont have an account? Sign Up
           </Button>
         </form>
       </div>
-      {/*<Box mt={5}>
-        <Copyright />
-      </Box>*/}
     </Container>
   );
 }
 
-export default RegisterForm;
+export default LoginForm;

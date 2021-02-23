@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
+import { useSelector } from 'react-redux';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,18 +20,19 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar() {
   const classes = useStyles();
+  const loggedIn = useSelector(state => state.loggedIn);
 
   return (
     <div className={classes.root}>
-      <AppBar position='static'>
+      <AppBar position='fixed'>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon/>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            
           </Typography>
-          <Button component={Link} to={"/login"} color="inherit">Login</Button>
+          { loggedIn ? 'Logged in as: user' : <Button component={Link} to={"/login"} color="inherit">Login</Button>}
         </Toolbar>
       </AppBar>
     </div>
