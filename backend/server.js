@@ -60,22 +60,6 @@ app.post('/user', async (req, res) => {
     });
 
 
-    // let games = req.body.games;
-    //
-    //
-    //
-    // let list = [];
-    //
-    //
-    //
-    // games.forEach(game => {
-    //     Game.find(game).then(x => {
-    //         return x[0]._id;
-    //     }).then(x => {
-    //         //console.log(x);
-    //         list += x;
-    //     });
-    // });
 
 
 
