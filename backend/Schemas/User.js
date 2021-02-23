@@ -8,9 +8,9 @@ const UserSchema = new Schema({
     username: String,
     password: String,
     email: String,
-    games: [],
-    isAdmin: false,
-    steamKey: null
+    games: [String],
+    isAdmin: Boolean,
+    steamKey: String
 
 });
 
