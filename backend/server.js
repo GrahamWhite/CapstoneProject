@@ -16,6 +16,7 @@ const port = process.env.PORT || 5000;
 //Schema Imports
 const User = require('../backend/Schemas/User');
 const Game = require('../backend/Schemas/Game');
+const Library = require('../backend/Schemas/Library');
 
 
 
@@ -58,8 +59,6 @@ function LogGames(gameArr)
        let game = gameArr[x];
        Game.find({"name": game.name}).then(res => console.log(res));
     }
-
-
 }
 
 app.get('/user', (req, res) => {
@@ -68,29 +67,45 @@ app.get('/user', (req, res) => {
     User.find({username: userReq}).then(r => {
         res.send(r);
     });
+});
 
+app.post('/addLibraryItem', (req, res) => {
+
+    User.find({"username": req.body.username}).then(r => {
+
+        Game.find({"name":req.body.name}).then(b => {
+
+        console.log(r[0]._id);
+
+        let libItem = new Library({
+            userId: r[0]._id,
+            gameId: b[0]._id
+        });
+
+        libItem.save();
+
+        res.send(libItem);
+
+        });
+    });
 });
 
 app.post('/user', (req, res) => {
 
-
-    let example = {
-        name: "crysis"
-    }
 
     let user = new User({
         username: req.body.username,
         password: req.body.password,
         email: req.body.email,
         isAdmin: false,
-        steamKey: "",
-        games: [],
-        friends: []
+        steamKey: ""
     });
 
 
 
     user.save();
+
+
 
     res.send(user);
 });

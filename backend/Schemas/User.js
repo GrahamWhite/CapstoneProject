@@ -8,10 +8,8 @@ const UserSchema = new Schema({
     username: String,
     password: String,
     email: String,
-    games: [{type: Schema.Types.ObjectId, ref: 'Game'}],
     isAdmin: Boolean,
-    steamKey: String,
-    friends:  [{type: Schema.Types.ObjectId, ref: 'Friend'}],
+    steamKey: String
 });
 
 //Export function to create "SomeModel" model class
