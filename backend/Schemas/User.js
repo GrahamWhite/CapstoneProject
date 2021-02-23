@@ -11,7 +11,6 @@ const UserSchema = new Schema({
     games: [String],
     isAdmin: Boolean,
     steamKey: String
-
 });
 
 //Export function to create "SomeModel" model class

@@ -56,7 +56,9 @@ app.post('/user', async (req, res) => {
         username: req.body.username,
         password: req.body.password,
         email: req.body.email,
-        games: []
+        games: [],
+        isAdmin: false,
+        steamKey: ""
     });
 
 
