@@ -1,10 +1,11 @@
 import React from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core';
+import RegisterForm from '../RegisterForm';
 
 function RegisterPage() {
   return (
     <div>
-      <Typography variant="h1" color="secondary">Register here!</Typography>
+      <RegisterForm/>
     </div>
   )
 }
