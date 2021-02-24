@@ -2,11 +2,18 @@ let express = require('express');
 let db = require('mongoose');
 
 
-const Game = require('../backend/Schemas/Game');
+const Game = require('../Schemas/Game');
 
 
-async function FindAllGames(name) {
+const SelectAllGames = (req, res) => {
     let game = Game.find().then(r => {
-        return r;
+        if(r === []) {
+            res.send("No games in the database");
+        } else{
+            res.send(r);
+        }
+
     });
 };
+
+exports.SelectAllGames = SelectAllGames;

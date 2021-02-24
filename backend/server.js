@@ -4,10 +4,6 @@ SUMMARY
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const res = require("express");
-const ePwd = require("encrypt-password");
-
-
 
 const Schema = mongoose.Schema;
 const app = express();
@@ -20,6 +16,14 @@ const Game = require('../backend/Schemas/Game');
 const UserGame = require('./Schemas/UserGame');
 
 
+const {FindUserByUsername} = require("./Controllers/UserController");
+const {FindAllUsers} = require("./Controllers/UserController");
+const {CreateNewUser} = require("./Controllers/UserController");
+
+
+const {SelectAllGames} = require("./Controllers/GameController");
+
+const {InsertUserGame} = require("./Controllers/UserGameController");
 
 
 require('dotenv').config();
@@ -27,118 +31,27 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 
-async function GetGameId(game) {
-    Game.find(game).then(res => {
-        return res[0]._id;
-    });
-}
 
-//THESE WILL BE MOVED TO A NEW DIRECTORY FOR ROUTES
+
 //User Routes
 app.get('/users', (req, res) => {
-
-    User.find().then(r => {
-        res.send(r);
-    })
+    FindAllUsers(req, res);
 });
-app.post('/userId', (req, res) => {
-
-    let userName = req.query.name;
-
-    Game.findOne({username: userName}).then(r => {
-        res.send(r.id);
-    });
-
-});
-
-
-function LogGames(gameArr)
-{
-    let games = [];
-    for(let x = 0; x < gameArr.length; x++)
-    {
-       let game = gameArr[x];
-       Game.find({"name": game.name}).then(res => console.log(res));
-    }
-}
-
 app.get('/user', (req, res) => {
-    let userReq = req.body.username;
-
-    User.find({username: userReq}).then(r => {
-        res.send(r);
-    });
+    FindUserByUsername(req, res);
 });
-
-app.post('/addLibraryItem', (req, res) => {
-
-    User.find({"username": req.body.username}).then(r => {
-
-        Game.find({"name":req.body.name}).then(b => {
-
-        console.log(r[0]._id);
-
-        let libItem = new UserGame({
-            userId: r[0]._id,
-            gameId: b[0]._id
-        });
-
-        libItem.save();
-
-        res.send(libItem);
-
-        });
-    });
-});
-
 app.post('/user', (req, res) => {
-
-
-    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
-
-    let user = new User({
-        username: req.body.username,
-        password: encryptedPwd,
-        email: req.body.email,
-        isAdmin: false,
-        steamKey: ""
-    });
-
-
-
-    user.save();
-
-
-
-    res.send(user);
+    CreateNewUser(req, res);
 });
 
+//Game Routes
 app.get('/games', (req, res) => {
-
-    Game.find().then(r => {
-        res.send(r);
-    });
+    SelectAllGames(req,res);
 });
-app.get('/gameId', (req, res) => {
 
-    let gameName = req.body.name;
-
-    Game.findOne({name: gameName}).then(r => {
-        res.send(r.id);
-    });
-});
-app.post('/game', (req, res) => {
-
-    let game = new Game({
-        name: req.body.name,
-        platform: req.body.platform
-    });
-
-    game.save().then(r => {
-        console.log(r);
-        res.send(r);
-    });
-
+//UserGame Routes
+app.post('/userGame', (req, res) => {
+    InsertUserGame(req, res);
 });
 
 //Initialize connection to MongoDb
