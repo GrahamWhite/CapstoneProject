@@ -4,7 +4,6 @@ const ePwd = require("encrypt-password");
 
 const User = require('../Schemas/User');
 
-
 const FindAllUsers = (req, res) => {
 
     try{
