@@ -14,15 +14,18 @@ const UserGameExists = (username, gameName) =>{
             let userId = u[0]._id;
             let gameId = g[0]._id;
 
-            UserGame.find({username: userId, name: gameId}).then(ug => {
-                if(ug === []){
+            console.log(u[0]._id);
+            console.log(g[0]._id);
+
+            UserGame.find({"userId": userId, "gameId": gameId}).then(ug => {
+                if(ug.length == 0){
                     return false;
                 }else{
                     return true;
                 }
-            })
-       })
-   })
+            });
+       });
+   });
 }
 
 const GetUserGames = (req, res) => {
