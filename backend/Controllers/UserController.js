@@ -68,7 +68,7 @@ const UserExists = (username) =>{
 
 const CreateNewUser = (req, res) => {
     try{
-        if(!UserExists(req.body.username)){
+        if(UserExists(req.body.username)){
             const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
 
             let user = new User({
