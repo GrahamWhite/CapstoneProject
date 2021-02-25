@@ -60,7 +60,7 @@ function LoginForm() {
   async function sendToServer(values) {
     let isValid = false;
     const options = {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -104,6 +104,7 @@ function LoginForm() {
       console.log(JSON.stringify(values));
       sendToServer(values);
     }
+    
   })
 
   return (
@@ -119,7 +120,7 @@ function LoginForm() {
           >
             Login
           </Typography>
-        <form className={classes.form} onSubmit={formik.onSubmit} noValidate>
+        <form className={classes.form} onSubmit={formik.handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
