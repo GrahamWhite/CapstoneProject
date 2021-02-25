@@ -22,6 +22,23 @@ const FindAllUsers = (req, res) => {
 
 };
 
+const UserLogin = (req, res) => {
+    try{
+        User.find({username: req.body.username}).then(r => {
+            console.log(r[0].password);
+            if(r[0].password === ePwd(req.body.password, process.env.SECRET)){
+                res.send({msg: "Valid Login for " + r[0].username});
+            }else{
+                res.send({msg: "Invalid Login"});
+            }
+        });
+
+
+    }catch (err){
+        res.send({msg: err});
+    }
+}
+
 const FindUserByUsername = (req, res) => {
 
     try{
@@ -80,4 +97,5 @@ const CreateNewUser = (req, res) => {
 exports.FindAllUsers = FindAllUsers;
 exports.FindUserByUsername = FindUserByUsername;
 exports.CreateNewUser = CreateNewUser;
+exports.UserLogin = UserLogin;
 
