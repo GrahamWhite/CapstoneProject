@@ -83,9 +83,9 @@ function RegisterForm() {
       console.log(err);
     }
 
-    // if (isValid) {
-    //   history.push("/login");
-    // }
+    if (isValid) {
+      history.push("/login");
+    }
   }
 
   const validationSchema = yup.object({
@@ -105,9 +105,9 @@ function RegisterForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'aadasddadads',
-      email: 'asdasdasd@asdasd.com',
-      password: 'asdasdasdadas',
+      username: '',
+      email: '',
+      password: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -121,23 +121,15 @@ function RegisterForm() {
     <Container className={classes.root} component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Box
-          display="flex"
-          width={"1"}
-          alignItems="center"
-          justifyContent="left"
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography
+          component="h1"
+          variant="h5"
         >
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography
-            component="h1"
-            variant="h5"
-            style={{ marginTop: ".5rem" }}
-          >
-            Sign up
-          </Typography>
-        </Box>
+          Sign up
+        </Typography>
         <form className={classes.form} onSubmit={formik.handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
