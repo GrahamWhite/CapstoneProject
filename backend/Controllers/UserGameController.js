@@ -7,12 +7,12 @@ const Game = require('../Schemas/Game');
 const User = require('../Schemas/User');
 
 
-//In Progress
+//In Progress - does not work
 const UserGameExists = (username, gameName) =>{
    User.find({username: username}).then(u => {
        Game.find({name: gameName}).then(g => {
             let userId = u[0]._id;
-            let gameId = u[0]._id;
+            let gameId = g[0]._id;
 
             UserGame.find({username: userId, name: gameId}).then(ug => {
                 if(ug === []){
@@ -25,10 +25,18 @@ const UserGameExists = (username, gameName) =>{
    })
 }
 
+const GetUserGames = (req, res) => {
+    try{
+        //No implementation yet
+    }catch (err){
+        console.log("Error: " + err);
+    }
+}
+
 const InsertUserGame = (req, res) => {
 
     try{
-        if(UserGameExists(req.body.username, req.body.name)){
+        if(!UserGameExists(req.body.username, req.body.name)){
             res.send("Error: " + req.body.username + " already has " + req.body.name + " associated with their account.");
         }else{
             User.find({username: req.body.username}).then(r => {

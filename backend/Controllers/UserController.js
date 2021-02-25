@@ -65,14 +65,14 @@ const CreateNewUser = (req, res) => {
 
             user.save();
 
-            res.send("User Saved");
+            res.send({msg: "User Saved"});
         }
         else{
-            res.send("Error: User " + req.body.username + " already exists.");
+            res.send({msg: "Error: User " + req.body.username + " already exists."});
         }
     }catch (err)
     {
-        res.send("Error: " + err)
+        res.send({msg: "Error: " + err});
     }
 }
 
