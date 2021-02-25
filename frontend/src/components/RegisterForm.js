@@ -76,14 +76,18 @@ function RegisterForm() {
 
     let responseData = "";
     try {
+      console.log(JSON.stringify(values));
       let response = await fetch(url + "/user", options);
+      console.log(response);
       responseData = await response.json();
       isValid = true;
     } catch (err) {
+      console.log(responseData);
       console.log(err);
     }
 
     if (isValid) {
+      localStorage.setItem('username', responseData.username);
       history.push("/login");
     }
   }
@@ -105,9 +109,9 @@ function RegisterForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      email: '',
-      password: '',
+      username: 'testa',
+      email: 'test@test.co',
+      password: 'testzxcbvnb',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -213,6 +217,7 @@ function RegisterForm() {
             color="primary"
             className={classes.submit}
             size="large"
+            onClick={formik.onSubmit}
           >
             Create Account
           </Button>

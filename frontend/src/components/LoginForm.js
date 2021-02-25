@@ -60,25 +60,28 @@ function LoginForm() {
   async function sendToServer(values) {
     let isValid = false;
     const options = {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body:JSON.stringify(values)
     };
 
-    let responseData = {};
+    let responseData = "";
     try {
+      console.log(values);
       let response = await fetch(url + "/user", options);
+      console.log(response);
       responseData = await response.json();
       isValid = true;
     } catch (err) {
+      console.log(responseData);
       console.log(err);
     }
 
     if (isValid) {
-      localStorage.setItem('username', responseData.username)
-      history.push("/userProfile");
+      localStorage.setItem('username', responseData.username);
+      history.push("/user");
     }
   }
 
@@ -95,8 +98,8 @@ function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'aadasddadads',
-      password: 'asdasdasdadas',
+      username: 'testasdf',
+      password: 'test',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -119,7 +122,7 @@ function LoginForm() {
           >
             Login
           </Typography>
-        <form className={classes.form} onSubmit={formik.onSubmit} noValidate>
+        <form className={classes.form} onSubmit={formik.handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
