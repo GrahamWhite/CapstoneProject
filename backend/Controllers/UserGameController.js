@@ -8,7 +8,6 @@ const User = require('../Schemas/User');
 
 
 //In Progress
-
 const UserGameExists = (username, gameName) =>{
    User.find({username: username}).then(u => {
        Game.find({name: gameName}).then(g => {
