@@ -18,7 +18,6 @@ const FindAllUsers = (req, res) => {
     }catch (err){
         res.send(err);
     }
-
 };
 
 const UserLogin = (req, res) => {
@@ -55,37 +54,34 @@ const FindUserByUsername = (req, res) => {
     }
 };
 
-const UserExists = (username) =>{
-    //Test for existing username
-    User.find({username: username}).then(r => {
-        if(r === []){
-            return false;
-        }else {
-            return true;
-        }
-    });
-}
+
 
 const CreateNewUser = (req, res) => {
     try{
-        // if(UserExists(req.body.username)){
-            const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
+        User.find({username: req.body.username}, (a, b) => {
 
-            let user = new User({
-                username: req.body.username,
-                password: encryptedPwd,
-                email: req.body.email,
-                isAdmin: false,
-                steamKey: ""
-            });
+            if(b.length === 0){
 
-            user.save();
+                    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
 
-            res.send({msg: "User Saved", username: user.username});
-        //}
-        else{
-            res.send({msg: "Error: User " + req.body.username + " already exists."});
-        }
+                    let user = new User({
+                        username: req.body.username,
+                        password: encryptedPwd,
+                        email: req.body.email,
+                        isAdmin: false,
+                        steamKey: ""
+                    });
+
+                    user.save();
+
+                    res.send({msg: "User Saved", username: user.username});
+            }
+            else {
+                res.send("User already exists");
+            }
+        });
+
+
     }catch (err)
     {
         res.send({msg: "Error: " + err});
