@@ -107,6 +107,7 @@ function LoginForm() {
       console.log(JSON.stringify(values));
       sendToServer(values);
     }
+    
   })
 
   return (

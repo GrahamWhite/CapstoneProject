@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core'
 import { useFetch, useInterval } from '../../util/CustomHooks';
 
-
 function UserProfile() {
   const url = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
   const storedUsername = localStorage.getItem('username');

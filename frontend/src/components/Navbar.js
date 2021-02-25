@@ -33,6 +33,7 @@ function Navbar() {
             
           </Typography>
           { loggedIn ? 'Logged in as: user' : <Button component={Link} to={"/login"} color="inherit">Login</Button>}
+          <Button component={Link} to={"/register"} color="inherit">Register</Button>
         </Toolbar>
       </AppBar>
     </div>
