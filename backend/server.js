@@ -19,6 +19,7 @@ const UserGame = require('./Schemas/UserGame');
 const {FindUserByUsername} = require("./Controllers/UserController");
 const {FindAllUsers} = require("./Controllers/UserController");
 const {CreateNewUser} = require("./Controllers/UserController");
+const {UserLogin} = require("./Controllers/UserController");
 
 
 const {SelectAllGames} = require("./Controllers/GameController");
@@ -43,7 +44,9 @@ app.get('/user', (req, res) => {
 app.post('/user', (req, res) => {
     CreateNewUser(req, res);
 });
-
+app.post('/login', (req, res) => {
+    UserLogin(req, res);
+});
 //Game Routes
 app.get('/games', (req, res) => {
     SelectAllGames(req,res);
