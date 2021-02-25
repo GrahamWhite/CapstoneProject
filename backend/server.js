@@ -51,7 +51,6 @@ app.post('/login', (req, res) => {
 app.get('/games', (req, res) => {
     SelectAllGames(req,res);
 });
-
 //UserGame Routes
 app.post('/userGame', (req, res) => {
     InsertUserGame(req, res);
