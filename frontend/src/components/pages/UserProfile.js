@@ -19,16 +19,20 @@ function UserProfile() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({'username':storedUsername})
     };
 
     try {
       console.log(JSON.stringify({username:storedUsername}));
-      let response = await fetch(url + "/user", options);
+      let query = `?username=${storedUsername}`;
+      
+      let response = await fetch(url + '/user' + query, options);
       console.log(response);
       let responseData = await response.json();
-      console.log(responseData);
-      isValid = true;
+      console.log(responseData[0]);
+      setUsername(responseData[0].username);
+      console.log(username);
+      //setEmail(responseData.email);
+      setLoading(true);
     } catch (err) {
       console.log(err);
     }
