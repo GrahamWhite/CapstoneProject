@@ -25,7 +25,7 @@ const UserLogin = (req, res) => {
         User.find({username: req.body.username}).then(r => {
             console.log(r[0].password);
             if(r[0].password === ePwd(req.body.password, process.env.SECRET)){
-                res.send({msg: "Valid Login for " + r[0].username});
+                res.send({msg: "Valid Login for " + r[0].username, user: r[0]});
             }else{
                 res.send({msg: "Invalid Login"});
             }
