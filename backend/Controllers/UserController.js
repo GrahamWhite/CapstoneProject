@@ -4,7 +4,6 @@ const ePwd = require("encrypt-password");
 
 const User = require('../Schemas/User');
 
-
 const FindAllUsers = (req, res) => {
 
     try{
@@ -19,7 +18,6 @@ const FindAllUsers = (req, res) => {
     }catch (err){
         res.send(err);
     }
-
 };
 
 const UserLogin = (req, res) => {
@@ -27,7 +25,7 @@ const UserLogin = (req, res) => {
         User.find({username: req.body.username}).then(r => {
             console.log(r[0].password);
             if(r[0].password === ePwd(req.body.password, process.env.SECRET)){
-                res.send({msg: "Valid Login for " + r[0].username});
+                res.send({msg: "Valid Login for " + r[0].username, user: r[0]});
             }else{
                 res.send({msg: "Invalid Login"});
             }
@@ -56,37 +54,34 @@ const FindUserByUsername = (req, res) => {
     }
 };
 
-const UserExists = (username) =>{
-    //Test for existing username
-    User.find({username: username}).then(r => {
-        if(r === []){
-            return false;
-        }else {
-            return true;
-        }
-    });
-}
+
 
 const CreateNewUser = (req, res) => {
     try{
-        if(!UserExists(req.body.username)){
-            const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
+        User.find({username: req.body.username}, (a, b) => {
 
-            let user = new User({
-                username: req.body.username,
-                password: encryptedPwd,
-                email: req.body.email,
-                isAdmin: false,
-                steamKey: ""
-            });
+            if(b.length === 0){
 
-            user.save();
+                    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
 
-            res.send({msg: "User Saved", username: user.username});
-        }
-        else{
-            res.send({msg: "Error: User " + req.body.username + " already exists."});
-        }
+                    let user = new User({
+                        username: req.body.username,
+                        password: encryptedPwd,
+                        email: req.body.email,
+                        isAdmin: false,
+                        steamKey: ""
+                    });
+
+                    user.save();
+
+                    res.send({msg: "User Saved", username: user.username});
+            }
+            else {
+                res.send("User already exists");
+            }
+        });
+
+
     }catch (err)
     {
         res.send({msg: "Error: " + err});
