@@ -70,7 +70,7 @@ function LoginForm() {
     let responseData = "";
     try {
       console.log(values);
-      let response = await fetch(url + "/user", options);
+      let response = await fetch(url + "/login", options);
       console.log(response);
       responseData = await response.json();
       isValid = true;
@@ -80,7 +80,7 @@ function LoginForm() {
     }
 
     if (isValid) {
-      localStorage.setItem('username', responseData.username);
+      localStorage.setItem('user', responseData.username);
       history.push("/user");
     }
   }
@@ -98,8 +98,8 @@ function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'testasdf',
-      password: 'test',
+      username: 'testa',
+      password: 'testzxcbvnb',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -109,7 +109,7 @@ function LoginForm() {
     }
     
   })
-
+  
   return (
     <Container className={classes.root} component="main" maxWidth="xs">
       <CssBaseline />

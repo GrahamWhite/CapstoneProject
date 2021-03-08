@@ -1,66 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Typography } from '@material-ui/core'
+import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid } from '@material-ui/core'
 import { useFetch, useInterval } from '../../util/CustomHooks';
+import ProfileHeader from '../ProfileHeader';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex'
+  },
+  tabBar: {
+    display: 'flex',
+    justifyContent:'space-even',
+    alignItems: 'stretch',
+    flexGrow: '1'
+  }
+}));
 
 function UserProfile() {
   const url = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
+  const classes = useStyles();
   const storedUsername = localStorage.getItem('username');
 
   const [loading, setLoading] = useState(true);
+  const [currentTab, setCurrentTab] = useState(0);
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [user, setuser] = useState({
+    username: 'tmills9208',
+    email: 'tmills9208@conestogac.on.ca',
+    bio: 'Hi, i am a person!',
+    avatarImg: 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png', // basic img placeholder
+    socialLinks: {
 
-  useEffect(async () => {
-    let isValid = false;
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+    },
+    games: {
 
-    try {
-      console.log(JSON.stringify({username:storedUsername}));
-      let query = `?username=${storedUsername}`;
-      
-      let response = await fetch(url + '/user' + query, options);
-      console.log(response);
-      let responseData = await response.json();
-      console.log(responseData[0]);
-      setUsername(responseData[0].username);
-      console.log(username);
-      //setEmail(responseData.email);
-      setLoading(true);
-    } catch (err) {
-      console.log(err);
-    }
+    },
+    friends: {
+
+    },
   });
 
-  // const [seconds, setSeconds] = useState(0);
-  // const [dots, setDots] = useState('');
+  const handleChange = (event, newValue) => {
+    setCurrentTab(newValue);
+  }
 
-  // setInterval(() => {
-  //   setSeconds(seconds + 1);
-  //   let string = '';
-  //   for (let i = 0; i < seconds % 3; i++){
-  //     string += '.';
-  //   }
-  //   setDots(string);
-  // }, 1000);
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
 
   return (
-    <div style={{padding:'10px'}}>
-      {
-        loading ?
-        <Typography variant="h3" color="initial">loading{'...'}</Typography>
-        : 
-        <div>
-          <Typography variant="h2" color="initial">Welcome {username}!</Typography>
-          <Typography variant="h3" color="initial">Email: {email}</Typography>
-        </div>
-      }
+    <div>
+      <ProfileHeader user={user}/>
+      <Paper>
+        <Tabs className={classes.tabBar} value={currentTab} onChange={handleChange}>
+          <Grid container spacing={1} justify="space-between">
+            <Grid item xs={6}>
+              <Tab label="Games" {...a11yProps(0)}/>
+            </Grid>
+            <Grid item xs={6}>
+              <Tab label="Friends" {...a11yProps(1)}/>
+            </Grid>
+          </Grid>
+        </Tabs>
+      </Paper>
+      <div>
+        {/* Where games and friends list will be */}
+      </div>
     </div>
   )
 }
