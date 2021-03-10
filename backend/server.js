@@ -13,18 +13,19 @@ const port = process.env.PORT || 5000;
 //Schema Imports
 const User = require('../backend/Schemas/User');
 const Game = require('../backend/Schemas/Game');
-const UserGame = require('./Schemas/UserGame');
 
 
-const {FindUserByUsername} = require("./Controllers/UserController");
-const {FindAllUsers} = require("./Controllers/UserController");
-const {CreateNewUser} = require("./Controllers/UserController");
-const {UserLogin} = require("./Controllers/UserController");
+
+const {SelectUser} = require("./Controllers/UserController");
+const {SelectUsers} = require("./Controllers/UserController");
+const {CreateUser} = require("./Controllers/UserController");
+const {UserExists} = require("./Controllers/UserController");
+const {Login} = require("./Controllers/UserController");
 
 
-const {SelectAllGames} = require("./Controllers/GameController");
 
-const {InsertUserGame} = require("./Controllers/UserGameController");
+const {SelectGames} = require("./Controllers/GameController");
+const {CreateGame} = require("./Controllers/GameController");
 
 
 require('dotenv').config();
@@ -32,29 +33,37 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 
-
-
 //User Routes
 app.get('/users', (req, res) => {
-    FindAllUsers(req, res);
+    SelectUsers(req, res);
 });
+
 app.get('/user', (req, res) => {
-    FindUserByUsername(req, res);
+    SelectUser(req, res);
 });
+
 app.post('/user', (req, res) => {
-    CreateNewUser(req, res);
+    CreateUser(req, res);
 });
+
 app.post('/login', (req, res) => {
-    UserLogin(req, res);
+    Login(req, res);
 });
-//Game Routes
+
+app.post('/user_exist', (req, res)  => {
+    UserExists(req, res);
+});
+
+///Game URLs
+
+app.post('/game', (req, res) => {
+   CreateGame(req, res);
+});
+
 app.get('/games', (req, res) => {
-    SelectAllGames(req,res);
+    SelectGames(req,res);
 });
-//UserGame Routes
-app.post('/userGame', (req, res) => {
-    InsertUserGame(req, res);
-});
+
 
 //Initialize connection to MongoDb
 try {

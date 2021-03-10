@@ -4,15 +4,15 @@ const ePwd = require("encrypt-password");
 
 const User = require('../Schemas/User');
 
-const FindAllUsers = (req, res) => {
+const SelectUsers = (req, res) => {
 
     try{
         User.find({}).then(r => {
             if(r === []){
                 res.send("No users currently in the database");
             }else{
-                res.send(r)
-            }
+                res.send(r);
+            };
 
         });
     }catch (err){
@@ -20,7 +20,7 @@ const FindAllUsers = (req, res) => {
     }
 };
 
-const UserLogin = (req, res) => {
+const Login = (req, res) => {
     try{
         User.find({username: req.body.username}).then(r => {
             console.log(r[0].password);
@@ -35,9 +35,9 @@ const UserLogin = (req, res) => {
     }catch (err){
         res.send({msg: err});
     }
-}
+};
 
-const FindUserByUsername = (req, res) => {
+const SelectUser = (req, res) => {
 
     try{
 
@@ -50,13 +50,11 @@ const FindUserByUsername = (req, res) => {
         });
     }
     catch (err){
-        res.send(err);
+        res.send({err});
     }
 };
 
-
-
-const CreateNewUser = (req, res) => {
+const CreateUser = (req, res) => {
     try{
         User.find({username: req.body.username}, (a, b) => {
 
@@ -86,11 +84,22 @@ const CreateNewUser = (req, res) => {
     {
         res.send({msg: "Error: " + err});
     }
-}
+};
+
+const UserExists = (req, res) => {
+    try {
+        User.exists({username: req.query.username}).then( r => {
+            res.send({msg: r});
+        });
+    } catch (err) {
+        res.send({msg: err});
+    };
+};
 
 
-exports.FindAllUsers = FindAllUsers;
-exports.FindUserByUsername = FindUserByUsername;
-exports.CreateNewUser = CreateNewUser;
-exports.UserLogin = UserLogin;
+exports.SelectUsers = SelectUsers;
+exports.SelectUser = SelectUser;
+exports.CreateUser = CreateUser;
+exports.Login = Login;
+exports.UserExists = UserExists;
 
