@@ -54,6 +54,22 @@ const SelectUser = (req, res) => {
     }
 };
 
+const GetUserId = (req, res) => {
+
+
+    try{
+        User.find({username: req.query.username}).then(r => {
+            res.send(r[0]._id);
+            Console.log(r[0]);
+        });
+    }catch (err){
+        res.send({msg: err})
+    }
+
+
+};
+
+
 const CreateUser = (req, res) => {
     try{
         User.find({username: req.body.username}, (a, b) => {
@@ -102,4 +118,5 @@ exports.SelectUser = SelectUser;
 exports.CreateUser = CreateUser;
 exports.Login = Login;
 exports.UserExists = UserExists;
+exports.GetUserId = GetUserId;
 

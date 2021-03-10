@@ -28,6 +28,14 @@ const {SelectGames} = require("./Controllers/GameController");
 const {CreateGame} = require("./Controllers/GameController");
 
 
+const {SelectUserGames} = require("./Controllers/UserGameController");
+const {UserGameExists} = require("./Controllers/UserGameController");
+const {CreateUserGame} = require("./Controllers/UserGameController");
+
+
+const {GetUserId} = require("./Controllers/UserController");
+
+
 require('dotenv').config();
 
 app.use(cors());
@@ -63,6 +71,32 @@ app.post('/game', (req, res) => {
 app.get('/games', (req, res) => {
     SelectGames(req,res);
 });
+
+//UserGame URLs
+app.get('/user_games', (req, res) => {
+    SelectUserGames(req, res);
+});
+
+app.post('/user_game_exists', (req, res) => {
+    UserGameExists(req, res);
+});
+
+app.post('/create_user_game', (req, res) => {
+    CreateUserGame(req, res);
+});
+
+app.post('/get_user_id', (req, res) => {
+    GetUserId(req, res);
+});
+
+
+/*
+app.post('/user_game', (req, res) => {
+    CreateUserGame(req, res);
+});
+*/
+
+
 
 
 //Initialize connection to MongoDb
