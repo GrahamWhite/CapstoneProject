@@ -11,7 +11,7 @@ import SearchPage from './components/pages/SearchPage';
 import NotificationPage from './components/pages/NotificationPage';
 import FriendPage from './components/pages/FriendPage';
 import MatchPage from './components/pages/MatchPage';
-import UserProfile from './components/pages/ProfilePage';
+import ProfilePage from './components/pages/ProfilePage';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,7 +39,7 @@ function App() {
             <Route path='/notification' exact component={NotificationPage}/>
             <Route path='/friend' exact component={FriendPage}/>
             <Route path='/match' exact component={MatchPage}/>
-            <Route path='/user' component={UserProfile}/>
+            <Route path='/user' component={ProfilePage}/>
           </Switch>
         </div>
       </ThemeProvider>
