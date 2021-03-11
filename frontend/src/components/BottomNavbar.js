@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
-import HistoryIcon from '@material-ui/icons/History';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import PeopleIcon from '@material-ui/icons/People';
 import PersonIcon from '@material-ui/icons/Person';
 //import {HomeIcon, HistoryIcon, PersonIcon} from '@material-ui/icons';
 
@@ -12,15 +13,13 @@ const useStyles = makeStyles((theme) => ({
   bottomNavbar:{
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
-    top: 'auto',
+    width: '100%',
+    position: 'fixed',
     bottom: 0,
   },
   icon:{
-    fill: theme.palette.primary.contrastText,
-  },
-  navAction:{
-    color: theme.palette.primary.contrastText,
-  },
+    fill: theme.palette.primary.contrastText
+  }
 }));
 
 //under construction 
@@ -35,9 +34,10 @@ function BottomNavbar(){
           showLabels
           className={classes.bottomNavbar}
         >
-          <BottomNavigationAction component={Link} to={""} label="Home" icon={<HomeIcon className="icon"/>} />
-          <BottomNavigationAction component={Link} to={""} label="History" icon={<HistoryIcon className="icon"/>} />
-          <BottomNavigationAction component={Link} to={"/user"} label="Profile" icon={<PersonIcon className="icon"/>} />
+          <BottomNavigationAction component={Link} to={"/"} icon={<HomeIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/"} icon={<NotificationsIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/"} icon={<PeopleIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/user"} icon={<PersonIcon className={classes.icon}/>}/>
         </BottomNavigation>
         )
 }
