@@ -1,6 +1,8 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import React, { useEffect, useState, useCallback } from 'react'
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
+import StarIcon from '@material-ui/icons/Star';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function GameItem(props) {
   const useStyles = makeStyles((theme) => ({
@@ -19,11 +21,16 @@ function GameItem(props) {
 
   const [selected, setSelected] = useState(false);
 
+  function onSelected(event){
+    setSelected(!selected);
+  }
+
   return (
     <Card className={classes.card}
       variant="outlined">
       <CardActionArea
-        onClick = {() => {setSelected(!selected)}}>
+        onClick = {() => {setSelected(!selected)}}
+        >
         <CardContent>
           <CardMedia
             className={classes.cover}
@@ -44,11 +51,19 @@ function GameItem(props) {
       {
         selected ?
         <CardActions>
-          <Button size="small" color="primary">
+          <Button 
+            size="small" 
+            color="primary"
+            variant="contained"
+            startIcon={<StarIcon/>}>
             Favourite
           </Button>
-          <Button size="small" color="red">
-            Delete
+          <Button 
+            size="small" 
+            color="secondary"
+            variant="contained"
+            startIcon={<DeleteIcon/>}>
+            Remove
           </Button>
         </CardActions>
         : ""
@@ -99,11 +114,35 @@ function GameList(props) {
     platform: "Steam, 80's Arcade Machine",
     img: ''
   },
+  {
+    id: "6",
+    name: "Devil Daggers",
+    platform: "Steam",
+    img: ''
+  },
+  {
+    id: "7",
+    name: "Ori & the blind forestc",
+    platform: "Steam",
+    img: ''
+  },
+  {
+    id: "8",
+    name: "Enter The Gungeon",
+    platform: "Steam",
+    img: ''
+  },
+  {
+    id: "9",
+    name: "Hot Tub Time Machine",
+    platform: "Film, Movie",
+    img: ''
+  },
   ];
 
   const [games, setgames] = useState(dummyData);
   const [selectedGame, setSelectedGame] = useState(null);
-  const [search, setSearch] = useState("");
+  //const [search, setSearch] = useState("");
 
   const onChange = useCallback(updatedGame => {
     const gameIndex = games.findIndex(emp => emp.id === updatedGame.id)

@@ -33,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
   },
   profileHeader: {
     padding: '10px'
+  },
+  tabPanelsContainer: {
+    height: '90vh',
+    backgroundColor: 'maroon'
   }
 }));
 
@@ -84,14 +88,17 @@ function UserProfile() {
         <Tab label="Games" {...a11yProps(0)}/>
         <Tab label="Friends" {...a11yProps(1)}/>
       </Tabs>
-      <TabPanel value={currentTab} index={0}>
-        {/* Games panel */}
-        <GameList user={user}/>
-      </TabPanel>
-      <TabPanel value={currentTab} index={1}>
-        {/* Friends panel */}
-        <FriendList user={user}/>
-      </TabPanel>
+      <div className={classes.tabPanelsContainer}>
+        <TabPanel value={currentTab} index={0}>
+          {/* Games panel */}
+          <GameList user={user}/>
+        </TabPanel>
+        <TabPanel value={currentTab} index={1}>
+          {/* Friends panel */}
+          <FriendList user={user}/>
+        </TabPanel>
+      </div>
+      
     </div>
   )
 }

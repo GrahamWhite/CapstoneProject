@@ -11,7 +11,7 @@ import SearchPage from './components/pages/SearchPage';
 import NotificationPage from './components/pages/NotificationPage';
 import FriendPage from './components/pages/FriendPage';
 import MatchPage from './components/pages/MatchPage';
-import UserProfile from './components/pages/UserProfile';
+import UserProfile from './components/pages/ProfilePage';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
