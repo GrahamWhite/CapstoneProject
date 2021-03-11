@@ -25,12 +25,15 @@ const {Login} = require("./Controllers/UserController");
 
 
 const {SelectGames} = require("./Controllers/GameController");
+const {SelectGame} = require("./Controllers/GameController");
 const {CreateGame} = require("./Controllers/GameController");
 
 
 const {SelectUserGames} = require("./Controllers/UserGameController");
+const {SelectUserGame} = require("./Controllers/UserGameController");
 const {UserGameExists} = require("./Controllers/UserGameController");
 const {CreateUserGame} = require("./Controllers/UserGameController");
+
 
 
 const {GetUserId} = require("./Controllers/UserController");
@@ -66,32 +69,55 @@ app.post('/user_exists', (req, res)  => {
     UserExists(req, res);
 });
 
-///Game URLs
-
-app.post('/game', (req, res) => {
-   CreateGame(req, res);
-});
-
-app.get('/games', (req, res) => {
-    SelectGames(req,res);
-});
-
-//UserGame URLs
-app.get('/user_games', (req, res) => {
-    SelectUserGames(req, res);
-});
-
-app.post('/user_game_exists', (req, res) => {
-    UserGameExists(req, res);
-});
-
-app.post('/create_user_game', (req, res) => {
-    CreateUserGame(req, res);
-});
-
 app.post('/get_user_id', (req, res) => {
     GetUserId(req, res);
 });
+
+//GAME Routes
+app.get('/games', (req, res) => {
+    SelectGames(req, res);
+});
+
+app.get('/game', (req, res) => {
+    SelectGame(req, res);
+});
+
+app.post('/game', (req, res) => {
+    CreateGame(req, res);
+});
+
+app.post('/game_id', (req, res) => {
+    GetGameId(req, res);
+});
+
+app.post('/game_exists', (req, res)  => {
+    GameExists(req, res);
+});
+
+app.post('/get_game_id', (req, res) => {
+    GetGameId(req, res);
+});
+
+
+//UserGame routes
+app.get('/user_games', (req, res) => {
+   SelectUserGames(req, res);
+});
+
+app.get('/user_game', (req, res) => {
+    SelectUserGame(req, res);
+});
+
+app.post('/user_game', (req, res) => {
+    CreateUserGame(req, res);
+});
+//UserGame routes
+app.get('/user_game_exists', (req, res) => {
+    UserGameExists(req, res);
+});
+
+
+
 
 
 /*

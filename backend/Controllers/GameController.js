@@ -1,15 +1,13 @@
 let express = require('express');
 let db = require('mongoose');
 
-
 const Game = require('../Schemas/Game');
 
 const SelectGames = (req, res) => {
-
     try{
         Game.find({}).then(r => {
             if(r === []){
-                res.send("No Games currently in the database");
+                res.send("No games currently in the database");
             }else{
                 res.send(r);
             };
@@ -21,12 +19,10 @@ const SelectGames = (req, res) => {
 };
 
 const SelectGame = (req, res) => {
-
     try{
-
-        Game.find({name:req.query.name}).then(r => {
+        Game.find({name:req.body.name, platform: req.body.platform}).then(r => {
             if(r === []){
-                res.send("Game: " + req.query.name + " not found in the database");
+                res.send("Game: " + req.body.name + " not found in the database");
             }else {
                 res.send(r);
             }
@@ -37,25 +33,33 @@ const SelectGame = (req, res) => {
     }
 };
 
+const GetGameId = (req, res) => {
+    try{
+        Game.find({name: req.body.name}).then(r => {
+            res.send(r[0]._id);
+        });
+    }catch (err){
+        res.send(err);
+    }
+};
+
 const CreateGame = (req, res) => {
     try{
-        Game.find({name: req.body.name}, (a, b) => {
-
+        Game.find({name: req.body.name, platform: req.body.platform}, (a, b) => {
 
             if(b.length === 0){
 
+                let game = new Game({
+                    name: req.body.name,
+                    platform: req.body.platform
+                });
 
-                    let game = new Game({
-                        name: req.body.name,
-                        platform: req.body.platform
-                    });
+                game.save();
 
-                    game.save();
-
-                    res.send({msg: "Game Saved", name: game.name});
+                res.send({msg: "Game Saved", game: game});
             }
             else {
-                res.send({msg: "Game already exists"});
+                res.send("Game already exists");
             }
         });
 
@@ -66,13 +70,14 @@ const CreateGame = (req, res) => {
     }
 };
 
+
 const GameExists = (req, res) => {
     try {
-        Game.exists({name: req.query.name}).then( r => {
-            res.send({msg: r});
+        Game.exists({name: req.body.name}).then( r => {
+            res.send(r);
         });
     } catch (err) {
-        res.send({msg: err});
+        res.send(err);
     };
 };
 
@@ -81,4 +86,5 @@ exports.SelectGames = SelectGames;
 exports.SelectGame = SelectGame;
 exports.CreateGame = CreateGame;
 exports.GameExists = GameExists;
+exports.GetGameId = GetGameId;
 

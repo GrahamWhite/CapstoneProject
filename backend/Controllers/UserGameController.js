@@ -2,14 +2,15 @@ let express = require('express');
 let db = require('mongoose');
 
 const UserGame = require('../Schemas/UserGame');
+const User= require('../Schemas/User');
+const Game = require('../Schemas/Game');
 
 
 const SelectUserGames = (req, res) => {
-
     try{
-        UserGame.find({username: req.query.username}).then(r => {
+        UserGame.find({}).then(r => {
             if(r === []){
-                res.send("No games associated with this user");
+                res.send("No user_games currently in the database");
             }else{
                 res.send(r);
             };
@@ -19,103 +20,67 @@ const SelectUserGames = (req, res) => {
     }
 };
 
-
-
 const CreateUserGame = (req, res) => {
     try{
-        if(!UserGameExists(req, res)) {
+        User.find({username: req.body.username}).then(user => {
 
-            let userGame = new UserGame({
-                username: req.query.username,
-                name: req.query.name
-            });
+            if(user[0]){
 
-            userGame.save();
+                Game.find({name: req.body.name, platform: req.body.platform}).then(game => {
 
-            res.send({msg: "User Game Saved"});
-        }
-    }catch (err){
-        res.send({msg: err})
-    }
-};
+                    if(game[0]){
 
-const UserGameExists = (req, res) => {
-    try{
-        UserGame.exists({username: req.query.username}).then(r => {
-            UserGame.exists({name: req.query.name}).then(x => {
+                        let userGame = new UserGame({
+                            userId: user[0]._id,
+                            gameId: game[0]._id
+                        });
 
-                return false;
+                        userGame.save();
 
-            });
-        });
-    }catch (err) {
-        res.send({msg: err})
-    };
-};
-
-
-/*const SelectUserGame = (req, res) => {
-
-    try{
-
-        UserGame.find({name:req.query.name}).then(r => {
-            if(r === []){
-                res.send("Game: " + req.query.name + " not found in the database");
+                        res.send(userGame);
+                    }
+                })
             }else {
-                res.send(r);
+
+                res.send("User not found");
             }
         });
-    }
-    catch (err){
-        res.send({err});
-    }
-};
-
-const CreateUserGame = (req, res) => {
-    try{
-        UserGame.find({name: req.body.name}, (a, b) => {
-
-
-            if(b.length === 0){
-
-
-                    let game = new Game({
-                        name: req.body.name,
-                        platform: req.body.platform
-                    });
-
-                    game.save();
-
-                    res.send({msg: "Game Saved", name: game.name});
-            }
-            else {
-                res.send({msg: "Game already exists"});
-            }
-        });
-
-
-    }catch (err)
+    }catch(err)
     {
         res.send({msg: "Error: " + err});
     }
 };
 
-const UserGameExists = (req, res) => {
+const SelectUserGame= (req, res) => {
     try {
-        Game.exists({name: req.query.name}).then( r => {
-            res.send({msg: r});
+        User.find({username: req.body.username}).then(user => {
+            Game.find({name: req.body.name}).then( game => {
+                res.send({user: user, game: game});
+            });
         });
+
     } catch (err) {
-        res.send({msg: err});
+        res.send(err);
     };
 };
 
 
+const UserGameExists = (req, res) => {
+    try {
+        User.exists({username: req.body.username}).then(user => {
+            Game.exists({name: req.body.name}).then( game => {
+                res.send({user: user, game: game});
+            });
+        });
 
-exports.SelectUserGame = SelectGame;
-exports.CreateUserGame = CreateUserGame;
-exports.UserGameExists = UserGameExists;*/
+    } catch (err) {
+        res.send(err);
+    };
+};
+
 exports.SelectUserGames = SelectUserGames;
+exports.SelectUserGame = SelectUserGame;
 exports.UserGameExists = UserGameExists;
-exports.CreateUserGame = CreateUserGame;
+exports.CreateUserGame= CreateUserGame;
+
 

@@ -68,10 +68,9 @@ const GetUserId = (req, res) => {
     }
 };
 
-
 const CreateUser = (req, res) => {
     try{
-        User.find({username: req.query.username}, (a, b) => {
+        User.find({username: req.body.username}, (a, b) => {
 
             if(b.length === 0){
 
