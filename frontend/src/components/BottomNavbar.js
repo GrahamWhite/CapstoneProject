@@ -34,9 +34,9 @@ function BottomNavbar(){
           showLabels
           className={classes.bottomNavbar}
         >
-          <BottomNavigationAction component={Link} to={"/"} icon={<HomeIcon className={classes.icon}/>}/>
-          <BottomNavigationAction component={Link} to={"/"} icon={<NotificationsIcon className={classes.icon}/>}/>
-          <BottomNavigationAction component={Link} to={"/"} icon={<PeopleIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/main"} icon={<HomeIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/notification"} icon={<NotificationsIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/friend"} icon={<PeopleIcon className={classes.icon}/>}/>
           <BottomNavigationAction component={Link} to={"/user"} icon={<PersonIcon className={classes.icon}/>}/>
         </BottomNavigation>
         )

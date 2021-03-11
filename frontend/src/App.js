@@ -6,6 +6,11 @@ import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import HomePage from './components/pages/HomePage';
 import RegisterPage from './components/pages/RegisterPage'
 import LoginPage from './components/pages/LoginPage';
+import MainPage from './components/pages/MainPage';
+import SearchPage from './components/pages/SearchPage';
+import NotificationPage from './components/pages/NotificationPage';
+import FriendPage from './components/pages/FriendPage';
+import MatchPage from './components/pages/MatchPage';
 import UserProfile from './components/pages/UserProfile';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 
@@ -28,6 +33,12 @@ function App() {
             <Route path='/' exact component={HomePage}/>
             <Route path='/login' exact component={LoginPage}/>
             <Route path='/register' exact component={RegisterPage}/>
+
+            <Route path='/main' exact component={MainPage}/>
+            <Route path='/search' exact component={SearchPage}/>
+            <Route path='/notification' exact component={NotificationPage}/>
+            <Route path='/friend' exact component={FriendPage}/>
+            <Route path='/match' exact component={MatchPage}/>
             <Route path='/user' component={UserProfile}/>
           </Switch>
         </div>
