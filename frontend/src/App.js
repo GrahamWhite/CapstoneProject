@@ -31,7 +31,6 @@ function App() {
             <Route path='/user' component={UserProfile}/>
           </Switch>
         </div>
-        
       </ThemeProvider>
     </Router>
   );
