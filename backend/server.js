@@ -58,7 +58,11 @@ app.post('/login', (req, res) => {
     Login(req, res);
 });
 
-app.post('/user_exist', (req, res)  => {
+app.post('/user_id', (req, res) => {
+    GetUserId(req, res);
+});
+
+app.post('/user_exists', (req, res)  => {
     UserExists(req, res);
 });
 

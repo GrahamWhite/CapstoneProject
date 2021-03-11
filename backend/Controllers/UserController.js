@@ -24,26 +24,30 @@ const Login = (req, res) => {
     try{
         User.find({username: req.body.username}).then(r => {
             console.log(r[0].password);
-            if(r[0].password === ePwd(req.body.password, process.env.SECRET)){
-                res.send({msg: "Valid Login for " + r[0].username, user: r[0]});
-            }else{
-                res.send({msg: "Invalid Login"});
-            }
+
+                try {
+                    let pwd = ePwd(req.body.password, process.env.SECRET);
+
+
+                    if(r[0].password === pwd){
+                        res.send({msg: "Valid Login for " + r[0].username, user: r[0]});
+                    }else{
+                        res.send("Invalid Login");
+                    }
+                } catch (err){
+                    res.send({msg: "Invalid login format"});
+                }
         });
-
-
     }catch (err){
-        res.send({msg: err});
+        res.send(err);
     }
 };
 
 const SelectUser = (req, res) => {
-
     try{
-
-        User.find({username:req.query.username}).then(r => {
+        User.find({username:req.body.username}).then(r => {
             if(r === []){
-                res.send("User: " + req.query.username + " not found in the database");
+                res.send("User: " + req.body.username + " not found in the database");
             }else {
                 res.send(r);
             }
@@ -55,24 +59,19 @@ const SelectUser = (req, res) => {
 };
 
 const GetUserId = (req, res) => {
-
-
     try{
-        User.find({username: req.query.username}).then(r => {
+        User.find({username: req.body.username}).then(r => {
             res.send(r[0]._id);
-            Console.log(r[0]);
         });
     }catch (err){
-        res.send({msg: err})
+        res.send(err);
     }
-
-
 };
 
 
 const CreateUser = (req, res) => {
     try{
-        User.find({username: req.body.username}, (a, b) => {
+        User.find({username: req.query.username}, (a, b) => {
 
             if(b.length === 0){
 
@@ -104,11 +103,11 @@ const CreateUser = (req, res) => {
 
 const UserExists = (req, res) => {
     try {
-        User.exists({username: req.query.username}).then( r => {
-            res.send({msg: r});
+        User.exists({username: req.body.username}).then( r => {
+            res.send(r);
         });
     } catch (err) {
-        res.send({msg: err});
+        res.send(err);
     };
 };
 
