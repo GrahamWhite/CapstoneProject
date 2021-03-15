@@ -17,14 +17,21 @@ eg. Asdf_Ghij.file
 
 API can be access on port 3000
 
-####POST:
-"/user" = insert user
-"/login" = user login
+## POST:
+/user = Insert user
+/login = User login
+user_exist = Check if a user exists
 
-"/game" = insert game
-"/userGame" = insert user-game relationship
+/game = Insert a game
 
-####GET:
-"/users" = get all users
+/userGame = insert user-game relationship
+
+## GET:
+/users = Get all users
+/user = Get a user
+
+/games = Get all games 
+/game = Get a game
+
 
 

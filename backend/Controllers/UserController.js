@@ -4,15 +4,15 @@ const ePwd = require("encrypt-password");
 
 const User = require('../Schemas/User');
 
-const FindAllUsers = (req, res) => {
+const SelectUsers = (req, res) => {
 
     try{
         User.find({}).then(r => {
             if(r === []){
                 res.send("No users currently in the database");
             }else{
-                res.send(r)
-            }
+                res.send(r);
+            };
 
         });
     }catch (err){
@@ -20,43 +20,55 @@ const FindAllUsers = (req, res) => {
     }
 };
 
-const UserLogin = (req, res) => {
+const Login = (req, res) => {
     try{
         User.find({username: req.body.username}).then(r => {
             console.log(r[0].password);
-            if(r[0].password === ePwd(req.body.password, process.env.SECRET)){
-                res.send({msg: "Valid Login for " + r[0].username, user: r[0]});
-            }else{
-                res.send({msg: "Invalid Login"});
-            }
+
+                try {
+                    let pwd = ePwd(req.body.password, process.env.SECRET);
+
+
+                    if(r[0].password === pwd){
+                        res.send({msg: "Valid Login for " + r[0].username, user: r[0]});
+                    }else{
+                        res.send("Invalid Login");
+                    }
+                } catch (err){
+                    res.send({msg: "Invalid login format"});
+                }
         });
-
-
     }catch (err){
-        res.send({msg: err});
+        res.send(err);
     }
-}
+};
 
-const FindUserByUsername = (req, res) => {
-
+const SelectUser = (req, res) => {
     try{
-
-        User.find({username:req.query.username}).then(r => {
+        User.find({username:req.body.username}).then(r => {
             if(r === []){
-                res.send("User: " + req.query.username + " not found in the database");
+                res.send("User: " + req.body.username + " not found in the database");
             }else {
                 res.send(r);
             }
         });
     }
     catch (err){
+        res.send({err});
+    }
+};
+
+const GetUserId = (req, res) => {
+    try{
+        User.find({username: req.body.username}).then(r => {
+            res.send(r[0]._id);
+        });
+    }catch (err){
         res.send(err);
     }
 };
 
-
-
-const CreateNewUser = (req, res) => {
+const CreateUser = (req, res) => {
     try{
         User.find({username: req.body.username}, (a, b) => {
 
@@ -86,11 +98,23 @@ const CreateNewUser = (req, res) => {
     {
         res.send({msg: "Error: " + err});
     }
-}
+};
+
+const UserExists = (req, res) => {
+    try {
+        User.exists({username: req.body.username}).then( r => {
+            res.send(r);
+        });
+    } catch (err) {
+        res.send(err);
+    };
+};
 
 
-exports.FindAllUsers = FindAllUsers;
-exports.FindUserByUsername = FindUserByUsername;
-exports.CreateNewUser = CreateNewUser;
-exports.UserLogin = UserLogin;
+exports.SelectUsers = SelectUsers;
+exports.SelectUser = SelectUser;
+exports.CreateUser = CreateUser;
+exports.Login = Login;
+exports.UserExists = UserExists;
+exports.GetUserId = GetUserId;
 

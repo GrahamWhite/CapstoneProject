@@ -13,18 +13,30 @@ const port = process.env.PORT || 5000;
 //Schema Imports
 const User = require('../backend/Schemas/User');
 const Game = require('../backend/Schemas/Game');
-const UserGame = require('./Schemas/UserGame');
 
 
-const {FindUserByUsername} = require("./Controllers/UserController");
-const {FindAllUsers} = require("./Controllers/UserController");
-const {CreateNewUser} = require("./Controllers/UserController");
-const {UserLogin} = require("./Controllers/UserController");
+
+const {SelectUser} = require("./Controllers/UserController");
+const {SelectUsers} = require("./Controllers/UserController");
+const {CreateUser} = require("./Controllers/UserController");
+const {UserExists} = require("./Controllers/UserController");
+const {Login} = require("./Controllers/UserController");
 
 
-const {SelectAllGames} = require("./Controllers/GameController");
 
-const {InsertUserGame} = require("./Controllers/UserGameController");
+const {SelectGames} = require("./Controllers/GameController");
+const {SelectGame} = require("./Controllers/GameController");
+const {CreateGame} = require("./Controllers/GameController");
+
+
+const {SelectUserGames} = require("./Controllers/UserGameController");
+const {SelectUserGame} = require("./Controllers/UserGameController");
+const {UserGameExists} = require("./Controllers/UserGameController");
+const {CreateUserGame} = require("./Controllers/UserGameController");
+
+
+
+const {GetUserId} = require("./Controllers/UserController");
 
 
 require('dotenv').config();
@@ -32,29 +44,90 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 
-
-
 //User Routes
 app.get('/users', (req, res) => {
-    FindAllUsers(req, res);
+    SelectUsers(req, res);
 });
+
 app.get('/user', (req, res) => {
-    FindUserByUsername(req, res);
+    SelectUser(req, res);
 });
+
 app.post('/user', (req, res) => {
-    CreateNewUser(req, res);
+    CreateUser(req, res);
 });
+
 app.post('/login', (req, res) => {
-    UserLogin(req, res);
+    Login(req, res);
 });
-//Game Routes
+
+app.post('/user_id', (req, res) => {
+    GetUserId(req, res);
+});
+
+app.post('/user_exists', (req, res)  => {
+    UserExists(req, res);
+});
+
+app.post('/get_user_id', (req, res) => {
+    GetUserId(req, res);
+});
+
+//GAME Routes
 app.get('/games', (req, res) => {
-    SelectAllGames(req,res);
+    SelectGames(req, res);
 });
-//UserGame Routes
-app.post('/userGame', (req, res) => {
-    InsertUserGame(req, res);
+
+app.get('/game', (req, res) => {
+    SelectGame(req, res);
 });
+
+app.post('/game', (req, res) => {
+    CreateGame(req, res);
+});
+
+app.post('/game_id', (req, res) => {
+    GetGameId(req, res);
+});
+
+app.post('/game_exists', (req, res)  => {
+    GameExists(req, res);
+});
+
+app.post('/get_game_id', (req, res) => {
+    GetGameId(req, res);
+});
+
+
+//UserGame routes
+app.get('/user_games', (req, res) => {
+   SelectUserGames(req, res);
+});
+
+app.get('/user_game', (req, res) => {
+    SelectUserGame(req, res);
+});
+
+app.post('/user_game', (req, res) => {
+    CreateUserGame(req, res);
+});
+//UserGame routes
+app.get('/user_game_exists', (req, res) => {
+    UserGameExists(req, res);
+});
+
+
+
+
+
+/*
+app.post('/user_game', (req, res) => {
+    CreateUserGame(req, res);
+});
+*/
+
+
+
 
 //Initialize connection to MongoDb
 try {
