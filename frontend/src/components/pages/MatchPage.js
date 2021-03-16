@@ -7,8 +7,7 @@ import AuthNavbar from '../AuthNavbar';
 function MatchPage() {
   return (
     <div>
-        <AuthNavbar/>
-        <BottomNavbar/>
+
     </div>
   )
 }

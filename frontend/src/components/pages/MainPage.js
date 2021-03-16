@@ -12,21 +12,22 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         width: '75%',
-        margin: 'auto'
+        margin: 'auto',
+        marginBottom: '2%'
     }
     }));
 
 function MainPage() {
     const classes = useStyles();
-  return (
+    return (
     <div>
-        <AuthNavbar/>
+        <h1 className={classes.center}>Search for a User to Match with:</h1>
         <SearchBar 
           // value={this.state.value}
           // onChange={(newValue) => this.setState({ value: newValue })}
           // onRequestSearch={() => doSomethingWith(this.state.value)}
           className={classes.center}/>
-        <BottomNavbar/>
+          <Button className={classes.center}>Edit Your Games</Button>
     </div>
   )
 }

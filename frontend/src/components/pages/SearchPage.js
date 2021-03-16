@@ -8,9 +8,7 @@ import SearchBar from "material-ui-search-bar";
 function SearchPage() {
   return (
     <div>
-        <AuthNavbar/>
         <SearchBar/>
-        <BottomNavbar/>
     </div>
   )
 }
