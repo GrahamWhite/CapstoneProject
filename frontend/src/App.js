@@ -12,13 +12,16 @@ import NotificationPage from './components/pages/NotificationPage';
 import FriendPage from './components/pages/FriendPage';
 import MatchPage from './components/pages/MatchPage';
 import ProfilePage from './components/pages/ProfilePage';
-import { BottomNavigation, makeStyles, ThemeProvider } from '@material-ui/core';
+import { makeStyles, ThemeProvider } from '@material-ui/core';
 import BottomNavbar from './components/BottomNavbar.js';
 import AuthNavbar from './components/AuthNavbar.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop:'5rem',
+  },
+  bottomNavbarSpacer: {
+    marginBottom: '60px'
   }
 }));
 
@@ -31,14 +34,16 @@ function App() {
   return (
     <Router className="App">
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-       {username ? <AuthNavbar/> : <Navbar/>}
+       {username 
+       ? <AuthNavbar/> 
+       : <Navbar/>}
         <div style={{marginTop:'5rem'}}>
           <Switch>
-            <Route path='/' exact component={HomePage}/>
+            <Route path='/' exact component={MainPage}/>
             <Route path='/login' exact component={LoginPage}/>
             <Route path='/register' exact component={RegisterPage}/>
 
-            <Route path='/main' exact component={MainPage}/>
+            {/* <Route path='/main' exact component={MainPage}/> */}
             <Route path='/search' exact component={SearchPage}/>
             <Route path='/notification' exact component={NotificationPage}/>
             <Route path='/friend' exact component={FriendPage}/>
@@ -46,7 +51,10 @@ function App() {
             <Route path='/user' component={ProfilePage}/>
           </Switch>
         </div>
-        {username ? <BottomNavbar/> : ''}
+        <div className={classes.bottomNavbarSpacer}></div>
+        {username 
+        ? <BottomNavbar/> 
+        : ''}
       </ThemeProvider>
     </Router>
   );
