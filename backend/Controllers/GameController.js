@@ -1,27 +1,37 @@
-let express = require('express');
-let db = require('mongoose');
-
 const Game = require('../Schemas/Game');
 
 const SelectGames = (req, res) => {
-    try{
-        Game.find({}).then(r => {
-            if(r === []){
+    try {
+        User.find({}).then(r => {
+            if (!r[0]) {
                 res.send("No games currently in the database");
-            }else{
+            } else {
                 res.send(r);
-            };
-
+            }
+            ;
         });
-    }catch (err){
+    } catch (err) {
         res.send(err);
     }
 };
 
 const SelectGame = (req, res) => {
     try{
+
+        if(!req.body.name){
+            res.send("name is required");
+            return;
+        }
+
+        if(!req.body.platform){
+            res.send("platform is required");
+            return;
+        }
+
+
+
         Game.find({name:req.body.name, platform: req.body.platform}).then(r => {
-            if(r === []){
+            if(!r[0]){
                 res.send("Game: " + req.body.name + " not found in the database");
             }else {
                 res.send(r);
@@ -45,23 +55,33 @@ const GetGameId = (req, res) => {
 
 const CreateGame = (req, res) => {
     try{
-        Game.find({name: req.body.name, platform: req.body.platform}, (a, b) => {
 
-            if(b.length === 0){
+        if(!req.body.name){
+            res.send("name is required");
+        }
+        else if(!req.body.platform){
+            res.send("platform is required");
+        }else {
 
-                let game = new Game({
-                    name: req.body.name,
-                    platform: req.body.platform
-                });
+            Game.find({name: req.body.name, platform: req.body.platform}).then(g => {
 
-                game.save();
+                if(!g[0]){
+                    let game = new Game({
+                        name: req.body.name,
+                        platform: req.body.platform
+                    });
 
-                res.send({msg: "Game Saved", game: game});
-            }
-            else {
-                res.send("Game already exists");
-            }
-        });
+                    game.save();
+
+                    res.send({msg: "Game Saved", game: game});
+                }
+                else {
+                    res.send("Game already exists")
+                }
+
+            });
+        }
+
 
 
     }catch (err)
