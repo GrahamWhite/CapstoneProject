@@ -31,7 +31,6 @@ const {GameExists} = require("./Controllers/GameController");
 
 
 const {SelectUserGames} = require("./Controllers/UserGameController");
-const {SelectUserGame} = require("./Controllers/UserGameController");
 const {UserGameExists} = require("./Controllers/UserGameController");
 const {CreateUserGame} = require("./Controllers/UserGameController");
 

@@ -6,7 +6,7 @@ const User= require('../Schemas/User');
 const Game = require('../Schemas/Game');
 
 
-const SelectUserGames = (req, res) => {
+/*const SelectUserGames = (req, res) => {
     try {
         UserGames.find({}).then(r => {
             if (!r[0]) {
@@ -19,7 +19,7 @@ const SelectUserGames = (req, res) => {
     } catch (err) {
         res.send(err);
     }
-};
+};*/
 
 
 const CreateUserGame = (req, res) => {
@@ -56,7 +56,7 @@ const CreateUserGame = (req, res) => {
     }
 };
 
-const SelectUserGame= (req, res) => {
+const SelectUserGames= (req, res) => {
     try {
         User.find({username: req.body.username}).then(user => {
 
@@ -99,7 +99,6 @@ const UserGameExists = (req, res) => {
 };
 
 exports.SelectUserGames = SelectUserGames;
-exports.SelectUserGame = SelectUserGame;
 exports.UserGameExists = UserGameExists;
 exports.CreateUserGame= CreateUserGame;
 
