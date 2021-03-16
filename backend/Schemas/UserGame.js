@@ -6,7 +6,8 @@ const Schema = mongoose.Schema;
 
 const UserGameSchema = new Schema({
     gameId: {type: Schema.Types.ObjectId, ref: 'Game'},
-    userId: {type: Schema.Types.ObjectId, ref: 'User'}
+    userId: {type: Schema.Types.ObjectId, ref: 'User'},
+    isFavorite: Boolean
 });
 
 //Export function to create "SomeModel" model class

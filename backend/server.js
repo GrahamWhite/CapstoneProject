@@ -35,7 +35,6 @@ const {UserGameExists} = require("./Controllers/UserGameController");
 const {CreateUserGame} = require("./Controllers/UserGameController");
 
 
-const {SelectFriendships} = require("./Controllers/FriendshipController");
 
 
 
@@ -122,12 +121,6 @@ app.get('/user_game_exists', (req, res) => {
 
 
 
-
-
-
-app.get('/friends', (req, res) => {
-    SelectFriendships(req, res);
-});
 
 
 
