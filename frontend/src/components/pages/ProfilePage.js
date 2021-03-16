@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px'
   },
   tabPanelsContainer: {
-    marginBottom: '100px'
+    
   }
 }));
 
