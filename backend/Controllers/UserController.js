@@ -1,113 +1,106 @@
-let express = require('express');
-let db = require('mongoose');
-const ePwd = require("encrypt-password");
+/*
+File: UserController.js
+Version: 1.0
+
+Revision History:
+    March 12 2020: Graham white
+ */
 
 const User = require('../Schemas/User');
+const ePwd = require("encrypt-password");
 
 const SelectUsers = (req, res) => {
 
-    try{
+    try {
         User.find({}).then(r => {
-            if(r === []){
+            if (!r[0]) {
                 res.send("No users currently in the database");
-            }else{
+            } else {
                 res.send(r);
-            };
-
+            }
+            ;
         });
-    }catch (err){
+    } catch (err) {
         res.send(err);
     }
 };
 
 const Login = (req, res) => {
-    try{
-        User.find({username: req.body.username}).then(r => {
-            console.log(r[0].password);
+    try {
+        User.find({username: req.body.username}).then(u => {
 
-                try {
-                    let pwd = ePwd(req.body.password, process.env.SECRET);
+            if (!u[0]) {
+                res.send("User does not exist");
+            }
 
+            let pwd = ePwd(req.body.password, process.env.SECRET);
 
-                    if(r[0].password === pwd){
-                        res.send({msg: "Valid Login for " + r[0].username, user: r[0]});
-                    }else{
-                        res.send("Invalid Login");
-                    }
-                } catch (err){
-                    res.send({msg: "Invalid login format"});
-                }
+            if (u[0].password === pwd) {
+                res.send({msg: "Valid Login for " + u[0].username, user: u[0]});
+            } else {
+                res.send("Invalid Login");
+            }
         });
-    }catch (err){
+    } catch (err) {
         res.send(err);
     }
 };
 
 const SelectUser = (req, res) => {
-    try{
-        User.find({username:req.body.username}).then(r => {
-            if(r === []){
+    try {
+        User.find({username: req.body.username}).then(r => {
+            if (r === []) {
                 res.send("User: " + req.body.username + " not found in the database");
-            }else {
+            } else {
                 res.send(r);
             }
         });
-    }
-    catch (err){
+    } catch (err) {
         res.send({err});
     }
 };
 
 const GetUserId = (req, res) => {
-    try{
+    try {
         User.find({username: req.body.username}).then(r => {
             res.send(r[0]._id);
         });
-    }catch (err){
+    } catch (err) {
         res.send(err);
     }
 };
 
 const CreateUser = (req, res) => {
-    try{
-        User.find({username: req.body.username}, (a, b) => {
+    try {
+        User.find({username: req.body.username}).then(u => {
 
-            if(b.length === 0){
-
-                    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
-
-                    let user = new User({
-                        username: req.body.username,
-                        password: encryptedPwd,
-                        email: req.body.email,
-                        isAdmin: false,
-                        steamKey: ""
-                    });
-
-                    user.save();
-
-                    res.send({msg: "User Saved", username: user.username});
-            }
-            else {
-                res.send("User already exists");
+            if (!u[0]) {
+                const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
+                let user = new User({
+                    username: req.body.username,
+                    password: encryptedPwd,
+                    email: req.body.email,
+                    isAdmin: false,
+                    steamKey: ""
+                });
+                user.save();
+                res.send({msg: "User Saved", username: user.username});
             }
         });
-
-
-    }catch (err)
-    {
+    } catch (err) {
         res.send({msg: "Error: " + err});
     }
 };
 
 const UserExists = (req, res) => {
     try {
-        User.exists({username: req.body.username}).then( r => {
+        User.exists({username: req.body.username}).then(r => {
             res.send(r);
         });
     } catch (err) {
         res.send(err);
-    };
+    }
+    ;
 };
 
 

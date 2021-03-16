@@ -27,12 +27,16 @@ const {Login} = require("./Controllers/UserController");
 const {SelectGames} = require("./Controllers/GameController");
 const {SelectGame} = require("./Controllers/GameController");
 const {CreateGame} = require("./Controllers/GameController");
+const {GameExists} = require("./Controllers/GameController");
 
 
 const {SelectUserGames} = require("./Controllers/UserGameController");
 const {SelectUserGame} = require("./Controllers/UserGameController");
 const {UserGameExists} = require("./Controllers/UserGameController");
 const {CreateUserGame} = require("./Controllers/UserGameController");
+
+
+const {SelectFriendships} = require("./Controllers/FriendshipController");
 
 
 
@@ -114,6 +118,16 @@ app.post('/user_game', (req, res) => {
 //UserGame routes
 app.get('/user_game_exists', (req, res) => {
     UserGameExists(req, res);
+});
+
+
+
+
+
+
+
+app.get('/friends', (req, res) => {
+    SelectFriendships(req, res);
 });
 
 

@@ -7,18 +7,20 @@ const Game = require('../Schemas/Game');
 
 
 const SelectUserGames = (req, res) => {
-    try{
-        UserGame.find({}).then(r => {
-            if(r === []){
-                res.send("No user_games currently in the database");
-            }else{
+    try {
+        UserGames.find({}).then(r => {
+            if (!r[0]) {
+                res.send("No userGames currently in the database");
+            } else {
                 res.send(r);
-            };
+            }
+            ;
         });
-    }catch (err){
+    } catch (err) {
         res.send(err);
     }
 };
+
 
 const CreateUserGame = (req, res) => {
     try{
@@ -37,7 +39,10 @@ const CreateUserGame = (req, res) => {
 
                         userGame.save();
 
-                        res.send(userGame);
+                        res.send({userGame});
+                    }
+                    else{
+                        res.send("Game not found");
                     }
                 })
             }else {
@@ -54,9 +59,24 @@ const CreateUserGame = (req, res) => {
 const SelectUserGame= (req, res) => {
     try {
         User.find({username: req.body.username}).then(user => {
-            Game.find({name: req.body.name}).then( game => {
-                res.send({user: user, game: game});
-            });
+
+            if(user){
+                Game.find({name: req.body.name}).then( game => {
+
+                    if(game){
+                        res.send({user: user, game: game});
+                    }
+                    else{
+                        res.send("game not found");
+                    }
+
+                });
+            }
+            else{
+                res.send("user not found");
+            }
+
+
         });
 
     } catch (err) {
