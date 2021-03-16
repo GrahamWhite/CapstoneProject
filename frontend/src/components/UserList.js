@@ -1,5 +1,4 @@
 import {
-<<<<<<< HEAD
   Button,
   Card,
   CardActionArea,
@@ -260,29 +259,3 @@ function UserList(props) {
 }
 
 export default UserList;
-=======
-    Button,
-    Card,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    CardMedia,
-    Grid,
-    makeStyles,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableFooter,
-    TableHead,
-    TablePagination,
-    TableRow,
-    Typography,
-  } from "@material-ui/core";
-  import { Pagination } from "@material-ui/lab";
-  import React, { useEffect, useState, useCallback } from "react";
-  import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
-  import StarIcon from "@material-ui/icons/Star";
-  import DeleteIcon from "@material-ui/icons/Delete";
->>>>>>> 599c186e44473a1f2a991528230711d8412601b0
