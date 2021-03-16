@@ -35,8 +35,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px'
   },
   tabPanelsContainer: {
-    height: '115vh',
-    backgroundColor: theme.palette.primary
+    marginBottom: '100px'
   }
 }));
 

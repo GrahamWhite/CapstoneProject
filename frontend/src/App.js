@@ -12,7 +12,9 @@ import NotificationPage from './components/pages/NotificationPage';
 import FriendPage from './components/pages/FriendPage';
 import MatchPage from './components/pages/MatchPage';
 import ProfilePage from './components/pages/ProfilePage';
-import { makeStyles, ThemeProvider } from '@material-ui/core';
+import { BottomNavigation, makeStyles, ThemeProvider } from '@material-ui/core';
+import BottomNavbar from './components/BottomNavbar.js';
+import AuthNavbar from './components/AuthNavbar.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,13 +23,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  let username = localStorage.getItem('username');
+
   const [isDarkTheme, setTheme] = useState(true);
   const classes = useStyles();
 
   return (
     <Router className="App">
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-        <Navbar></Navbar>
+       {username ? <AuthNavbar/> : <Navbar/>}
         <div style={{marginTop:'5rem'}}>
           <Switch>
             <Route path='/' exact component={HomePage}/>
@@ -42,6 +46,7 @@ function App() {
             <Route path='/user' component={ProfilePage}/>
           </Switch>
         </div>
+        {username ? <BottomNavbar/> : ''}
       </ThemeProvider>
     </Router>
   );
