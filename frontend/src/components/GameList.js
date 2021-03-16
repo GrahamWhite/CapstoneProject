@@ -18,13 +18,15 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-import { Pagination } from "@material-ui/lab";
 import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
 import StarIcon from "@material-ui/icons/Star";
+import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-function GameItem(props) {
+
+
+function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -37,14 +39,15 @@ function GameItem(props) {
       width: "151",
     },
     blankItem: {},
-    favouriteicon: {
+    favouriteIcon: {
       width: "30px",
       height: "auto",
-      top: "0",
+      top: "5%",
       left: "100%",
       transform: "translate(-40px)",
-      backgroundColor: 'yellow',
-    },
+      color: 'red',
+      position: 'absolute',
+    }
   }));
   const classes = useStyles();
 
@@ -57,11 +60,13 @@ function GameItem(props) {
   const [favourite, setFavourite] = useState(false);
 
   useEffect(() => {
-    setFavourite(props.game.favourite);
-  }, [favourite])
+    setFavourite(game.favourite);
+    setSelected(game.selected);
+  }, [game.favourite])
 
-  function onSelected(event) {
-    setSelected(!selected);
+  function onRemoveItem(index) {
+    setSelected(!false);
+    onRemove(index);
   }
 
   return (
@@ -73,7 +78,10 @@ function GameItem(props) {
         }}
       >
         <CardContent>
-          {favourite ? <div className={classes.favouriteIcon}></div> : ""}
+          {favourite 
+          ? <StarIcon className={classes.favouriteIcon}/> 
+          : ''}
+          
           <CardMedia
             className={classes.cover}
             image={imgPlaceholder /*process.env.PUBLIC_URL + game.img*/}
@@ -81,10 +89,10 @@ function GameItem(props) {
           <div className={classes.details}>
             <CardContent className={classes.content}>
               <Typography component="h5" variant="h5">
-                {props.game.name}
+                {game.name}
               </Typography>
               <Typography variant="subtitle1" color="textSecondary">
-                {props.game.platform}
+                {game.platform}
               </Typography>
             </CardContent>
           </div>
@@ -97,6 +105,7 @@ function GameItem(props) {
             color="primary"
             variant="contained"
             startIcon={<StarIcon />}
+            onClick={() => onFavourite(index)}
           >
             Favourite
           </Button>
@@ -105,6 +114,7 @@ function GameItem(props) {
             color="secondary"
             variant="contained"
             startIcon={<DeleteIcon />}
+            onClick={onRemoveItem}
           >
             Remove
           </Button>
@@ -127,67 +137,76 @@ function GameList(props) {
 
   const dummyData = [
     {
-      id: "1",
+      id: "0",
       name: "Apex Legends",
       platform: "Steam, Origin",
       img: "/images/ApexLogo.png",
       favourite: false,
+      selected: false,
     },
     {
-      id: "2",
+      id: "1",
       name: "Rainbow 6 Siege",
       platform: "Steam, Ubisoft",
       img: "",
       favourite: false,
+      selected: false,
     },
     {
-      id: "3",
+      id: "2",
       name: "Deep Rock Galactic",
       platform: "Steam",
       img: "",
       favourite: true,
+      selected: false,
     },
     {
-      id: "4",
+      id: "3",
       name: "Noita",
       platform: "Steam",
       img: "",
       favourite: false,
+      selected: false,
     },
     {
-      id: "5",
+      id: "4",
       name: "Polybius",
       platform: "Steam, 80's Arcade Machine",
       img: "",
       favourite: false,
+      selected: false,
     },
     {
-      id: "6",
+      id: "5",
       name: "Devil Daggers",
       platform: "Steam",
       img: "",
       favourite: false,
+      selected: false,
     },
     {
-      id: "7",
+      id: "6",
       name: "Ori & the blind forestc",
       platform: "Steam",
       img: "",
       favourite: false,
+      selected: false,
     },
     {
-      id: "8",
+      id: "7",
       name: "Enter The Gungeon",
       platform: "Steam",
       img: "",
       favourite: false,
+      selected: false,
     },
     {
-      id: "9",
+      id: "8",
       name: "Hot Tub Time Machine",
       platform: "Film, Movie",
       img: "",
       favourite: false,
+      selected: false,
     },
   ];
 
@@ -242,6 +261,27 @@ function GameList(props) {
     setPage(newPage);
   };
 
+  // List changing functions
+  const favouriteGame = index => {
+    const newGames = [...games];
+    let favourited = newGames[index].favourite;
+    newGames[index].favourite = !favourited;
+    setGames(newGames);
+  }
+
+  const removeGame = index => {
+    const newGames = [...games];
+    newGames.splice(index, 1);
+    setGames(newGames);
+  }
+
+  const onSelected = (index, selected) => {
+    const newGames = [...games];
+    for (let game of newGames) game.selected = false;
+    newGames[index].selected = selected;
+    setGames(newGames);
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -255,9 +295,14 @@ function GameList(props) {
         <TableBody>
           {games
             .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
-            .map((game) => (
-              <TableRow key={game.id} className={classes.tableItem}>
-                <GameItem game={game} />
+            .map((game, index) => (
+              <TableRow key={index} className={classes.tableItem}>
+                <GameItem 
+                  game={game}
+                  index={index}
+                  onFavourite={favouriteGame}
+                  onRemove={removeGame}
+                />
               </TableRow>
             ))}
         </TableBody>
