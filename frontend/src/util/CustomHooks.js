@@ -23,13 +23,13 @@ export const useInterval = (fun, milliseconds=1000, condition=true) => {
   input:  url <String>
   output: data <Object>, loading <Boolean> 
 */
-export const useFetch = url => {
+export const useFetch = (url, options) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(async () => {
-    const response = await fetch(url);
+    const response = await fetch(url, options);
     const data = await response.json();
     const [item] = data.results;
     setData(item);
