@@ -70,7 +70,10 @@ function UserItem({ user, index, history }) {
 
   function goToMatch(username) {
     localStorage.setItem("searchParams", user.username);
-    history.push("/match");
+    history.push({
+      pathname: "/match",
+      search: `?username=${user.username}`
+    });
   }
 
   return (
@@ -93,7 +96,7 @@ function UserItem({ user, index, history }) {
               <div className={classes.details}>
                 <CardContent className={classes.content}>
                   <Typography component="h6" variant="h6">
-                    {user.name}
+                    {user.username}
                   </Typography>
                 </CardContent>
               </div>
@@ -170,7 +173,7 @@ function UserList(props) {
 
   const ROWS_PER_PAGE = 5;
 
-  const [users, setUsers] = useState(dummyData);
+  const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -210,6 +213,13 @@ function UserList(props) {
     }
   }
 
+  useEffect(() => {
+    fetch(url + "/select_users")
+      .then(response => response.json())
+      .then(data => { setUsers(data); console.log(data);});
+    console.log(users);
+  }, [])
+
   const onChange = useCallback((updatedUser) => {
     const userIndex = users.findIndex((emp) => emp.id === updatedUser.id);
     users[userIndex] = updatedUser;
@@ -231,13 +241,15 @@ function UserList(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users
+          {users.length > 0 ? 
+          users
             .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
             .map((user, index) => (
               <TableRow key={index} className={classes.tableItem}>
                 <UserItem user={user} index={index} history={history} />
               </TableRow>
-            ))}
+            ))
+          : 'hmm thats weird, there are no users'}
         </TableBody>
         <TableFooter>
           <TableRow>
