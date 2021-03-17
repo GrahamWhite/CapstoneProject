@@ -32,7 +32,7 @@ app.get('/select_users', (req, res) => {
 });
 
 app.post('/select_user', (req, res) => {
-    UserController.SelectUsers(req, res);
+    UserController.SelectUser(req, res);
 });
 
 app.post('/create_user', (req, res) => {
@@ -57,7 +57,7 @@ app.post('/select_game', (req, res) => {
     GameController.SelectGame(req, res);
 });
 
-app.post('/create_user', (req, res) => {
+app.post('/create_game', (req, res) => {
     GameController.CreateGame(req, res);
 });
 
@@ -68,6 +68,9 @@ app.post('/get_game_id', (req, res) => {
 
 app.get('/select_usergames', (req, res) => {
     UserGameController.SelectUserGames(req, res);
+})
+app.post('/create_usergame', (req, res) => {
+    UserGameController.CreateUserGame(req, res);
 })
 
 

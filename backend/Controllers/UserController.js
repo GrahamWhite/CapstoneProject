@@ -48,9 +48,9 @@ const Login = (req, res) => {
 
 const SelectUser = (req, res) => {
     try {
-        User.findOne({username: req.query.username}).then(r => {
-            if (!r[0]) {
-                res.send("User: " + req.query.username + " not found in the database");
+        User.findOne({username: req.body.username}).then(r => {
+            if (!r) {
+                res.send("User: " + req.body.username + " not found in the database");
             } else {
                 res.send(r);
             }
@@ -79,15 +79,21 @@ const CreateUser = (req, res) => {
     try {
         User.find({username: req.body.username}).then(u => {
 
-            if(!validateEmail(req.body.email)){
-                res.send("invalid email");
-            }
 
-            if(!req.body.username || !req.body.password){
-                res.send("username and password required");
-            }
+
+
 
             if (!u[0]) {
+
+                if(!req.body.username || !req.body.password){
+                    res.send("username and password required");
+                }
+
+                if(!validateEmail(req.body.email)){
+                    res.send("invalid email");
+                }
+
+
                 try{
                     const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
                 } catch (err){
