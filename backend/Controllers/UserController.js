@@ -48,9 +48,9 @@ const Login = (req, res) => {
 
 const SelectUser = (req, res) => {
     try {
-        User.find({username: req.body.username}).then(r => {
-            if (r === []) {
-                res.send("User: " + req.body.username + " not found in the database");
+        User.findOne({username: req.query.username}).then(r => {
+            if (!r[0]) {
+                res.send("User: " + req.query.username + " not found in the database");
             } else {
                 res.send(r);
             }
@@ -69,13 +69,31 @@ const GetUserId = (req, res) => {
         res.send(err);
     }
 };
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
 
 const CreateUser = (req, res) => {
     try {
         User.find({username: req.body.username}).then(u => {
 
+            if(!validateEmail(req.body.email)){
+                res.send("invalid email");
+            }
+
+            if(!req.body.username || !req.body.password){
+                res.send("username and password required");
+            }
+
             if (!u[0]) {
-                const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
+                try{
+                    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
+                } catch (err){
+                    res.send("username and password required");
+                }
+
                 let user = new User({
                     username: req.body.username,
                     password: encryptedPwd,
@@ -85,6 +103,9 @@ const CreateUser = (req, res) => {
                 });
                 user.save();
                 res.send({msg: "User Saved", username: user.username});
+            }
+            else{
+                res.send("user already exists");
             }
         });
     } catch (err) {

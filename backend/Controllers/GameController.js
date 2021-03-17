@@ -30,7 +30,7 @@ const SelectGame = (req, res) => {
 
 
 
-        Game.find({name:req.body.name, platform: req.body.platform}).then(r => {
+        Game.findOne({name:req.body.name, platform: req.body.platform}).then(r => {
             if(!r[0]){
                 res.send("Game: " + req.body.name + " not found in the database");
             }else {
