@@ -5,6 +5,8 @@ import BottomNavbar from '../BottomNavbar';
 import AuthNavbar from '../AuthNavbar';
 import MatchHeader from '../MatchHeader';
 import UserGameList from '../UserGameList';
+import { backendURL } from '../../globals';
+import MatchList from '../MatchList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,37 +39,26 @@ function MatchPage() {
   const [loading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState(0);
 
-  const [user] = useState({
-    username: 'tmills9208',
+  const [user, setUser] = useState({
+    username: localStorage.getItem('username') ? localStorage.getItem('username') : 'invalid user',
     email: 'tmills9208@conestogac.on.ca',
     bio: 'Hi, i am a person!',
     avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder
-    socialLinks: {
 
-    },
-    games: {
-
-    },
-    friends: {
-
-    },
   });
 
-  const [matchedUser] = useState({
-    username: 'lordhexfuzz',
+  const [matchedUser, setMatchedUser] = useState({
+    username: new URLSearchParams(window.location.search).get('username') ?
+      new URLSearchParams(window.location.search).get('username') : 'invalid user 2',
     email: 'notaemail@gmail.com',
     bio: "I'm a gamer and I love games",
-    avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder
-    socialLinks: {
-
-    },
-    games: {
-
-    },
-    friends: {
-
-    },
+    avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder,
+    
   });
+
+  useEffect(() => {
+    //fetch(backendURL + '/user')
+  }, [])
 
   return (
     <div>
@@ -81,7 +72,7 @@ function MatchPage() {
         {/* <h1 className={classes.center}>{user.username} + {matchedUser.username}</h1> */}
         </Grid>
         <Grid item xs={12}>
-          <UserGameList/>
+          <MatchList/>
         </Grid>
       </Grid>
     </div>
