@@ -25,6 +25,9 @@ const SelectUsers = (req, res) => {
     }
 };
 
+
+
+
 const Login = (req, res) => {
     try {
         User.find({username: req.body.username}).then(u => {
@@ -96,19 +99,20 @@ const CreateUser = (req, res) => {
 
                 try{
                     const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
-                } catch (err){
-                    res.send("username and password required");
-                }
+
 
                 let user = new User({
                     username: req.body.username,
                     password: encryptedPwd,
                     email: req.body.email,
-                    isAdmin: false,
-                    steamKey: ""
+                    isAdmin: false
                 });
                 user.save();
                 res.send({msg: "User Saved", username: user.username});
+
+                } catch (err){
+                    res.send("username and password required");
+                }
             }
             else{
                 res.send("user already exists");
