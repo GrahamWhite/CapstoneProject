@@ -31,7 +31,7 @@ function MatchHeader(props) {
           <img className={classes.profileImg} src={props.user.avatarImg} alt="User image"/>
         </Grid>
         <Grid item className={classes.profileUsername} xs={6}>
-          <Typography variant="h5">{props.user.username}</Typography>
+          <Typography variant="h5" align="center">{props.user.username}</Typography>
         </Grid>
       </Grid>
       </Grid>
@@ -39,7 +39,7 @@ function MatchHeader(props) {
         <Grid item xs={6}>
           <Grid container justify="center">
           <Grid item className={classes.profileUsername} xs={6}>
-              <Typography variant="h5" align='right'>{props.matchedUser.username}</Typography>
+              <Typography variant="h5" align="center">{props.matchedUser.username}</Typography>
             </Grid>
             <Grid item className={classes.profileImgContainer} xs={6}>
               <img className={classes.profileImg} src={props.matchedUser.avatarImg} alt="User image"/>
