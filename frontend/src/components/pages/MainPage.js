@@ -27,7 +27,8 @@ function MainPage() {
           // onChange={(newValue) => this.setState({ value: newValue })}
           // onRequestSearch={() => doSomethingWith(this.state.value)}
           className={classes.center}/>
-          <Button className={classes.center}>Edit Your Games</Button>
+          <Button className={classes.center} component={Link} to={"/search"}>Search (standin)</Button>
+          <Button className={classes.center} component={Link} to={"/games"}>Edit Your Games</Button>
     </div>
   )
 }

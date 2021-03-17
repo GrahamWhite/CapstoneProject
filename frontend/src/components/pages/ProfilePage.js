@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box } from '@material-ui/core'
 import { useFetch, useInterval } from '../../util/CustomHooks';
 import ProfileHeader from '../ProfileHeader';
-import GameList from '../GameList';
+import UserGameList from '../UserGameList';
 import FriendList from '../FriendList';
 
 
@@ -90,7 +90,7 @@ function UserProfile() {
       <div className={classes.tabPanelsContainer}>
         <TabPanel value={currentTab} index={0}>
           {/* Games panel */}
-          <GameList user={user}/>
+          <UserGameList user={user}/>
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
           {/* Friends panel */}

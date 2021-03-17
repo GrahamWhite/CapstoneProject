@@ -12,6 +12,7 @@ import NotificationPage from './components/pages/NotificationPage';
 import FriendPage from './components/pages/FriendPage';
 import MatchPage from './components/pages/MatchPage';
 import ProfilePage from './components/pages/ProfilePage';
+import GamesPage from './components/pages/GamesPage';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 import BottomNavbar from './components/BottomNavbar.js';
 import AuthNavbar from './components/AuthNavbar.js';
@@ -49,6 +50,8 @@ function App() {
             <Route path='/friend' exact component={FriendPage}/>
             <Route path='/match' exact component={MatchPage}/>
             <Route path='/user' component={ProfilePage}/>
+
+            <Route path='/games' component={GamesPage}/>
           </Switch>
         </div>
         <div className={classes.bottomNavbarSpacer}></div>

@@ -24,8 +24,6 @@ import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-
-
 function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
@@ -126,7 +124,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
   );
 }
 
-function GameList(props) {
+function UserGameList(props) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -325,4 +323,4 @@ function GameList(props) {
   );
 }
 
-export default GameList;
+export default UserGameList;
