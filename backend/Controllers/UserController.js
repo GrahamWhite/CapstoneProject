@@ -9,6 +9,7 @@ Revision History:
 const User = require('../Schemas/User');
 const ePwd = require("encrypt-password");
 
+//GET a list of users
 const SelectUsers = (req, res) => {
 
     try {
@@ -18,13 +19,69 @@ const SelectUsers = (req, res) => {
             } else {
                 res.send(r);
             }
-            ;
         });
     } catch (err) {
         res.send(err);
     }
 };
 
+//POST select a user
+const SelectUser = (req, res) => {
+    try {
+        User.findOne({username: req.query.username}).then(r => {
+            if (!r[0]) {
+                res.send("User: " + req.query.username + " not found in the database");
+            } else {
+                res.send(r);
+            }
+        });
+    } catch (err) {
+        res.send({err});
+    }
+};
+
+//POST Create a user
+const CreateUser = (req, res) => {
+    try {
+        User.find({username: req.body.username}).then(u => {
+
+            if(!validateEmail(req.body.email)){
+                res.send("Invalid email");
+            }
+
+            if(!req.body.username || !req.body.password){
+                res.send("Username and password required");
+            }
+
+            if (!u[0]) {
+                //?? Does this try catch need to exist if above if statement checks for blank inputs
+                try{
+                    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
+                } catch (err){
+                    res.send("username and password required");
+                }
+
+                //!! remove extra fields (and in schema)
+                let user = new User({
+                    username: req.body.username,
+                    password: encryptedPwd,
+                    email: req.body.email,
+                    isAdmin: false,
+                    steamKey: ""
+                });
+                user.save();
+                res.send({msg: "User Saved", username: user.username});
+            }
+            else{
+                res.send("User already exists");
+            }
+        });
+    } catch (err) {
+        res.send({msg: "Error: " + err});
+    }
+};
+
+//POST login a user
 const Login = (req, res) => {
     try {
         User.find({username: req.body.username}).then(u => {
@@ -46,20 +103,7 @@ const Login = (req, res) => {
     }
 };
 
-const SelectUser = (req, res) => {
-    try {
-        User.findOne({username: req.query.username}).then(r => {
-            if (!r[0]) {
-                res.send("User: " + req.query.username + " not found in the database");
-            } else {
-                res.send(r);
-            }
-        });
-    } catch (err) {
-        res.send({err});
-    }
-};
-
+//POST get a user id based on username
 const GetUserId = (req, res) => {
     try {
         User.find({username: req.body.username}).then(r => {
@@ -69,50 +113,8 @@ const GetUserId = (req, res) => {
         res.send(err);
     }
 };
-function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-}
 
-
-const CreateUser = (req, res) => {
-    try {
-        User.find({username: req.body.username}).then(u => {
-
-            if(!validateEmail(req.body.email)){
-                res.send("invalid email");
-            }
-
-            if(!req.body.username || !req.body.password){
-                res.send("username and password required");
-            }
-
-            if (!u[0]) {
-                try{
-                    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
-                } catch (err){
-                    res.send("username and password required");
-                }
-
-                let user = new User({
-                    username: req.body.username,
-                    password: encryptedPwd,
-                    email: req.body.email,
-                    isAdmin: false,
-                    steamKey: ""
-                });
-                user.save();
-                res.send({msg: "User Saved", username: user.username});
-            }
-            else{
-                res.send("user already exists");
-            }
-        });
-    } catch (err) {
-        res.send({msg: "Error: " + err});
-    }
-};
-
+//POST check if user exists
 const UserExists = (req, res) => {
     try {
         User.exists({username: req.body.username}).then(r => {
@@ -124,6 +126,10 @@ const UserExists = (req, res) => {
     ;
 };
 
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 
 exports.SelectUsers = SelectUsers;
 exports.SelectUser = SelectUser;
