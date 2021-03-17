@@ -73,10 +73,6 @@ app.post('/create_usergame', (req, res) => {
     UserGameController.CreateUserGame(req, res);
 })
 
-app.get('/user_game_match', (req, res) => {
-    UserGameController.UserGameMatch(req, res);
-})
-
 
 
 
