@@ -8,7 +8,7 @@ const Game = require('../Schemas/Game');
 
 const SelectUserGames = (req, res) => {
     let gameList = [];
-    User.findOne({username: req.body.username}).then(user => {
+    User.findOne({username: req.query.username}).then(user => {
         if(user){
             UserGame.find({userId: user._id}).then(async userGames => {
                 for(let userGame of userGames){

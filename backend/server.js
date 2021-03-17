@@ -66,6 +66,10 @@ app.post('/get_game_id', (req, res) => {
 });
 
 
+app.get('/select_usergames', (req, res) => {
+    UserGameController.SelectUserGames(req, res);
+})
+
 
 
 
