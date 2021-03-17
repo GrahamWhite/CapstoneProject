@@ -67,7 +67,7 @@ const CreateUser = (req, res) => {
                     password: encryptedPwd,
                     email: req.body.email,
                     isAdmin: false,
-                    steamKey: ""
+                    bio: ""
                 });
                 user.save();
                 res.send({msg: "User Saved", username: user.username});
