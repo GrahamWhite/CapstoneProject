@@ -128,49 +128,6 @@ function UserList(props) {
   }));
   const classes = useStyles();
 
-  const dummyData = [
-    {
-      id: "0",
-      name: "Tyler Mills",
-    },
-    {
-      id: "1",
-      name: "Lynn Varga",
-    },
-    {
-      id: "2",
-      name: "Graham White",
-    },
-    {
-      id: "3",
-      name: "Tyler Mills",
-    },
-    {
-      id: "4",
-      name: "Tyler Mills",
-    },
-    {
-      id: "5",
-      name: "Tyler Mills",
-    },
-    {
-      id: "6",
-      name: "Tyler Mills",
-    },
-    {
-      id: "7",
-      name: "Tyler Mills",
-    },
-    {
-      id: "8",
-      name: "Tyler Mills",
-    },
-    {
-      id: "9",
-      name: "Tyler Mills",
-    },
-  ];
-
   const ROWS_PER_PAGE = 5;
 
   const [users, setUsers] = useState([]);

@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 //import './App.css';
 import { darkTheme, lightTheme } from './components/PrimaryTheme.js';
 import Navbar from './components/Navbar';
@@ -27,10 +27,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  let username = localStorage.getItem('username');
 
   const [isDarkTheme, setTheme] = useState(true);
   const classes = useStyles();
+
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+
+  useEffect(() => {
+    
+  }, [])
 
   return (
     <Router className="App">

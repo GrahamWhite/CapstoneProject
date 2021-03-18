@@ -23,6 +23,7 @@ import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { backendURL } from "../globals";
 
 function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
@@ -218,8 +219,7 @@ function MatchList(props) {
   const [matchedUser, setMatchedUser] = useState('');
   //const [search, setSearch] = useState("");
   // "/user_game?username=graham_white"
-  const url =
-    "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
+  const url = backendURL;
 
   //Events
   async function getData() {
@@ -261,10 +261,9 @@ function MatchList(props) {
   }
 
   useEffect(() => {
-    
     setUser(localStorage.getItem('username'));
     setMatchedUser(new URLSearchParams(window.location.search).get('matchedUsername'));
-    fetch(`${url}"/user_game_match?username=${user}&matchedUsername=${matchedUser}`)
+    fetch(`${url}/user_game_match?username=${user}&matchedUsername=${matchedUser}`)
       .then(response => response.json())
       .then(data => setGames(data));
     console.log('lol');

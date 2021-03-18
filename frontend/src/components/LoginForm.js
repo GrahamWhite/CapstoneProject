@@ -15,6 +15,7 @@ import { Link, useHistory } from "react-router-dom";
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux'
+import { backendURL } from "../globals";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,8 +45,7 @@ const useStyles = makeStyles((theme) => ({
 function LoginForm() {
   // Constants
   // Note: Find a global place to store server url for repeated use.
-  const url =
-    "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
+  const url = backendURL;
 
   // Hooks
   const isLogged = useSelector(state => state.isLogged);
@@ -80,8 +80,9 @@ function LoginForm() {
     }
 
     if (isValid) {
-      localStorage.setItem('user', responseData.username);
+      localStorage.setItem('username', responseData.user.username);
       history.push("/user");
+      //window.location.reload(false);
     }
   }
 
@@ -98,8 +99,8 @@ function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'testa',
-      password: 'testzxcbvnb',
+      username: 'jebroni',
+      password: 'password',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
