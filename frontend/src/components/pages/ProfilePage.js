@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box } from '@material-ui/core'
+import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes } from '@material-ui/core'
 import { useFetch, useInterval } from '../../util/CustomHooks';
 import ProfileHeader from '../ProfileHeader';
 import UserGameList from '../UserGameList';
 import FriendList from '../FriendList';
+import { backendURL } from '../../globals';
 
 
 function TabPanel(props) {
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function UserProfile() {
-  const url = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
+  const url = backendURL;
   const storedUsername = localStorage.getItem('username');
 
   const classes = useStyles();
@@ -50,21 +51,16 @@ function UserProfile() {
   const [loading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState(0);
 
-  const [user, setuser] = useState({
-    username: 'tmills9208',
-    email: 'tmills9208@conestogac.on.ca',
-    bio: 'Hi, i am a person!',
-    avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder
-    socialLinks: {
+  const [user, setUser] = useState({});
 
-    },
-    games: {
-
-    },
-    friends: {
-
-    },
-  });
+  useEffect(() => {
+    let oldURL = `${url}/select_user?username=${storedUsername}`;
+    fetch(oldURL)
+      .then(response => response.json())
+      .then(data => setUser(data))
+      .catch(err => console.log(err));
+    console.log(user);
+  }, [])
 
   const handleChange = (event, newValue) => {
     setCurrentTab(newValue);
