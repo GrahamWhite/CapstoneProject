@@ -9,6 +9,8 @@ const UserSchema = new Schema({
     password: String,
     email: String,
     isAdmin: Boolean,
+    bio: String,
+    // steamKey: String,
     friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
 });
 

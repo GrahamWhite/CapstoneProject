@@ -210,17 +210,18 @@ function UserGameList(props) {
 
   const ROWS_PER_PAGE = 5;
 
-  const [games, setGames] = useState(dummyData);
+  const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
   const [page, setPage] = useState(0);
   //const [search, setSearch] = useState("");
-
+  // "/user_game?username=graham_white"
   const url =
     "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
 
   //Events
   async function getData() {
-    let username = localStorage.getItem("username");
+    let username = 'graham_white' //localStorage.getItem("username");
+    const queryString = window.location.search;
     if (!username) return;
 
     let isValid = false;
@@ -229,15 +230,18 @@ function UserGameList(props) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(username),
+      //body: JSON.stringify(username),
     };
 
     let responseData = "";
     try {
       console.log(username);
-      let response = await fetch(url + "/user_game", options);
+      let response = await fetch(url + "/select_usergames?username=graham_white", options);
       console.log(response);
       responseData = await response.json();
+
+      console.log(responseData);
+
       isValid = true;
     } catch (err) {
       console.log(responseData);
@@ -246,8 +250,19 @@ function UserGameList(props) {
 
     if (isValid) {
       console.log("coooool");
+      return responseData;
+    }
+    else {
+      return [];
     }
   }
+
+  useEffect(() => {
+    fetch(url + "/select_usergames?username=" + localStorage.getItem("username"))
+      .then(response => response.json())
+      .then(data => setGames(data));
+    console.log('lol');
+  }, [])
 
   const onChange = useCallback((updatedGame) => {
     const gameIndex = games.findIndex((emp) => emp.id === updatedGame.id);
@@ -291,7 +306,8 @@ function UserGameList(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {games
+          {games.length > 0 ? 
+            games
             .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
             .map((game, index) => (
               <TableRow key={index} className={classes.tableItem}>
@@ -302,11 +318,13 @@ function UserGameList(props) {
                   onRemove={removeGame}
                 />
               </TableRow>
-            ))}
+            ))
+          : 'Uh oh, no games loaded'}
         </TableBody>
         <TableFooter>
           <TableRow>
             <div style={{ width: "100%", margin: "auto" }}>
+              { games.length > 0 ? 
               <TablePagination
                 rowsPerPageOptions={[5]}
                 count={games.length}
@@ -315,6 +333,7 @@ function UserGameList(props) {
                 siblingCount={0}
                 onChangePage={onChangePage}
               />
+              : ''}
             </div>
           </TableRow>
         </TableFooter>
