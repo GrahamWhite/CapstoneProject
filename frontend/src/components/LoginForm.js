@@ -80,7 +80,7 @@ function LoginForm() {
     }
 
     if (isValid) {
-      localStorage.setItem('user', responseData.username);
+      localStorage.setItem('username', responseData.user.username);
       history.push("/user");
     }
   }
@@ -98,8 +98,8 @@ function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'testa',
-      password: 'testzxcbvnb',
+      username: 'tyler_mills',
+      password: 'password',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
