@@ -99,7 +99,7 @@ function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'jebroni',
+      username: 'tyler_mills',
       password: 'password',
     },
     validationSchema: validationSchema,
