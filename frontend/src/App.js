@@ -45,11 +45,11 @@ function App() {
        : <Navbar/>}
         <div style={{marginTop:'5rem'}}>
           <Switch>
-            <Route path='/' exact component={MainPage}/>
+            <Route path='/' exact component={LoginPage}/>
             <Route path='/login' exact component={LoginPage}/>
             <Route path='/register' exact component={RegisterPage}/>
 
-            {/* <Route path='/main' exact component={MainPage}/> */}
+            <Route path='/main' exact component={MainPage}/>
             <Route path='/search' exact component={SearchPage}/>
             <Route path='/notification' exact component={NotificationPage}/>
             <Route path='/friend' exact component={FriendPage}/>
