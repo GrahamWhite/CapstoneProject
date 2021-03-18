@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 
 function LoginForm() {
   // Constants
-  // Note: Find a global place to store server url for repeated use.
   const url = backendURL;
 
   // Hooks
@@ -69,20 +68,16 @@ function LoginForm() {
 
     let responseData = "";
     try {
-      console.log(values);
       let response = await fetch(url + "/login", options);
-      console.log(response);
       responseData = await response.json();
       isValid = true;
     } catch (err) {
-      console.log(responseData);
       console.log(err);
     }
 
     if (isValid) {
       localStorage.setItem('username', responseData.user.username);
       history.push("/user");
-      //window.location.reload(false);
     }
   }
 

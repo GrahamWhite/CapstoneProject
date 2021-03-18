@@ -24,6 +24,7 @@ import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
+import { backendURL } from "../globals";
 
 function UserItem({ user, index, history }) {
   const useStyles = makeStyles((theme) => ({
@@ -50,18 +51,7 @@ function UserItem({ user, index, history }) {
   }));
   const classes = useStyles();
 
-  const imgPlaceholder =
-    "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
-
-  // const updateHandler = dummyData => onUpdate({ ...props.user, ...props.dummyData});
-
-  const [selected, setSelected] = useState(false);
-  const [favourite, setFavourite] = useState(false);
-
-  useEffect(() => {
-    setFavourite(user.favourite);
-    setSelected(user.selected);
-  }, [user.favourite]);
+  const imgPlaceholder = "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
 
   function goToUser(username) {
     localStorage.setItem("searchParams", user.username);
@@ -81,14 +71,12 @@ function UserItem({ user, index, history }) {
       <Grid container spacing={1} >
         <Grid item width={"70%"}>
           <CardActionArea
-            className={!selected ? classes.fullHeight : ""}
+            className={classes.fullHeight}
             onClick={() => {
               goToUser(user.username);
             }}
           >
             <CardContent>
-              {favourite ? <StarIcon className={classes.favouriteIcon} /> : ""}
-
               <CardMedia
                 className={classes.cover}
                 image={imgPlaceholder /*process.env.PUBLIC_URL + user.img*/}
@@ -132,43 +120,11 @@ function UserList(props) {
 
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
 
   let history = useHistory();
 
-  const url =
-    "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
-
-  //Events
-  async function getData() {
-    let username = localStorage.getItem("username");
-    if (!username) return;
-
-    let isValid = false;
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(username),
-    };
-
-    let responseData = "";
-    try {
-      console.log(username);
-      let response = await fetch(url + "/users", options);
-      console.log(response);
-      responseData = await response.json();
-      isValid = true;
-    } catch (err) {
-      console.log(responseData);
-      console.log(err);
-    }
-
-    if (isValid) {
-      console.log("coooool");
-    }
-  }
+  const url = backendURL;
 
   useEffect(() => {
     fetch(url + "/select_users")
@@ -176,12 +132,6 @@ function UserList(props) {
       .then(data => { setUsers(data); console.log(data);});
     console.log(users);
   }, [])
-
-  const onChange = useCallback((updatedUser) => {
-    const userIndex = users.findIndex((emp) => emp.id === updatedUser.id);
-    users[userIndex] = updatedUser;
-    setUsers([...users]);
-  }, []);
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
