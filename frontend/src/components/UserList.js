@@ -72,7 +72,7 @@ function UserItem({ user, index, history }) {
     localStorage.setItem("searchParams", user.username);
     history.push({
       pathname: "/match",
-      search: `?matchedUsername=${user.username}`
+      search: `?username=${user.username}`
     });
   }
 
