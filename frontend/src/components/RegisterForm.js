@@ -14,6 +14,7 @@ import Container from "@material-ui/core/Container";
 import { Link, useHistory } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { backendURL } from "../globals";
 
 // function Copyright() {
 //   return (
@@ -55,8 +56,7 @@ const useStyles = makeStyles((theme) => ({
 function RegisterForm() {
   // Constants
   // Note: Find a global place to store server url for repeated use.
-  const url =
-    "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
+  const url = backendURL;
 
   // Helps with programatically changing what page you're on
   let history = useHistory();
@@ -77,7 +77,7 @@ function RegisterForm() {
     let responseData = "";
     try {
       console.log(JSON.stringify(values));
-      let response = await fetch(url + "/user", options);
+      let response = await fetch(url + "/create_user", options);
       console.log(response);
       responseData = await response.json();
       isValid = true;
@@ -89,6 +89,7 @@ function RegisterForm() {
     if (isValid) {
       localStorage.setItem('username', responseData.username);
       history.push("/login");
+      //window.location.reload(false);
     }
   }
 
@@ -109,9 +110,9 @@ function RegisterForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'testa',
+      username: 'jebroni',
       email: 'test@test.co',
-      password: 'testzxcbvnb',
+      password: 'password',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {

@@ -23,6 +23,7 @@ import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { backendURL } from "../globals";
 
 function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
@@ -133,81 +134,6 @@ function MatchList(props) {
   }));
   const classes = useStyles();
 
-  const dummyData = [
-    {
-      id: "0",
-      name: "Apex Legends",
-      platform: "Steam, Origin",
-      img: "/images/ApexLogo.png",
-      favourite: false,
-      selected: false,
-    },
-    {
-      id: "1",
-      name: "Rainbow 6 Siege",
-      platform: "Steam, Ubisoft",
-      img: "",
-      favourite: false,
-      selected: false,
-    },
-    {
-      id: "2",
-      name: "Deep Rock Galactic",
-      platform: "Steam",
-      img: "",
-      favourite: true,
-      selected: false,
-    },
-    {
-      id: "3",
-      name: "Noita",
-      platform: "Steam",
-      img: "",
-      favourite: false,
-      selected: false,
-    },
-    {
-      id: "4",
-      name: "Polybius",
-      platform: "Steam, 80's Arcade Machine",
-      img: "",
-      favourite: false,
-      selected: false,
-    },
-    {
-      id: "5",
-      name: "Devil Daggers",
-      platform: "Steam",
-      img: "",
-      favourite: false,
-      selected: false,
-    },
-    {
-      id: "6",
-      name: "Ori & the blind forestc",
-      platform: "Steam",
-      img: "",
-      favourite: false,
-      selected: false,
-    },
-    {
-      id: "7",
-      name: "Enter The Gungeon",
-      platform: "Steam",
-      img: "",
-      favourite: false,
-      selected: false,
-    },
-    {
-      id: "8",
-      name: "Hot Tub Time Machine",
-      platform: "Film, Movie",
-      img: "",
-      favourite: false,
-      selected: false,
-    },
-  ];
-
   const ROWS_PER_PAGE = 5;
 
   const [games, setGames] = useState([]);
@@ -218,8 +144,7 @@ function MatchList(props) {
   const [matchedUser, setMatchedUser] = useState('');
   //const [search, setSearch] = useState("");
   // "/user_game?username=graham_white"
-  const url =
-    "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
+  const url = backendURL;
 
   //Events
   async function getData() {
@@ -261,10 +186,9 @@ function MatchList(props) {
   }
 
   useEffect(() => {
-    
     setUser(localStorage.getItem('username'));
     setMatchedUser(new URLSearchParams(window.location.search).get('matchedUsername'));
-    fetch(`${url}"/user_game_match?username=${user}&matchedUsername=${matchedUser}`)
+    fetch(`${url}/user_game_match?username=${user}&matchedUsername=${matchedUser}`)
       .then(response => response.json())
       .then(data => setGames(data));
     console.log('lol');

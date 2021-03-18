@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 //import './App.css';
 import { darkTheme, lightTheme } from './components/PrimaryTheme.js';
 import Navbar from './components/Navbar';
@@ -27,10 +27,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  let username = localStorage.getItem('username');
 
   const [isDarkTheme, setTheme] = useState(true);
   const classes = useStyles();
+
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+
+  useEffect(() => {
+    
+  }, [])
 
   return (
     <Router className="App">
@@ -40,11 +45,11 @@ function App() {
        : <Navbar/>}
         <div style={{marginTop:'5rem'}}>
           <Switch>
-            <Route path='/' exact component={MainPage}/>
+            <Route path='/' exact component={LoginPage}/>
             <Route path='/login' exact component={LoginPage}/>
             <Route path='/register' exact component={RegisterPage}/>
 
-            {/* <Route path='/main' exact component={MainPage}/> */}
+            <Route path='/main' exact component={MainPage}/>
             <Route path='/search' exact component={SearchPage}/>
             <Route path='/notification' exact component={NotificationPage}/>
             <Route path='/friend' exact component={FriendPage}/>
