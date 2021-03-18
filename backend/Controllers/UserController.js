@@ -80,7 +80,7 @@ const CreateUser = (req, res) => {
         User.find({username: req.body.username}).then(u => {
 
 
-
+            try{
 
 
             if (!u[0]) {
@@ -94,11 +94,9 @@ const CreateUser = (req, res) => {
                 }
 
 
-                try{
+
                     const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
-                } catch (err){
-                    res.send("username and password required");
-                }
+
 
                 let user = new User({
                     username: req.body.username,
@@ -109,9 +107,15 @@ const CreateUser = (req, res) => {
                 });
                 user.save();
                 res.send({msg: "User Saved", username: user.username});
+
+
             }
             else{
                 res.send("user already exists");
+            }
+
+            } catch (err){
+                res.send("username and password required");
             }
         });
     } catch (err) {
