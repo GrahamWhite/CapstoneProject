@@ -6,21 +6,23 @@ const User= require('../Schemas/User');
 const Game = require('../Schemas/Game');
 
 
-/*const SelectUserGames = (req, res) => {
-    try {
-        UserGames.find({}).then(r => {
-            if (!r[0]) {
-                res.send("No userGames currently in the database");
-            } else {
-                res.send(r);
-            }
-            ;
-        });
-    } catch (err) {
-        res.send(err);
-    }
-};*/
+const SelectUserGames = (req, res) => {
+    let gameList = [];
+    User.findOne({username: req.query.username}).then(user => {
+        if(user){
+            UserGame.find({userId: user._id}).then(async userGames => {
+                for(let userGame of userGames){
+                    let game = await Game.findById(userGame.gameId);
 
+                    gameList.push(game)
+                }
+
+                console.log(gameList.join(','));
+                res.send(gameList);
+            })
+        }
+    })
+}
 
 const CreateUserGame = (req, res) => {
     try{
@@ -34,7 +36,8 @@ const CreateUserGame = (req, res) => {
 
                         let userGame = new UserGame({
                             userId: user[0]._id,
-                            gameId: game[0]._id
+                            gameId: game[0]._id,
+                            isFavorite: false
                         });
 
                         userGame.save();
@@ -56,34 +59,60 @@ const CreateUserGame = (req, res) => {
     }
 };
 
-const SelectUserGames= (req, res) => {
-    try {
-        User.find({username: req.body.username}).then(user => {
+const UserGameMatch = (req, res) => {
+    try{
+    if(!req.query.username || !req.query.matchedUsername){
+        res.send("username and matchedUsername are required");
+    }
 
-            if(user){
-                Game.find({name: req.body.name}).then( game => {
+    User.findOne({username: req.query.username}).then(u1 => {
 
-                    if(game){
-                        res.send({user: user, game: game});
-                    }
-                    else{
-                        res.send("game not found");
-                    }
 
-                });
-            }
-            else{
-                res.send("user not found");
+            if(!u1){
+                res.send("username not found");
             }
 
+            User.findOne({username: req.query.matchedUsername}).then(u2 => {
+                if(!u2){
+                    res.send("matchedUsername not found");
+                }
 
-        });
+                //both names have been found!
 
-    } catch (err) {
+                console.log({user1: u1._id, user2: u2._id});
+
+                UserGame.find({userId: u1._id}).then(async r => {
+                    //console.log(r);
+
+                    await UserGame.find({userId: u2._id}).then(async h => {
+                        //console.log(h);
+
+                        let matches = [];
+
+                        for(let x = 0; x < r.length; x++){
+                            for(let y = 0; y < h.length; y++){
+                                if(r[x].gameId.toString() === h[y].gameId.toString()){
+                                    await Game.findOne({_id: r[x].gameId}).then(async g=>{
+                                        console.log(g);
+                                        matches.push(g);
+                                    })
+                                }
+                            }
+                        }
+
+                        await res.send(matches);
+                    });
+                })
+
+            });
+
+
+    });
+
+    }catch (err){
         res.send(err);
-    };
-};
-
+    }
+}
 
 const UserGameExists = (req, res) => {
     try {
@@ -101,5 +130,6 @@ const UserGameExists = (req, res) => {
 exports.SelectUserGames = SelectUserGames;
 exports.UserGameExists = UserGameExists;
 exports.CreateUserGame= CreateUserGame;
+exports.UserGameMatch = UserGameMatch;
 
 

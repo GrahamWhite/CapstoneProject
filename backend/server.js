@@ -16,30 +16,9 @@ const Game = require('../backend/Schemas/Game');
 
 
 
-const {SelectUser} = require("./Controllers/UserController");
-const {SelectUsers} = require("./Controllers/UserController");
-const {CreateUser} = require("./Controllers/UserController");
-const {UserExists} = require("./Controllers/UserController");
-const {Login} = require("./Controllers/UserController");
-
-
-
-const {SelectGames} = require("./Controllers/GameController");
-const {SelectGame} = require("./Controllers/GameController");
-const {CreateGame} = require("./Controllers/GameController");
-const {GameExists} = require("./Controllers/GameController");
-
-
-const {SelectUserGames} = require("./Controllers/UserGameController");
-const {UserGameExists} = require("./Controllers/UserGameController");
-const {CreateUserGame} = require("./Controllers/UserGameController");
-
-
-const {SelectFriendships} = require("./Controllers/FriendshipController");
-
-
-
-const {GetUserId} = require("./Controllers/UserController");
+const UserController = require("./Controllers/UserController");
+const GameController = require("./Controllers/GameController");
+const UserGameController = require("./Controllers/UserGameController");
 
 
 require('dotenv').config();
@@ -48,96 +27,56 @@ app.use(cors());
 app.use(express.json());
 
 //User Routes
-app.get('/users', (req, res) => {
-    SelectUsers(req, res);
+app.get('/select_users', (req, res) => {
+    UserController.SelectUsers(req, res);
 });
 
-app.get('/user', (req, res) => {
-    SelectUser(req, res);
+app.get('/select_user', (req, res) => {
+    UserController.SelectUser(req, res);
 });
 
-app.post('/user', (req, res) => {
-    CreateUser(req, res);
-});
-
-app.post('/login', (req, res) => {
-    Login(req, res);
-});
-
-app.post('/user_id', (req, res) => {
-    GetUserId(req, res);
-});
-
-app.post('/user_exists', (req, res)  => {
-    UserExists(req, res);
+app.post('/create_user', (req, res) => {
+    UserController.CreateUser(req, res);
 });
 
 app.post('/get_user_id', (req, res) => {
-    GetUserId(req, res);
+    UserController.GetUserId(req, res);
 });
 
-//GAME Routes
-app.get('/games', (req, res) => {
-    SelectGames(req, res);
+app.post('/login', (req, res) => {
+    UserController.Login(req, res);
 });
 
-app.get('/game', (req, res) => {
-    SelectGame(req, res);
+
+//User Routes
+app.get('/select_games', (req, res) => {
+    GameController.SelectGames(req, res);
 });
 
-app.post('/game', (req, res) => {
-    CreateGame(req, res);
+app.post('/select_game', (req, res) => {
+    GameController.SelectGame(req, res);
 });
 
-app.post('/game_id', (req, res) => {
-    GetGameId(req, res);
-});
-
-app.post('/game_exists', (req, res)  => {
-    GameExists(req, res);
+app.post('/create_game', (req, res) => {
+    GameController.CreateGame(req, res);
 });
 
 app.post('/get_game_id', (req, res) => {
-    GetGameId(req, res);
+    GameController.GetGameId(req, res);
 });
 
 
-//UserGame routes
-app.get('/user_games', (req, res) => {
-   SelectUserGames(req, res);
-});
-
-app.get('/user_game', (req, res) => {
-    SelectUserGame(req, res);
-});
-
-app.post('/user_game', (req, res) => {
-    CreateUserGame(req, res);
-});
-//UserGame routes
-app.get('/user_game_exists', (req, res) => {
-    UserGameExists(req, res);
-});
+app.get('/select_usergames', (req, res) => {
+    UserGameController.SelectUserGames(req, res);
+})
+app.post('/create_usergame', (req, res) => {
+    UserGameController.CreateUserGame(req, res);
+})
 
 
-
-
-
-
-
-app.get('/friends', (req, res) => {
-    SelectFriendships(req, res);
-});
-
-
-
-
-
-/*
-app.post('/user_game', (req, res) => {
-    CreateUserGame(req, res);
-});
-*/
+app.get('/user_game_match', (req, res) => {
+    UserGameController.UserGameMatch(req, res);
+})
 
 
 
