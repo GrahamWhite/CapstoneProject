@@ -261,6 +261,7 @@ function MatchList(props) {
   }
 
   useEffect(() => {
+    
     setUser(localStorage.getItem('username'));
     setMatchedUser(new URLSearchParams(window.location.search).get('matchedUsername'));
     fetch(`${url}"/user_game_match?username=${user}&matchedUsername=${matchedUser}`)
