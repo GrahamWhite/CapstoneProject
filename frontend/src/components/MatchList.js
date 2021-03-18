@@ -140,8 +140,8 @@ function MatchList(props) {
   const [selectedGame, setSelectedGame] = useState(null);
   const [page, setPage] = useState(0);
 
-  const [user, setUser] = useState('');
-  const [matchedUser, setMatchedUser] = useState('');
+  const [user, setUser] = useState(localStorage.getItem('username'));
+  const [matchedUser, setMatchedUser] = useState(new URLSearchParams(window.location.search).get('username'));
   //const [search, setSearch] = useState("");
   // "/user_game?username=graham_white"
   const url = backendURL;
@@ -184,13 +184,19 @@ function MatchList(props) {
       return [];
     }
   }
-
+  const oldURL = `${url}/user_game_match?username=${user}&matchedUsername=${matchedUser}`;
   useEffect(() => {
     setUser(localStorage.getItem('username'));
-    setMatchedUser(new URLSearchParams(window.location.search).get('matchedUsername'));
-    fetch(`${url}/user_game_match?username=${user}&matchedUsername=${matchedUser}`)
+    setMatchedUser(new URLSearchParams(window.location.search).get('username'));
+    console.log(user);
+    console.log(matchedUser);
+    fetch(oldURL)
       .then(response => response.json())
-      .then(data => setGames(data));
+      .then(data => setGames(data))
+      .catch(err => {
+        console.log(err);
+        setGames([]);
+      });
     console.log('lol');
   }, [])
 
