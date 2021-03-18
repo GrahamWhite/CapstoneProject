@@ -16,18 +16,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { backendURL } from "../globals";
 
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {'Copyright © '}
-//       {'Tink'}
-//       {' '}*
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
-
 const useStyles = makeStyles((theme) => ({
   root: {
     background: "none",
@@ -55,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 
 function RegisterForm() {
   // Constants
-  // Note: Find a global place to store server url for repeated use.
   const url = backendURL;
 
   // Helps with programatically changing what page you're on
@@ -76,20 +63,16 @@ function RegisterForm() {
 
     let responseData = "";
     try {
-      console.log(JSON.stringify(values));
       let response = await fetch(url + "/create_user", options);
-      console.log(response);
       responseData = await response.json();
       isValid = true;
     } catch (err) {
-      console.log(responseData);
       console.log(err);
     }
 
     if (isValid) {
       localStorage.setItem('username', responseData.username);
       history.push("/login");
-      //window.location.reload(false);
     }
   }
 
@@ -204,12 +187,6 @@ function RegisterForm() {
                 helperText={formik.touched.password && formik.errors.password}
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid> */}
           </Grid>
           <Button
             type="submit"
@@ -233,9 +210,6 @@ function RegisterForm() {
           </Button>
         </form>
       </div>
-      {/*<Box mt={5}>
-        <Copyright />
-      </Box>*/}
     </Container>
   );
 }
