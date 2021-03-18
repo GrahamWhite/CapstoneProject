@@ -31,7 +31,7 @@ app.get('/select_users', (req, res) => {
     UserController.SelectUsers(req, res);
 });
 
-app.post('/select_user', (req, res) => {
+app.get('/select_user', (req, res) => {
     UserController.SelectUser(req, res);
 });
 

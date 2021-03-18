@@ -48,9 +48,9 @@ const Login = (req, res) => {
 
 const SelectUser = (req, res) => {
     try {
-        User.findOne({username: req.body.username}).then(r => {
+        User.findOne({username: req.query.username}).then(r => {
             if (!r) {
-                res.send("User: " + req.body.username + " not found in the database");
+                res.send("User: " + req.query.username + " not found in the database");
             } else {
                 res.send(r);
             }
