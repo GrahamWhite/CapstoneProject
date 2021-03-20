@@ -16,6 +16,7 @@ import GamesPage from './components/pages/GamesPage';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 import BottomNavbar from './components/BottomNavbar.js';
 import AuthNavbar from './components/AuthNavbar.js';
+import UserProfilePage from './components/pages/UserProfilePage.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +55,7 @@ function App() {
             <Route path='/notification' exact component={NotificationPage}/>
             <Route path='/friend' exact component={FriendPage}/>
             <Route path='/match' exact component={MatchPage}/>
+            <Route path='/userprofile' component={UserProfilePage}/>
             <Route path='/user' component={ProfilePage}/>
 
             <Route path='/games' component={GamesPage}/>

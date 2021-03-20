@@ -21,11 +21,10 @@ import {
 import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
 import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
 
-function GameItem({game, index}) {
+function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -50,13 +49,34 @@ function GameItem({game, index}) {
   }));
   const classes = useStyles();
 
-  const imgPlaceholder = "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
+  const imgPlaceholder =
+    "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
+
+  // const updateHandler = dummyData => onUpdate({ ...props.game, ...props.dummyData});
+
+  const [selected, setSelected] = useState(false);
+  const [favourite, setFavourite] = useState(false);
+
+  useEffect(() => {
+    setFavourite(game.favourite);
+    setSelected(game.selected);
+  }, [game.favourite])
+
+  function onRemoveItem(index) {
+    setSelected(!false);
+    onRemove(index);
+  }
 
   return (
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
-      <CardActionArea className={classes.fullHeight}>
+      <CardActionArea
+        className={!selected ? classes.fullHeight : ""}
+        onClick={() => {
+          setSelected(!selected);
+        }}
+      >
         <CardContent>
-          {game.favourite 
+          {favourite 
           ? <StarIcon className={classes.favouriteIcon}/> 
           : ''}
           
@@ -76,32 +96,56 @@ function GameItem({game, index}) {
           </div>
         </CardContent>
       </CardActionArea>
+      {selected ? (
+        <CardActions>
+          <Button
+            size="small"
+            color="primary"
+            variant="contained"
+            startIcon={<StarIcon />}
+            onClick={() => onFavourite(index)}
+          >
+            Favourite
+          </Button>
+          <Button
+            size="small"
+            color="secondary"
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={onRemoveItem}
+          >
+            Remove
+          </Button>
+        </CardActions>
+      ) : (
+        ""
+      )}
     </Card>
   );
 }
 
-function MatchList(props) {
+function UserGameList(props) {
   const useStyles = makeStyles((theme) => ({
     root: {},
+    cover: {
+      width: "151",
+    },
   }));
   const classes = useStyles();
 
   const ROWS_PER_PAGE = 5;
 
+  
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
   const [page, setPage] = useState(0);
-
-  const [user, setUser] = useState(localStorage.getItem('username'));
-  const [matchedUser, setMatchedUser] = useState(new URLSearchParams(window.location.search).get('username'));
-  
+  //const [search, setSearch] = useState("");
+  // "/user_game?username=graham_white"
   const url = backendURL;
-  
 
-  const oldURL = `${url}/user_game_match?username=${user}&matchedUsername=${matchedUser}`;
+  const oldURL = `${url}select_usergames?username="${user}`;
   useEffect(() => {
-    setUser(localStorage.getItem('username'));
-    setMatchedUser(new URLSearchParams(window.location.search).get('username'));
+    setUser(new URLSearchParams(window.location.search).get('username'));
     fetch(oldURL)
       .then(response => response.json())
       .then(data => setGames(data))
@@ -116,7 +160,19 @@ function MatchList(props) {
   };
 
   // List changing functions
-  // Idea to display additional info for matched games on click
+  const favouriteGame = index => {
+    const newGames = [...games];
+    let favourited = newGames[index].favourite;
+    newGames[index].favourite = !favourited;
+    setGames(newGames);
+  }
+
+  const removeGame = index => {
+    const newGames = [...games];
+    newGames.splice(index, 1);
+    setGames(newGames);
+  }
+
   const onSelected = (index, selected) => {
     const newGames = [...games];
     for (let game of newGames) game.selected = false;
@@ -129,7 +185,6 @@ function MatchList(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow colSpan={2}>
-          <Typography variant="h5" align="center" className={classes.center}>You have {games.length} games in common!</Typography>
             {/* <SearchBar
                 value={search}
               /> */}
@@ -144,6 +199,8 @@ function MatchList(props) {
                 <GameItem 
                   game={game}
                   index={index}
+                  onFavourite={favouriteGame}
+                  onRemove={removeGame}
                 />
               </TableRow>
             ))
@@ -170,4 +227,4 @@ function MatchList(props) {
   );
 }
 
-export default MatchList;
+export default UserGameList;
