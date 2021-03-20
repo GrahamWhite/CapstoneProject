@@ -154,6 +154,7 @@ function UserGameList(props) {
 
   // List changing functions
   const favouriteGame = index => {
+    // fetch(url + "")
     const newGames = [...games];
     let favourited = newGames[index].favourite;
     newGames[index].favourite = !favourited;
@@ -161,6 +162,7 @@ function UserGameList(props) {
   }
 
   const removeGame = index => {
+    // fetch(url + "")
     const newGames = [...games];
     newGames.splice(index, 1);
     setGames(newGames);
