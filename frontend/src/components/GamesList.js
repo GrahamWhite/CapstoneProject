@@ -23,9 +23,9 @@ import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package
 import AddIcon from "@material-ui/icons/Add";
 import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { backendURL } from "../globals";
+import { backendURL, ReAuthenticate } from "../globals";
 
-function GameItem({game, index, onSelected, onAddToUserGames, onFavourite}) {
+function GameItem({game, index, url, onSelected, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -57,6 +57,7 @@ function GameItem({game, index, onSelected, onAddToUserGames, onFavourite}) {
 
   const [selected, setSelected] = useState(false);
   const [favourite, setFavourite] = useState(false);
+  const [disableAddButton, setDisableAddButton] = useState(false)
 
   useEffect(() => {
     setFavourite(game.favourite);
@@ -65,6 +66,32 @@ function GameItem({game, index, onSelected, onAddToUserGames, onFavourite}) {
 
   function addSelected(index) {
 
+  }
+
+  const addToUserGames = index => {
+    const values = {
+      username: localStorage.getItem('username'),
+      name: game.name
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(values)
+    }
+    fetch(url + "/create_usergame", options)
+      .then(response => response.json())
+      .then(data => {
+        setDisableAddButton(true);
+      })
+      .catch((err) => {
+        if (!localStorage.getItem('username')){
+          ReAuthenticate();
+        }
+        console.log(err);
+      });
   }
 
   // const onSelected = (index, selected) => {
@@ -109,8 +136,9 @@ function GameItem({game, index, onSelected, onAddToUserGames, onFavourite}) {
           size="small"
           color="primary"
           variant="contained"
+          disabled={disableAddButton}
           startIcon={<AddIcon />}
-          onClick={() => onAddToUserGames(index)}
+          onClick={() => addToUserGames(index)}
         >
           Add to List
         </Button>
@@ -171,6 +199,7 @@ function GamesList(props) {
   };
 
   // List changing functions
+
   const favouriteGame = index => {
     const newGames = [...games];
     let favourited = newGames[index].favourite;
@@ -204,6 +233,7 @@ function GamesList(props) {
                 <GameItem 
                   game={game}
                   index={index}
+                  url={url}
                   onSelected={onSelected}
                   onFavourite={favouriteGame}
                 />
