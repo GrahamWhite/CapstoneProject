@@ -20,6 +20,8 @@ const SelectUserGames = (req, res) => {
                 console.log(gameList.join(','));
                 res.send(gameList);
             })
+        }else{
+            res.send("User not found");
         }
     })
 }
