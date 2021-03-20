@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function UserProfile() {
+function ProfilePage() {
   const url = backendURL;
   const storedUsername = localStorage.getItem('username');
 
@@ -98,4 +98,4 @@ function UserProfile() {
   )
 }
 
-export default UserProfile
+export default ProfilePage
