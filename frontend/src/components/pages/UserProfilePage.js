@@ -89,7 +89,7 @@ function UserProfilePage() {
       <div className={classes.tabPanelsContainer}>
         <TabPanel value={currentTab} index={0}>
           {/* Games panel */}
-          <UserGameList user={user}/>
+          {/* <UserGameList user={user}/> */}
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
           {/* Friends panel */}

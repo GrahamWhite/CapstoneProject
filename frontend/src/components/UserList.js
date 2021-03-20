@@ -53,9 +53,12 @@ function UserItem({ user, index, history }) {
 
   const imgPlaceholder = "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
 
-  function goToUser(username) {
+  function goToUserProfile(username) {
     localStorage.setItem("searchParams", user.username);
-    history.push("/user");
+    history.push({
+      pathname: "/userprofile",
+      search: `?username=${user.username}`
+    });
   }
 
   function goToMatch(username) {
@@ -70,12 +73,12 @@ function UserItem({ user, index, history }) {
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
       <Grid container spacing={1} >
         <Grid item width={"70%"}>
-          <CardActionArea
+          {/* <CardActionArea
             className={classes.fullHeight}
             onClick={() => {
-              goToUser(user.username);
+              goToUserProfile(user.username);
             }}
-          >
+          > */}
             <CardContent>
               <CardMedia
                 className={classes.cover}
@@ -89,16 +92,23 @@ function UserItem({ user, index, history }) {
                 </CardContent>
               </div>
             </CardContent>
-          </CardActionArea>
+          {/* </CardActionArea> */}
         </Grid>
         <Grid item width={"30%"}>
           <CardActions>
+          <Button
+              color="primary"
+              variant="outlined"
+              onClick={() => goToUserProfile(user.username)}
+              >
+              Profile
+            </Button>
             <Button
               color="primary"
               variant="outlined"
               onClick={() => goToMatch(user.username)}
             >
-              Match
+              Match 
             </Button>
           </CardActions>
         </Grid>
