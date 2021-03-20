@@ -96,6 +96,7 @@ function MatchList(props) {
   const [matchedUser, setMatchedUser] = useState(new URLSearchParams(window.location.search).get('username'));
   
   const url = backendURL;
+  
 
   const oldURL = `${url}/user_game_match?username=${user}&matchedUsername=${matchedUser}`;
   useEffect(() => {
@@ -128,6 +129,7 @@ function MatchList(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow colSpan={2}>
+          <Typography variant="h5" align="center" className={classes.center}>You have {games.length} games in common!</Typography>
             {/* <SearchBar
                 value={search}
               /> */}
