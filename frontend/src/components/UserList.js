@@ -69,6 +69,13 @@ function UserItem({ user, index, history }) {
     });
   }
 
+  function addFriend(){
+    //user.username
+    //Add friend from current session user
+    //send to db
+    //Notify/change state
+  }
+
   return (
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
       <Grid container spacing={1} >
@@ -96,6 +103,13 @@ function UserItem({ user, index, history }) {
         </Grid>
         <Grid item width={"30%"}>
           <CardActions>
+          <Button
+              color="primary"
+              variant="outlined"
+              onClick={() => addFriend(user.username)}
+            >
+              Add
+            </Button>
           <Button
               color="primary"
               variant="outlined"
