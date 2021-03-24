@@ -56,7 +56,7 @@ function UserItem({ user, index, history }) {
   function goToUserProfile(username) {
     localStorage.setItem("searchParams", user.username);
     history.push({
-      pathname: "/userprofile",
+      pathname: "/user",
       search: `?username=${user.username}`
     });
   }
