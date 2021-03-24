@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PeopleIcon from '@material-ui/icons/People';
 import PersonIcon from '@material-ui/icons/Person';
 //import {HomeIcon, HistoryIcon, PersonIcon} from '@material-ui/icons';
@@ -35,7 +35,7 @@ function BottomNavbar(){
           className={classes.bottomNavbar}
         >
           <BottomNavigationAction component={Link} to={"/main"} icon={<HomeIcon className={classes.icon}/>}/>
-          <BottomNavigationAction component={Link} to={"/notification"} icon={<NotificationsIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/search"} icon={<PersonAddIcon className={classes.icon}/>}/>
           <BottomNavigationAction component={Link} to={"/friend"} icon={<PeopleIcon className={classes.icon}/>}/>
           <BottomNavigationAction component={Link} to={"/user"} icon={<PersonIcon className={classes.icon}/>}/>
         </BottomNavigation>
