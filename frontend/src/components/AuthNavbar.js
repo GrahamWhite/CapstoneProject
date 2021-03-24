@@ -4,7 +4,7 @@ import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/co
 import { Link } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
 import { useSelector } from 'react-redux';
-
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +32,8 @@ function AuthNavbar() {
           <Typography variant="h6" className={classes.title}>
             Tink
           </Typography>
+          <Button component={Link} to={"/login"} color="inherit">Logout</Button>
+          {/* <NotificationsIcon/> */}
         </Toolbar>
       </AppBar>
     </div>
