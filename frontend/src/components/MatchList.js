@@ -130,6 +130,7 @@ function MatchList(props) {
         <TableHead>
           <TableRow colSpan={2}>
           <Typography variant="h5" align="center" className={classes.center}>You have {games.length} games in common!</Typography>
+          <Typography variant="h5" align="center" className={classes.center}>You both play on these platforms: {games.platform}</Typography>
             {/* <SearchBar
                 value={search}
               /> */}
@@ -144,6 +145,7 @@ function MatchList(props) {
                 <GameItem 
                   game={game}
                   index={index}
+                  //Add platform into array
                 />
               </TableRow>
             ))
