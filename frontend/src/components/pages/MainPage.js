@@ -19,16 +19,17 @@ const useStyles = makeStyles((theme) => ({
 
 function MainPage() {
     const classes = useStyles();
+    const storedUsername = localStorage.getItem('username');
     return (
     <div>
-        <h1 className={classes.center}>Search for a User to Match with:</h1>
-        <SearchBar 
+        <h1 className={classes.center}>Welcome to Tink, {storedUsername}!</h1>
+        {/* <SearchBar 
           // value={this.state.value}
           // onChange={(newValue) => this.setState({ value: newValue })}
           // onRequestSearch={() => doSomethingWith(this.state.value)}
-          className={classes.center}/>
-          <Button className={classes.center} component={Link} to={"/search"}>Search (standin)</Button>
-          <Button className={classes.center} component={Link} to={"/games"}>Edit Your Games</Button>
+          className={classes.center}/> */}
+          <Button className={classes.center} component={Link} to={"/search"} variant="contained" color="primary">Search for a user</Button>
+          <Button className={classes.center} component={Link} to={"/games"} variant="contained" color="primary">Manage your library</Button>
     </div>
   )
 }
