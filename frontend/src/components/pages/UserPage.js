@@ -66,7 +66,15 @@ function UserPage() {
       .then(data => setUser(data))
       .catch(err => console.log(err));
     console.log(user);
-  }, [])
+  }, []);
+
+  function goToMatch(username) {
+    localStorage.setItem("searchParams", user.username);
+    history.push({
+      pathname: "/match",
+      search: `?username=${user.username}`
+    });
+  }
 
   const handleChange = (event, newValue) => {
     setCurrentTab(newValue);
@@ -83,6 +91,9 @@ function UserPage() {
     <div>
       { user ? 
       <div>
+        <Grid container justify="flex-end" alignItems="flex-end">
+          
+        </Grid>
         <UserHeader className={classes.profileHeader} user={user}/>
         <Tabs className={classes.tabBar} 
           value={currentTab}
