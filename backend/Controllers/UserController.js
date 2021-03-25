@@ -9,6 +9,8 @@ Revision History:
 const User = require('../Schemas/User');
 const ePwd = require("encrypt-password");
 
+
+//NEEDS REFACTOR
 const SelectUsers = (req, res) => {
 
     try {

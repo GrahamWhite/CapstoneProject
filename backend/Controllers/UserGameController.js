@@ -6,6 +6,7 @@ const User= require('../Schemas/User');
 const Game = require('../Schemas/Game');
 
 
+
 const SelectUserGames = (req, res) => {
     let gameList = [];
     User.findOne({username: req.query.username}).then(user => {
