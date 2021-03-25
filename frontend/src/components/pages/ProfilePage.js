@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes } from '@material-ui/core'
+import { Link, useHistory } from 'react-router-dom';
+import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes, Button, IconButton } from '@material-ui/core'
 import { useFetch, useInterval } from '../../util/CustomHooks';
-import ProfileHeader from '../ProfileHeader';
+import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
 import FriendList from '../FriendList';
 import { backendURL } from '../../globals';
-
+import SettingsIcon from '@material-ui/icons/Settings';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -37,13 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
   tabPanelsContainer: {
     
+  },
+  settingsButton: {
+    right: '3%'
   }
 }));
 
 function ProfilePage() {
-  const url = backendURL;
-  const storedUsername = localStorage.getItem('username');
-
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
@@ -51,11 +51,23 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState(0);
 
+  const history = useHistory();
+
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    let oldURL = `${url}/select_user?username=${storedUsername}`;
-    fetch(oldURL)
+    let storedUsername = localStorage.getItem('username');
+    let username = '';
+
+    if (storedUsername) {
+      username = storedUsername;
+    }
+    else {
+      history.push('/login');
+    }
+
+    let url = `${backendURL}/select_user?username=${username}`;
+    fetch(url)
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(err => console.log(err));
@@ -75,25 +87,41 @@ function ProfilePage() {
 
   return (
     <div>
-      <ProfileHeader className={classes.profileHeader} user={user}/>
-      <Tabs className={classes.tabBar} 
-        value={currentTab}
-        variant="fullWidth"
-        onChange={handleChange}>
-        <Tab label="Games" {...a11yProps(0)}/>
-        <Tab label="Friends" {...a11yProps(1)}/>
-      </Tabs>
-      <div className={classes.tabPanelsContainer}>
-        <TabPanel value={currentTab} index={0}>
-          {/* Games panel */}
-          <UserGameList user={user}/>
-        </TabPanel>
-        <TabPanel value={currentTab} index={1}>
-          {/* Friends panel */}
-          <FriendList user={user}/>
-        </TabPanel>
-      </div>
-      
+      { user ? 
+        <div>
+          <Grid container justify="flex-end" alignItems="flex-end">
+            <IconButton
+              classname={classes.settingsButton}
+              tooltip="Settings"
+              size='large'
+              onClick={() => history.push('/settings')}>
+              <SettingsIcon/>
+            </IconButton>
+          </Grid>
+          <UserHeader className={classes.profileHeader} user={user}/>
+          <Tabs className={classes.tabBar} 
+            value={currentTab}
+            variant="fullWidth"
+            onChange={handleChange}>
+            <Tab label="Games" {...a11yProps(0)}/>
+            <Tab label="Friends" {...a11yProps(1)}/>
+          </Tabs>
+          <div className={classes.tabPanelsContainer}>
+            <TabPanel value={currentTab} index={0}>
+              {/* Games panel */}
+              <UserGameList username={user.username}/>
+            </TabPanel>
+            <TabPanel value={currentTab} index={1}>
+              {/* Friends panel */}
+              <FriendList user={user}/>
+            </TabPanel>
+          </div>
+        </div>
+        :
+        <div>
+          <Typography variant="h4" color="initial">Loading...</Typography>
+        </div>
+      }
     </div>
   )
 }
