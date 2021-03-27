@@ -4,6 +4,7 @@ let db = require('mongoose');
 const UserGame = require('../Schemas/UserGame');
 const User= require('../Schemas/User');
 const Game = require('../Schemas/Game');
+const Platform = require('../Schemas/Platform');
 
 
 
@@ -27,35 +28,40 @@ const SelectUserGames = (req, res) => {
     })
 }
 
-const CreateUserGame = (req, res) => {
+const CreateUserGame = async  (req, res) => {
     try{
-        User.find({username: req.body.username}).then(user => {
+        let user = await User.find({username: req.body.username});
 
-            if(user[0]){
+        if(user){
 
-                Game.find({name: req.body.name, platform: req.body.platform}).then(game => {
+            let game = await Game.find({name: req.body.game});
 
-                    if(game[0]){
+            if(game){
+                let platform = await Platform.find({name: req.body.platform});
 
-                        let userGame = new UserGame({
-                            userId: user[0]._id,
-                            gameId: game[0]._id,
-                            isFavorite: false
-                        });
+                if(platform){
+                    console.log(platform);
+                    console.log(game);
 
-                        userGame.save();
 
-                        res.send({userGame});
-                    }
-                    else{
-                        res.send("Game not found");
-                    }
-                })
-            }else {
 
-                res.send("User not found");
+
+
+                }
+
+                res.send("Error: platform not found")
             }
-        });
+
+            res.send("Error: game not found")
+
+
+            // let game = await Game.find({name: req.body.})
+        }
+
+        res.send("Error: user not found");
+
+
+
     }catch(err)
     {
         res.send({msg: "Error: " + err});

@@ -18,7 +18,7 @@ const SelectPlatforms = async (req, res) => {
 }
 
 //GET
-//Searches for a list of records with similar properties to [name]
+//Searches for a list of records with exact properties to [name]
 const SelectPlatform = async (req, res) => {
 
     if(req.query.name){

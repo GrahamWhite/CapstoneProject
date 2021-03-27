@@ -10,23 +10,73 @@ const User = require('../Schemas/User');
 const ePwd = require("encrypt-password");
 
 
-//NEEDS REFACTOR
-const SelectUsers = (req, res) => {
+//GET
+//Selects all records in the collection
+const SelectUsers = async (req, res) => {
 
     try {
-        User.find({}).then(r => {
-            if (!r[0]) {
-                res.send("No users currently in the database");
-            } else {
-                res.send(r);
-            }
-            ;
-        });
+        let users = await User.find({});
+
+        if(users[0]){
+            res.send(users);
+        }
+
+        res.send("Error: No users found")
     } catch (err) {
         res.send(err);
     }
 };
 
+
+const UpdateUser = async (req, res) => {
+    if(req.body.username){
+        let user = await User.findOne({username: req.body.username});
+
+        if(user){
+
+            let valid = false;
+
+            if(req.body.email){
+                if(!validateEmail(req.body.email)){
+                    res.send("Error: email not valid")
+                }
+            }
+
+            let updatedUser = await User.updateOne({username: req.body.username, email: req.body.email, bio: req.body.bio});
+
+            if(updatedUser){
+                res.send("user updated");
+            }
+
+            res.send("you fucked up");
+        }
+    }
+    res.send("Error: username must be defined")
+}
+
+//GET
+//Searches for similar records with parameters [username]
+const SearchUsers = async (req, res) => {
+
+    if(req.query.username){
+
+            let RegExUsername = RegExp(req.query.username);
+
+            let users = await User.find({username: {$regex: RegExUsername, $options: 'i'}});
+
+            if(users[0]){
+                res.send(users);
+            }else {
+                res.send("No users found with username " + req.query.username);
+            }
+    }
+
+    res.send("Error: username must be defined");
+
+}
+
+//POST
+//Sends valid login
 const Login = (req, res) => {
     try {
         User.find({username: req.body.username}).then(u => {
@@ -48,19 +98,39 @@ const Login = (req, res) => {
     }
 };
 
-const SelectUser = (req, res) => {
+//GET
+//Searches for a record matching exact properties of [username]
+const SelectUser = async (req, res) => {
     try {
-        User.findOne({username: req.query.username}).then(r => {
-            if (!r) {
-                res.send("User: " + req.query.username + " not found in the database");
-            } else {
-                res.send(r);
+        if(req.query.username){
+            let user = await User.findOne({username: req.query.username});
+
+            if(user){
+                res.send(user);
             }
-        });
+
+            res.send("Error: user not found");
+        }
+
+        res.send("Error: username must be defined");
+
     } catch (err) {
         res.send({err});
     }
 };
+
+
+
+
+
+
+
+//WRITE SEARCH USER
+
+
+
+
+
 
 const GetUserId = (req, res) => {
     try {
@@ -77,51 +147,54 @@ function validateEmail(email) {
 }
 
 
-const CreateUser = (req, res) => {
+const CreateUser = async (req, res) => {
     try {
-        User.find({username: req.body.username}).then(u => {
+
+        if(req.body.username){
+            if(req.body.password){
+                if(req.body.email && validateEmail(req.body.email)){
+                    let check = await User.findOne({username: req.body.username});
+
+                    if(!check){
+                        try{
+                            const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
 
 
-            try{
 
-
-            if (!u[0]) {
-
-                if(!req.body.username || !req.body.password){
-                    res.send("username and password required");
+                            let user = new User({
+                                username: req.body.username,
+                                password: encryptedPwd,
+                                email: req.body.email,
+                                isAdmin: false,
+                                bio: ""
+                            });
+                            user.save();
+                            res.send({msg: "User Saved", username: user.username});
+                        } catch (e){
+                            res.send(e.toString());
+                        }
                 }
 
-                if(!validateEmail(req.body.email)){
-                    res.send("invalid email");
+                    res.send("Error: valid email required");
+
+
                 }
 
+                res.send("Error: user already exists with username: " + req.body.username);
 
-
-                    const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
-
-
-                let user = new User({
-                    username: req.body.username,
-                    password: encryptedPwd,
-                    email: req.body.email,
-                    isAdmin: false,
-                    bio: ""
-                });
-                user.save();
-                res.send({msg: "User Saved", username: user.username});
 
 
             }
-            else{
-                res.send("user already exists");
-            }
 
-            } catch (err){
-                res.send("username and password required");
-            }
-        });
+            res.send("Error: password must be defined");
+        }
+
+        res.send("Error: username must be defined");
+        let user = User.findOne({username: req.body.username})
+
+
     } catch (err) {
-        res.send({msg: "Error: " + err});
+        res.send(err);
     }
 };
 
@@ -142,5 +215,7 @@ exports.SelectUser = SelectUser;
 exports.CreateUser = CreateUser;
 exports.Login = Login;
 exports.UserExists = UserExists;
+exports.SearchUsers = SearchUsers;
 exports.GetUserId = GetUserId;
+exports.UpdateUser= UpdateUser;
 
