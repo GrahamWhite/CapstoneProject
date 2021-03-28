@@ -42,28 +42,16 @@ const CreateUserGame = async  (req, res) => {
                 if(platform){
                     console.log(platform);
                     console.log(game);
-
-
-
-
-
                 }
 
                 res.send("Error: platform not found")
             }
 
             res.send("Error: game not found")
-
-
-            // let game = await Game.find({name: req.body.})
         }
 
         res.send("Error: user not found");
-
-
-
-    }catch(err)
-    {
+    }catch(err){
         res.send({msg: "Error: " + err});
     }
 };
@@ -114,8 +102,6 @@ const UserGameMatch = (req, res) => {
                 })
 
             });
-
-
     });
 
     }catch (err){

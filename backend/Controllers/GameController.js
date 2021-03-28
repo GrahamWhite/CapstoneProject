@@ -5,10 +5,10 @@ const Platform = require('../Schemas/Platform');
 //Selects all records in the collection
 const SelectGames = async (req, res) => {
     try {
-        let game = await Game.find({});
+        let game = await Game.find();
 
-        if(game) {
-            res.send(r);
+        if(game[0]) {
+            res.send(game);
         }
         res.send("No games currently in the database");
 
@@ -27,13 +27,11 @@ const SearchGamesByName = async (req, res) => {
 
         let games = await Game.find({name: {$regex: RegExName, $options: 'i'}});
 
-
         if(games[0]){
             res.send(games);
         }else {
             res.send({err:"No games found"});
         }
-
 
     }else{
         res.send("Error: name must be defined");
@@ -59,22 +57,7 @@ const SelectGame = async (req, res) => {
         res.send("Error: Platform not found");
     }
     res.send("Error: name and platform must be defined");
-
 }
-//Returns boolean for existing game (similar match)
-// const GameExists = async (name, platform) => {
-//
-//     try{
-//         let p = await Game.findOne({name: name, platform: platform});
-//
-//         if(p){
-//             return true;
-//         }
-//         return false;
-//     } catch (e) {
-//         return false;
-//     }
-// }
 
 //POST
 //Creates a new record with properties [name, platform]
