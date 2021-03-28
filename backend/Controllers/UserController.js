@@ -119,19 +119,6 @@ const SelectUser = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
-//WRITE SEARCH USER
-
-
-
-
-
-
 const GetUserId = (req, res) => {
     try {
         User.find({username: req.body.username}).then(r => {
