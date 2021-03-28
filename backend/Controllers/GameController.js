@@ -5,10 +5,10 @@ const Platform = require('../Schemas/Platform');
 //Selects all records in the collection
 const SelectGames = async (req, res) => {
     try {
-        let game = await Game.find({});
+        let game = await Game.find();
 
-        if(game) {
-            res.send(r);
+        if(game[0]) {
+            res.send(game);
         }
         res.send("No games currently in the database");
 
