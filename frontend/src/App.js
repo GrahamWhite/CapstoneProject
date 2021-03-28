@@ -16,6 +16,10 @@ import GamesPage from './components/pages/GamesPage';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 import BottomNavbar from './components/BottomNavbar.js';
 import AuthNavbar from './components/AuthNavbar.js';
+import loggedInReducer from './reducers/loginReducer.js';
+import { useSelector } from 'react-redux';
+import UserPage from './components/pages/UserPage.js';
+import SettingsPage from './components/pages/SettingsPage.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,16 +35,13 @@ function App() {
   const [isDarkTheme, setTheme] = useState(true);
   const classes = useStyles();
 
-  const [username, setUsername] = useState(localStorage.getItem('username'));
-
-  useEffect(() => {
-    
-  }, [])
+  //const isLogged = useSelector(state => state.isLogged);
+  const isLogged = localStorage.getItem('username') ? true : false;
 
   return (
     <Router className="App">
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-       {username 
+       {isLogged 
        ? <AuthNavbar/> 
        : <Navbar/>}
         <div style={{marginTop:'5rem'}}>
@@ -54,13 +55,14 @@ function App() {
             <Route path='/notification' exact component={NotificationPage}/>
             <Route path='/friend' exact component={FriendPage}/>
             <Route path='/match' exact component={MatchPage}/>
-            <Route path='/user' component={ProfilePage}/>
-
+            <Route path='/profile' component={ProfilePage}/>
+            <Route path='/user' component={UserPage}/>
             <Route path='/games' component={GamesPage}/>
+            <Route path='/settings' component={SettingsPage}/>
           </Switch>
         </div>
         <div className={classes.bottomNavbarSpacer}></div>
-        {username 
+        {isLogged 
         ? <BottomNavbar/> 
         : ''}
       </ThemeProvider>
