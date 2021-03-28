@@ -1,110 +1,121 @@
 const Game = require('../Schemas/Game');
+const Platform = require('../Schemas/Platform');
 
-const SelectGames = (req, res) => {
+//GET
+//Selects all records in the collection
+const SelectGames = async (req, res) => {
     try {
-        Game.find({}).then(r => {
-            if (!r[0]) {
-                res.send("No games currently in the database");
-            } else {
-                res.send(r);
-            }
-            ;
-        });
-    } catch (err) {
-        res.send(err);
-    }
-};
+        let game = await Game.find({});
 
-const SelectGame = (req, res) => {
-    try{
-
-        if(!req.body.name){
-            res.send("name is required");
-            return;
+        if(game) {
+            res.send(r);
         }
-
-        if(!req.body.platform){
-            res.send("platform is required");
-            return;
-        }
-
-
-
-        Game.findOne({name:req.body.name, platform: req.body.platform}).then(r => {
-            if(!r){
-                res.send("Game: " + req.body.name + " not found in the database");
-            }else {
-                res.send(r);
-            }
-        });
-    }
-    catch (err){
-        res.send({err});
-    }
-};
-
-const GetGameId = (req, res) => {
-    try{
-        Game.find({name: req.body.name}).then(r => {
-            res.send(r[0]._id);
-        });
-    }catch (err){
-        res.send(err);
-    }
-};
-
-const CreateGame = (req, res) => {
-    try{
-
-        if(!req.body.name){
-            res.send("name is required");
-        }
-        else if(!req.body.platform){
-            res.send("platform is required");
-        }else {
-
-            Game.find({name: req.body.name, platform: req.body.platform}).then(g => {
-
-                if(!g[0]){
-                    let game = new Game({
-                        name: req.body.name,
-                        platform: req.body.platform
-                    });
-
-                    game.save();
-
-                    res.send({msg: "Game Saved", game: game});
-                }
-                else {
-                    res.send("Game already exists")
-                }
-
-            });
-        }
-
-
+        res.send("No games currently in the database");
 
     }catch (err)
     {
-        res.send({msg: "Error: " + err});
+        res.send(err);
     }
 };
 
+//GET
+//Searches for a list of records matching similar properties [name, platform]
+const SearchGamesByName = async (req, res) => {
+    if(req.query.name){
 
-const GameExists = (req, res) => {
-    try {
-        Game.exists({name: req.body.name}).then( r => {
-            res.send(r);
-        });
-    } catch (err) {
-        res.send(err);
-    };
-};
+        let RegExName = RegExp(req.query.name);
 
+        let games = await Game.find({name: {$regex: RegExName, $options: 'i'}});
+
+
+        if(games[0]){
+            res.send(games);
+        }else {
+            res.send({err:"No games found"});
+        }
+
+
+    }else{
+        res.send("Error: name must be defined");
+    }
+}
+
+//GET
+//Searches for a single record with exact properties matching [name, platform]
+const SelectGame = async (req, res) => {
+
+    if(req.query.name){
+
+        let platform = await Platform.findOne({name: req.query.platform});
+
+        if(platform){
+            let game = await Game.findOne({name: req.query.name, platform: platform._id});
+
+            if(game){
+                res.send(game);
+            }
+            res.send("Error: Game not found");
+        }
+        res.send("Error: Platform not found");
+    }
+    res.send("Error: name and platform must be defined");
+
+}
+//Returns boolean for existing game (similar match)
+// const GameExists = async (name, platform) => {
+//
+//     try{
+//         let p = await Game.findOne({name: name, platform: platform});
+//
+//         if(p){
+//             return true;
+//         }
+//         return false;
+//     } catch (e) {
+//         return false;
+//     }
+// }
+
+//POST
+//Creates a new record with properties [name, platform]
+const CreateGame = async (req, res) => {
+
+    if(req.body.name && req.body.platform) {
+
+        let platform = await Platform.find({name: req.body.platform});
+
+        if(platform[0]){
+
+            let exist = await Game.find({name: req.body.name, platform: platform[0]._id});
+
+            if(!exist[0]){
+
+
+                let game = new Game({
+                    name: req.body.name,
+                    platform: platform[0]._id
+                });
+
+                game.save();
+
+                res.send(game);
+            }
+            res.send("Error: game record already exists");
+
+        }
+
+        res.send("Error: platform not found");
+
+    }
+
+    res.send("Error: name and platform must be defined");
+
+}
 
 exports.SelectGames = SelectGames;
 exports.SelectGame = SelectGame;
+exports.SearchGamesByName = SearchGamesByName;
 exports.CreateGame = CreateGame;
-exports.GameExists = GameExists;
-exports.GetGameId = GetGameId;
+
+
 
