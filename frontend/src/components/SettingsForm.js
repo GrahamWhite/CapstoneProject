@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { backendURL, ReAuthenticate } from '../globals';
@@ -31,9 +31,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SettingsForm({ user }) {
+function SettingsForm(props, { user }) {
 
   const classes = useStyles();
+  const history = useHistory();
 
   const [message, setMessage] = useState('');
 
@@ -42,7 +43,7 @@ function SettingsForm({ user }) {
     setMessage('');
 
     if (!localStorage.getItem('username')){
-      ReAuthenticate();
+      ReAuthenticate(props);
     }
 
     let isValid = false;
@@ -81,6 +82,7 @@ function SettingsForm({ user }) {
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       bio: user.bio,
       email: user.email
@@ -110,6 +112,7 @@ function SettingsForm({ user }) {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                InputLabelProps={{shrink: true}}
                 id="bio"
                 label="bio"
                 fullWidth
@@ -125,6 +128,7 @@ function SettingsForm({ user }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                InputLabelProps={{shrink: true}}
                 id="email"
                 label="email"
                 fullWidth
@@ -144,6 +148,16 @@ function SettingsForm({ user }) {
             size="large"
           >
             Save Changes
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="secondary"
+            size="large"
+            onClick={() => history.push('/profile')}
+          >
+            Go back to profile
           </Button>
         </form>
       </div>

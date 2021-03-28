@@ -4,7 +4,7 @@ import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, 
 import { useFetch, useInterval } from '../../util/CustomHooks';
 import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
-import FriendList from '../FriendList';
+import FriendsList from '../FriendsList';
 import { backendURL } from '../../globals';
 import SettingsIcon from '@material-ui/icons/Settings';
 
@@ -113,7 +113,7 @@ function ProfilePage() {
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
               {/* Friends panel */}
-              <FriendList user={user}/>
+              <FriendsList user={user}/>
             </TabPanel>
           </div>
         </div>

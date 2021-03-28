@@ -124,7 +124,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
   );
 }
 
-function UserGameList(props) {
+function UserGameList({username}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -138,15 +138,14 @@ function UserGameList(props) {
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
   const [page, setPage] = useState(0);
-  //const [search, setSearch] = useState("");
-  // "/user_game?username=graham_white"
+  
   const url = backendURL;
 
   useEffect(() => {
-    fetch(url + "/select_usergames?username=" + localStorage.getItem("username"))
+    fetch(url + "/select_usergames?username=" + username)
       .then(response => response.json())
       .then(data => setGames(data));
-  }, [])
+  }, [username])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);

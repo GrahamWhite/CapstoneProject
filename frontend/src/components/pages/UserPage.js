@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes } from '@material-ui/core'
+import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes, Button } from '@material-ui/core'
 import { useFetch, useInterval } from '../../util/CustomHooks';
 import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
-import FriendList from '../FriendList';
+import FriendsList from '../FriendsList';
 import { backendURL } from '../../globals';
 
 
@@ -92,7 +92,13 @@ function UserPage() {
       { user ? 
       <div>
         <Grid container justify="flex-end" alignItems="flex-end">
-          
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => goToMatch(user.username)}
+          >
+            Match 
+          </Button>
         </Grid>
         <UserHeader className={classes.profileHeader} user={user}/>
         <Tabs className={classes.tabBar} 
@@ -109,7 +115,7 @@ function UserPage() {
           </TabPanel>
           <TabPanel value={currentTab} index={1}>
             {/* Friends panel */}
-            <FriendList user={user}/>
+            <FriendsList user={user}/>
           </TabPanel>
         </div>
       </div>

@@ -37,7 +37,7 @@ function BottomNavbar(){
           <BottomNavigationAction component={Link} to={"/main"} icon={<HomeIcon className={classes.icon}/>}/>
           <BottomNavigationAction component={Link} to={"/search"} icon={<PersonAddIcon className={classes.icon}/>}/>
           <BottomNavigationAction component={Link} to={"/friend"} icon={<PeopleIcon className={classes.icon}/>}/>
-          <BottomNavigationAction component={Link} to={"/user"} icon={<PersonIcon className={classes.icon}/>}/>
+          <BottomNavigationAction component={Link} to={"/profile"} icon={<PersonIcon className={classes.icon}/>}/>
         </BottomNavigation>
         )
 }

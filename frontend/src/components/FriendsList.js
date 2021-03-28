@@ -56,14 +56,14 @@ function UserItem({ user, index, history }) {
   function goToUserProfile(username) {
     history.push({
       pathname: "/user",
-      search: `?username=${username}`
+      search: `?username=${user.username}`
     });
   }
 
   function goToMatch(username) {
     history.push({
       pathname: "/match",
-      search: `?username=${username}`
+      search: `?username=${user.username}`
     });
   }
 
@@ -101,14 +101,14 @@ function UserItem({ user, index, history }) {
         </Grid>
         <Grid item width={"30%"}>
           <CardActions>
-            <Button
+          <Button
               color="primary"
               variant="outlined"
               onClick={() => addFriend(user.username)}
             >
               Add
             </Button>
-            <Button
+          <Button
               color="primary"
               variant="outlined"
               onClick={() => goToUserProfile(user.username)}
@@ -129,7 +129,7 @@ function UserItem({ user, index, history }) {
   );
 }
 
-function UserList(props) {
+function FriendsList(props) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -149,7 +149,7 @@ function UserList(props) {
   const url = backendURL;
 
   useEffect(() => {
-    fetch(url + "/select_users")
+    fetch(url + "/select_userfriends")
       .then(response => response.json())
       .then(data => { setUsers(data); console.log(data);});
     console.log(users);
@@ -199,4 +199,4 @@ function UserList(props) {
   );
 }
 
-export default UserList;
+export default FriendsList;

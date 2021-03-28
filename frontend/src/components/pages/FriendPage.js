@@ -4,7 +4,7 @@ import { makeStyles, ThemeProvider } from '@material-ui/core';
 //import Typography from '@material-ui/core/Typography'
 import BottomNavbar from '../BottomNavbar';
 import AuthNavbar from '../AuthNavbar';
-import FriendList from '../FriendList';
+import FriendsList from '../FriendsList';
 
 const useStyles = makeStyles((theme) => ({
     center: {
@@ -23,7 +23,7 @@ function FriendPage() {
   return (
     <div>
         <h1 className={classes.center}>Friends list coming Soon!</h1>
-        <FriendList/>
+        <FriendsList/>
     </div>
   )
 }

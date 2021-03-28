@@ -24,7 +24,7 @@ function SettingsPage() {
     let url = `${backendURL}/select_user?username=${username}`;
     fetch(url)
       .then(response => response.json())
-      .then(data => setUser(data))
+      .then(data => { setUser(data); console.log(data); })
       .catch(err => console.log(err));
     console.log(user);
   }, [])
