@@ -32,23 +32,22 @@ app.use(express.json());
 app.get('/select_users', (req, res) => {
     UserController.SelectUsers(req, res);
 });
-app.get('/search_users', (req, res) => {
-    UserController.SearchUsers(req, res);
-});
-
-
 
 app.get('/select_user', (req, res) => {
     UserController.SelectUser(req, res);
+});
+
+app.get('/search_users', (req, res) => {
+    UserController.SearchUsers(req, res);
 });
 
 app.post('/create_user', (req, res) => {
     UserController.CreateUser(req, res);
 });
 
-app.post('/get_user_id', (req, res) => {
-    UserController.GetUserId(req, res);
-});
+// app.post('/get_user_id', (req, res) => {
+//     UserController.GetUserId(req, res);
+// });
 
 app.post('/login', (req, res) => {
     UserController.Login(req, res);
@@ -72,9 +71,9 @@ app.post('/create_game', (req, res) => {
     GameController.CreateGame(req, res);
 });
 
-app.post('/get_game_id', (req, res) => {
-    GameController.GetGameId(req, res);
-});
+// app.post('/get_game_id', (req, res) => {
+//     GameController.GetGameId(req, res);
+// });
 
 app.get('/search_games', (req, res) => {
     GameController.SearchGamesByName(req, res);
@@ -110,9 +109,6 @@ app.post('/delete_platform', (req, res) => {
 app.post('/create_platform', (req, res) => {
     PlatformController.CreatePlatform(req, res);
 })
-
-
-
 
 //Initialize connection to MongoDb
 try {

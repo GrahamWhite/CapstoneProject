@@ -61,20 +61,6 @@ const SelectGame = async (req, res) => {
     res.send("Error: name and platform must be defined");
 
 }
-//Returns boolean for existing game (similar match)
-// const GameExists = async (name, platform) => {
-//
-//     try{
-//         let p = await Game.findOne({name: name, platform: platform});
-//
-//         if(p){
-//             return true;
-//         }
-//         return false;
-//     } catch (e) {
-//         return false;
-//     }
-// }
 
 //POST
 //Creates a new record with properties [name, platform]
