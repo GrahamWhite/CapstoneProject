@@ -14,8 +14,10 @@ import Container from "@material-ui/core/Container";
 import { Link, useHistory } from "react-router-dom";
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { backendURL } from "../globals";
+import loggedInReducer from "../reducers/loginReducer";
+import { signIn } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +50,7 @@ function LoginForm() {
 
   // Hooks
   const isLogged = useSelector(state => state.isLogged);
+  const setLogin = useDispatch(loggedInReducer);
 
   // Helps with programatically changing what page you're on
   let history = useHistory();
@@ -77,7 +80,8 @@ function LoginForm() {
 
     if (isValid) {
       localStorage.setItem('username', responseData.user.username);
-      history.push("/user");
+      //dispatch(signIn);
+      history.push("/profile");
     }
   }
 
@@ -103,7 +107,6 @@ function LoginForm() {
       console.log(JSON.stringify(values));
       sendToServer(values);
     }
-    
   })
   
   return (
