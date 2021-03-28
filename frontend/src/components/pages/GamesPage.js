@@ -21,7 +21,7 @@ function GamesPage() {
   return (
     <div>
         <h1 className={classes.center}>Select games to add to your library:</h1>
-        {/* <GamesList/> */}
+        <GamesList/>
     </div>
   )
 }

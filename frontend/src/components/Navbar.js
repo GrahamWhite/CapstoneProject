@@ -6,6 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useSelector } from 'react-redux';
 
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -30,7 +31,7 @@ function Navbar() {
             <MenuIcon/>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            
+            Tink
           </Typography>
           { loggedIn ? 'Logged in as: user' : <Button component={Link} to={"/login"} color="inherit">Login</Button>}
           <Button component={Link} to={"/register"} color="inherit">Register</Button>

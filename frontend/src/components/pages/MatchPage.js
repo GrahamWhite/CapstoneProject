@@ -40,7 +40,7 @@ function MatchPage() {
   const [currentTab, setCurrentTab] = useState(0);
 
   const [user, setUser] = useState({
-    username: localStorage.getItem('username') ? localStorage.getItem('username') : 'invalid user',
+    username: localStorage.getItem('username') ? localStorage.getItem('username') : 'Invalid User',
     // email: 'tmills9208@conestogac.on.ca',
     // bio: 'Hi, i am a person!',
     avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder
@@ -49,7 +49,7 @@ function MatchPage() {
 
   const [matchedUser, setMatchedUser] = useState({
     username: new URLSearchParams(window.location.search).get('username') ?
-      new URLSearchParams(window.location.search).get('username') : 'invalid user 2',
+      new URLSearchParams(window.location.search).get('username') : 'Invalid User 2',
     // email: 'notaemail@gmail.com',
     // bio: "I'm a gamer and I love games",
     avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder,
@@ -67,9 +67,7 @@ function MatchPage() {
         <MatchHeader user={user} matchedUser={matchedUser}/>
         </Grid>
         <Grid item xs={12}>
-        <Typography variant="h5" className={classes.center}>{user.username} + {matchedUser.username}</Typography>
-        <Typography variant="h5" className={classes.center}>You have {'xx'} games in common!</Typography>
-        {/* <h1 className={classes.center}>{user.username} + {matchedUser.username}</h1> */}
+        {/* <Typography variant="h5" className={classes.center}>{user.username} + {matchedUser.username}</Typography> */}
         </Grid>
         <Grid item xs={12}>
           <MatchList/>

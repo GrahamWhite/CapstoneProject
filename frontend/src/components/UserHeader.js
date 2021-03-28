@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ProfileHeader(props) {
+function UserHeader({user}) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
@@ -27,14 +27,14 @@ function ProfileHeader(props) {
     <Grid container className={classes.root} spacing={3} justify="center" alignItems="center">
       <Grid container item spacing={2} justify="center">
         <Grid item className={classes.profileImgContainer} xs={12} sm={3}>
-          <img className={classes.profileImg} src={props.user.avatarImg} alt="User image"/>
+          <img className={classes.profileImg} src={user.avatarImg} alt="User image"/>
         </Grid>
         <Grid item className={classes.profileUsername} xs={12} sm={9}>
-          <Typography variant="h5" align={matches ? 'left' : 'center'}>{props.user.username}</Typography>
+          <Typography variant="h5" align={matches ? 'left' : 'center'}>{user.username}</Typography>
         </Grid>
       </Grid>
       <Grid item xs={12} sm={6}>
-        <Typography variant="body1" style={{color:"#666"}}>{props.user.bio}</Typography>
+        <Typography variant="body1" style={{color:"#666"}}>{user.bio}</Typography>
       </Grid>
       <Grid item xs={12} sm={6}>
         <Typography variant="h6" color="initial">Here are my steam, origin, etc links!</Typography>
@@ -43,4 +43,4 @@ function ProfileHeader(props) {
   )
 }
 
-export default ProfileHeader;
+export default UserHeader;
