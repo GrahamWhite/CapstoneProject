@@ -27,13 +27,11 @@ const SearchGamesByName = async (req, res) => {
 
         let games = await Game.find({name: {$regex: RegExName, $options: 'i'}});
 
-
         if(games[0]){
             res.send(games);
         }else {
             res.send({err:"No games found"});
         }
-
 
     }else{
         res.send("Error: name must be defined");
@@ -59,7 +57,6 @@ const SelectGame = async (req, res) => {
         res.send("Error: Platform not found");
     }
     res.send("Error: name and platform must be defined");
-
 }
 
 //POST
