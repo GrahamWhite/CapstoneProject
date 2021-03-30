@@ -48,7 +48,7 @@ const UpdateUser = async (req, res) => {
                 res.send("user updated");
             }
 
-            res.send("you fucked up");
+            res.send("Error: User is not defined");
         }
     }
     res.send("Error: username must be defined")
@@ -118,19 +118,6 @@ const SelectUser = async (req, res) => {
         res.send({err});
     }
 };
-
-
-
-
-
-
-
-//WRITE SEARCH USER
-
-
-
-
-
 
 const GetUserId = (req, res) => {
     try {
