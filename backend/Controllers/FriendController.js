@@ -1,10 +1,11 @@
 let express = require('express');
 let db = require('mongoose');
 
-
 const User= require('../Schemas/User');
 const Friend = require('../Schemas/Friend');
 
+//POST
+//Create a new friend [username, friendUsername]
 const CreateFriend = async (req, res) => {
     if(req.body.username && req.body.friendUsername){
 
@@ -12,26 +13,33 @@ const CreateFriend = async (req, res) => {
         let friend = await User.findOne({username: req.body.friendUsername});
 
         if(user && friend){
-            let record = new Friend({
-               userId: user._id,
-               friendId: friend._id
-            });
+            //Check if users are already friends
+            let friendship = await Friend.findOne({userId: user._id, friendId: friend._id});
 
-            try{
-                record.save();
+            if(!friendship){
+                    let record = new Friend({
+                    userId: user._id,
+                    friendId: friend._id
+                    });
 
-                res.send("Friend added");
-            }catch (e){
-                res.send("Error: could not save record")
+                    try{
+                        record.save();
+
+                        res.send("Friend added");
+                    }catch (e){
+                        res.send("Error: could not save record");
+                    }
             }
+                res.send("Error: Friend already added")
         }
-
+        res.send("Error: User(s) are not valid")
     }
 
-    res.send("Error: username and friendUsername must be defined")
+    res.send("Error: username and friendUsername must be defined");
 }
 
-
+//GET
+//Selects a list of a user's friends
 const SelectUserFriends = async (req, res) => {
 
     if(req.query.username) {
@@ -41,38 +49,39 @@ const SelectUserFriends = async (req, res) => {
             let friends = await Friend.find({userId: user._id});
 
             if(friends[0]){
-                res.send(friends);
+                res.send(friends);//Needs to send back friend usernames not ids - get usernames for each id
             }
-
-            res.send("you have no friends :(");
+            res.send("error: no friends");
         }
-
         res.send("Error: user not found");
-
     }
-
     res.send("Error: username must be defined");
 }
 
+//POST
+// Delete a friendship 
 const DeleteFriend = async (req, res) => {
-    if(req.query.username) {
-      if(req.query.friendUsername){
-          let username = await User.findOne({username: req.query.username});
-          let friendUsername = await User.findOne({username: req.query.friendUsername});
+    if(req.body.username && req.body.friendUsername) {
+    
+          let user = await User.findOne({username: req.body.username});
+          let friend = await User.findOne({username: req.body.friendUsername});
 
-          if(username && friendUsername){
-                let friend = Friend.findOneAndRemove({userId: username._id, friendId: friendUsername._id});
+          if(user && friend){
+                //Check if users are already friends
+                let friendship = await Friend.findOne({userId: user._id, friendId: friend._id});
 
-                if(friend){
-                    res.send("friend deleted");
+                if(friendship){
+                    let deleteFriend = Friend.findOneAndRemove({userId: user._id, friendId: friend._id});//????? Does not delete
+
+                    if(deleteFriend){
+                        res.send("friend deleted");
+                    }
+                    res.send("error: could not delete record");
                 }
-
-                res.send("error: could not delete record");
-          }
+                res.send("user or friend not found");
+            }
           res.send("user or friend not found");
-      }
     }
-
     res.send("Error: username must be defined")
 }
 

@@ -14,14 +14,15 @@ const port = process.env.PORT || 5000;
 const User = require('../backend/Schemas/User');
 const Game = require('../backend/Schemas/Game');
 const Platform = require('../backend/Schemas/Game');
+const Friend = require('../backend/Schemas/Friend');
 
 
-
+//Controller Imports
 const UserController = require("./Controllers/UserController");
 const GameController = require("./Controllers/GameController");
 const PlatformController = require("./Controllers/PlatformController");
 const UserGameController = require("./Controllers/UserGameController");
-
+const FriendController = require("./Controllers/FriendController");
 
 require('dotenv').config();
 
@@ -57,8 +58,7 @@ app.post('/update_user', (req, res) => {
     UserController.UpdateUser(req, res);
 });
 
-
-//User Routes
+//Game Routes
 app.get('/select_games', (req, res) => {
     GameController.SelectGames(req, res);
 });
@@ -79,7 +79,6 @@ app.get('/search_games', (req, res) => {
     GameController.SearchGamesByName(req, res);
 });
 
-
 app.get('/select_usergames', (req, res) => {
     UserGameController.SelectUserGames(req, res);
 })
@@ -87,11 +86,9 @@ app.post('/create_usergame', (req, res) => {
     UserGameController.CreateUserGame(req, res);
 })
 
-
 app.get('/user_game_match', (req, res) => {
     UserGameController.UserGameMatch(req, res);
 })
-
 
 //Platform Routes
 app.get('/select_platforms', (req, res) => {
@@ -111,7 +108,7 @@ app.post('/create_platform', (req, res) => {
 })
 
 //Friend Routes
-app.get('/select_user_friends', (req, res) => {
+app.get('/select_userfriends', (req, res) => {
     FriendController.SelectUserFriends(req, res);
 })
 
@@ -145,7 +142,3 @@ try {
 } catch (error) {
     console.log("Error:" + error);
 }
-
-
-
-
