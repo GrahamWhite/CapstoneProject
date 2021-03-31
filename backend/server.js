@@ -110,6 +110,19 @@ app.post('/create_platform', (req, res) => {
     PlatformController.CreatePlatform(req, res);
 })
 
+//Friend Routes
+app.get('/select_user_friends', (req, res) => {
+    FriendController.SelectUserFriends(req, res);
+})
+
+app.post('/create_friend', (req, res) => {
+    FriendController.CreateFriend(req, res);
+})
+
+app.post('/delete_friend', (req, res) => {
+    FriendController.DeleteFriend(req, res);
+})
+
 //Initialize connection to MongoDb
 try {
 
