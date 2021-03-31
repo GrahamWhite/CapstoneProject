@@ -82,19 +82,6 @@ app.get('/search_games', (req, res) => {
 });
 
 
-app.get('/select_usergames', (req, res) => {
-    UserGameController.SelectUserGames(req, res);
-})
-app.post('/create_usergame', (req, res) => {
-    UserGameController.CreateUserGame(req, res);
-})
-
-
-app.get('/user_game_match', (req, res) => {
-    UserGameController.UserGameMatch(req, res);
-})
-
-
 //Platform Routes
 app.get('/select_platforms', (req, res) => {
     PlatformController.SelectPlatforms(req, res);
