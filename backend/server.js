@@ -21,6 +21,7 @@ const UserController = require("./Controllers/UserController");
 const GameController = require("./Controllers/GameController");
 const PlatformController = require("./Controllers/PlatformController");
 const UserGameController = require("./Controllers/UserGameController");
+const FriendController = require("./Controllers/FriendController");
 
 
 require('dotenv').config();
@@ -111,6 +112,18 @@ app.post('/create_platform', (req, res) => {
     PlatformController.CreatePlatform(req, res);
 })
 
+
+app.get('/select_user_friends', (req, res) => {
+    FriendController.SelectUserFriends(req, res);
+})
+
+app.post('/create_friend', (req, res) => {
+    FriendController.CreateFriend(req, res);
+})
+
+app.post('/delete_friend', (req, res) => {
+    FriendController.DeleteFriend(req, res);
+})
 
 
 

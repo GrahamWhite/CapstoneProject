@@ -8,64 +8,78 @@ const Platform = require('../Schemas/Platform');
 
 
 
-const SelectUserGames = (req, res) => {
-    let gameList = [];
-    User.findOne({username: req.query.username}).then(user => {
-        if(user){
-            UserGame.find({userId: user._id}).then(async userGames => {
-                for(let userGame of userGames){
-                    let game = await Game.findById(userGame.gameId);
+const SelectUserGames = async (req, res) => {
 
-                    gameList.push(game)
-                }
+    let userGameList = await UserGame.find({});
 
-                console.log(gameList.join(','));
-                res.send(gameList);
-            })
-        }else{
-            res.send("User not found");
-        }
-    })
+    if(userGameList[0]){
+        res.send(userGameList);
+    }
+
+    res.send("Error: No usersgames in the database")
+    // let gameList = [];
+    // User.findOne({username: req.query.username}).then(user => {
+    //     if(user){
+    //         UserGame.find({userId: user._id}).then(async userGames => {
+    //             for(let userGame of userGames){
+    //                 let game = await Game.findById(userGame.gameId);
+    //
+    //                 gameList.push(game)
+    //             }
+    //
+    //             console.log(gameList.join(','));
+    //             res.send(gameList);
+    //         })
+    //     }else{
+    //         res.send("User not found");
+    //     }
+    // })
 }
 
 const CreateUserGame = async  (req, res) => {
-    try{
-        let user = await User.find({username: req.body.username});
+    if(req.body.name){
+        if(req.body.platform){
+            if(req.body.username){
 
-        if(user){
+                let user = await User.findOne({username: req.body.username});
 
-            let game = await Game.find({name: req.body.game});
+                if(user){
+                    //let platform = await Platform.findOne({name: req.body.platform});
 
-            if(game){
-                let platform = await Platform.find({name: req.body.platform});
-
-                if(platform){
-                    console.log(platform);
-                    console.log(game);
+                    let game = await Game.findOne({name: req.body.name, platform: req.body.platform});
 
 
 
-
-
+                    // if(platform){
+                    //
+                    //
+                    //     let game = await Game.findOne({name: req.body.name});
+                    //
+                    //         if(game){
+                    //             let usergame = new UserGame({
+                    //                 userId: user._id,
+                    //                 gameId: game._id
+                    //             });
+                    //
+                    //             try{
+                    //                 usergame.save();
+                    //             }catch (e){
+                    //                 res.send("Error: usergame not saved");
+                    //             }
+                    //         }
+                    //
+                    //         res.send("Error: game not found");
+                    //
+                    // }
+                    res.send("Error: platform not found");
                 }
-
-                res.send("Error: platform not found")
+                res.send("Error: user not found");
             }
-
-            res.send("Error: game not found")
-
-
-            // let game = await Game.find({name: req.body.})
+            res.send("Error: username is required");
         }
-
-        res.send("Error: user not found");
-
-
-
-    }catch(err)
-    {
-        res.send({msg: "Error: " + err});
+        res.send("Error: platform is required");
     }
+    res.send("Error: name is required");
 };
 
 const UserGameMatch = (req, res) => {

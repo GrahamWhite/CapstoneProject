@@ -10,8 +10,7 @@ const UserSchema = new Schema({
     email: String,
     isAdmin: Boolean,
     bio: String,
-    // steamKey: String,
-    friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
+    
 });
 
 //Export function to create "SomeModel" model class

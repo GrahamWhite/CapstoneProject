@@ -33,9 +33,6 @@ const UpdateUser = async (req, res) => {
         let user = await User.findOne({username: req.body.username});
 
         if(user){
-
-            let valid = false;
-
             if(req.body.email){
                 if(!validateEmail(req.body.email)){
                     res.send("Error: email not valid")
