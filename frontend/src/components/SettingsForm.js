@@ -31,16 +31,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SettingsForm(props, { user }) {
+function SettingsForm(props) {
 
   const classes = useStyles();
   const history = useHistory();
 
   const [message, setMessage] = useState('');
-
+  const [user, setUser] = useState({});
+  
   //Events
   async function sendToServer(values) {
     setMessage('');
+    console.log(values);
 
     if (!localStorage.getItem('username')){
       ReAuthenticate(props);
@@ -71,6 +73,25 @@ function SettingsForm(props, { user }) {
     }
   }
 
+  useEffect(() => {
+    let storedUsername = localStorage.getItem('username');
+    let username = '';
+
+    if (storedUsername) {
+      username = storedUsername;
+    }
+    else {
+      history.push('/login');
+    }
+
+    let url = `${backendURL}/select_user?username=${username}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => { setUser(data); console.log(data); })
+      .catch(err => console.log(err));
+    console.log(user);
+  }, [])
+
   const validationSchema = yup.object({
     bio: yup
       .string('must be a string')
@@ -84,8 +105,8 @@ function SettingsForm(props, { user }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      bio: user.bio,
-      email: user.email
+      bio: user.bio ? user.bio : '' , 
+      email: user.email ? user.email : ''
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -139,16 +160,42 @@ function SettingsForm(props, { user }) {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            size="large"
+          <Grid
+            container
+            spacing={1}
+            direction="row"
+            justify="space-between"
+            alignItems="stretch"
+            alignContent="center"
+            wrap="nowrap"
           >
-            Save Changes
-          </Button>
+            <Grid item sm={6} xs={12}>
+              <Button
+                fullWidth
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                size="large"
+                onClick={formik.submitForm}
+              >
+                Save Changes
+              </Button>
+            </Grid>
+            <Grid item sm={6} xs={12}>
+              <Button
+                fullWidth
+                type="reset"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                size="large"
+                onClick={formik.resetForm}
+              >
+                Reset
+              </Button>
+            </Grid>
+          </Grid>
           <Button
             type="submit"
             fullWidth
