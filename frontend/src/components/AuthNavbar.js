@@ -28,7 +28,7 @@ function AuthNavbar(props) {
   const logout = () => {
     localStorage.setItem('username', '');
     dispatch({
-      type: ''
+      type: 'SIGN_OUT'
     });
     history.push('/login');
   }

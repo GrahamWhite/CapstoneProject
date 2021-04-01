@@ -16,11 +16,9 @@ import GamesPage from './components/pages/GamesPage';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 import BottomNavbar from './components/BottomNavbar.js';
 import AuthNavbar from './components/AuthNavbar.js';
-import loggedInReducer from './reducers/loginReducer.js';
-import { useSelector, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import UserPage from './components/pages/UserPage.js';
 import SettingsPage from './components/pages/SettingsPage.js';
-import { signIn } from './actions/index.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {

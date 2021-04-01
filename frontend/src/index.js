@@ -6,11 +6,18 @@ import { App } from './App.js';
 import reportWebVitals from './reportWebVitals';
 import { createStore } from 'redux';
 import allReducers from './reducers';
+import { loadState, saveState } from './globals'
+
+const persistedStore = JSON.parse(loadState());
+console.log("persistedStore", persistedStore);
 
 const store = createStore(
-  allReducers,
+  allReducers, 
+  persistedStore,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
+console.log("store", store.getState());
 
 ReactDOM.render(
   <Provider store={store}>
@@ -19,6 +26,10 @@ ReactDOM.render(
   ,
   document.getElementById('root')
 );
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

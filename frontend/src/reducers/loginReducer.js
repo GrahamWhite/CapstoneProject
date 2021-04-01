@@ -1,9 +1,11 @@
-const loggedInReducer = (state = false, action) => {
+const loggedInReducer = (state = localStorage.getItem('username') ? true : false, action) => {
   switch (action.type) {
     case 'SIGN_IN':
-      return !state;
-    default:
+      return true;
+    case 'SIGN_OUT':
       return false;
+    default:
+      return state;
   }
 };
 
