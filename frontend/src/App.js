@@ -17,9 +17,10 @@ import { makeStyles, ThemeProvider } from '@material-ui/core';
 import BottomNavbar from './components/BottomNavbar.js';
 import AuthNavbar from './components/AuthNavbar.js';
 import loggedInReducer from './reducers/loginReducer.js';
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import UserPage from './components/pages/UserPage.js';
 import SettingsPage from './components/pages/SettingsPage.js';
+import { signIn } from './actions/index.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,20 +31,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function App() {
+function App(props) {
 
   const [isDarkTheme, setTheme] = useState(true);
   const classes = useStyles();
 
-  //const isLogged = useSelector(state => state.isLogged);
-  const isLogged = localStorage.getItem('username') ? true : false;
-
   return (
     <Router className="App">
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-       {isLogged 
-       ? <AuthNavbar/> 
-       : <Navbar/>}
+       {props.loggedIn ? <AuthNavbar/> : <Navbar/>}
         <div style={{marginTop:'5rem'}}>
           <Switch>
             <Route path='/' exact component={LoginPage}/>
@@ -62,12 +58,17 @@ function App() {
           </Switch>
         </div>
         <div className={classes.bottomNavbarSpacer}></div>
-        {isLogged 
-        ? <BottomNavbar/> 
-        : ''}
+        {props.loggedIn ? <BottomNavbar/> : ''}
       </ThemeProvider>
     </Router>
   );
 }
 
-export default App;
+const mapState = (state) => {
+  return {
+    loggedIn: state.loggedIn
+  }
+}
+
+const connectedApp = connect(mapState, null)(App);
+export { connectedApp as App };
