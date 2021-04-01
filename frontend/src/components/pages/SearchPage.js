@@ -9,7 +9,6 @@ import UserList from '../UserList';
 function SearchPage() {
   return (
     <div>
-        <SearchBar/>
         <UserList/>
     </div>
   )

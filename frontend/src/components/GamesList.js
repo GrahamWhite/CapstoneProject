@@ -64,9 +64,9 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
     setSelected(game.selected);
   }, [game.favourite])
 
-  function addSelected(index) {
+  // function addSelected(index) {
 
-  }
+  // }
 
   const addToUserGames = index => {
     const values = {
@@ -172,33 +172,42 @@ function GamesList(props) {
 
   const [games, setGames] = useState([]);
   const [selectedGames, setSelectedGames] = useState([]);
-  const [allGamesButton, setAllGamesButton] = useState(false);
+  // const [allGamesButton, setAllGamesButton] = useState(false);
   const [page, setPage] = useState(0);
-  //const [search, setSearch] = useState("");
-  // "/user_game?username=graham_white"
+  const [search, setSearch] = useState("");
 
   const url = backendURL;
 
   useEffect(() => {
-    fetch(url + "/select_games")
-      .then(response => response.json())
-      .then(data => setGames(data));
-  }, [])
-
-  useEffect(() => {
-    if (selectedGames.length > 0) {
-      setAllGamesButton(true);
+    if (!search) {
+      fetch(url + "/select_games")
+        .then(response => response.json())
+        .then(data => { setGames(data); console.log(data);});
+      console.log(games);
     }
     else {
-      setAllGamesButton(false);
+      fetch(url + "/search_games?name=" + search)
+        .then(response => response.json())
+        .then(data => { setGames(data); console.log(data);});
+      console.log(games);
     }
-  }, [selectedGames])
+    
+  }, [search])
+
+  // useEffect(() => {
+  //   if (selectedGames.length > 0) {
+  //     setAllGamesButton(true);
+  //   }
+  //   else {
+  //     setAllGamesButton(false);
+  //   }
+  // }, [selectedGames]);
+
+  // List changing functions
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
-  // List changing functions
 
   const favouriteGame = index => {
     const newGames = [...games];
@@ -219,9 +228,10 @@ function GamesList(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow colSpan={2}>
-            {/* <SearchBar
-                value={search}
-              /> */}
+            <SearchBar
+              value={search}
+              onChange={(newValue) => setSearch(newValue.trim())}
+              />
           </TableRow>
         </TableHead>
         <TableBody>

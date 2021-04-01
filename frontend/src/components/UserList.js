@@ -142,18 +142,27 @@ function UserList(props) {
 
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
-  // const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
 
   let history = useHistory();
 
   const url = backendURL;
 
   useEffect(() => {
-    fetch(url + "/select_users")
-      .then(response => response.json())
-      .then(data => { setUsers(data); console.log(data);});
-    console.log(users);
-  }, [])
+    if (!search) {
+      fetch(url + "/select_users")
+        .then(response => response.json())
+        .then(data => { setUsers(data); console.log(data);});
+      console.log(users);
+    }
+    else {
+      fetch(url + "/search_users?username=" + search)
+        .then(response => response.json())
+        .then(data => { setUsers(data); console.log(data);});
+      console.log(users);
+    }
+    
+  }, [search])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
@@ -164,9 +173,10 @@ function UserList(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow colSpan={2}>
-            {/* <SearchBar
-                value={search}
-              /> */}
+            <SearchBar
+              value={search}
+              onChange={(newValue) => setSearch(newValue.trim())}
+              />
           </TableRow>
         </TableHead>
         <TableBody>

@@ -49,8 +49,7 @@ function LoginForm() {
   const url = backendURL;
 
   // Hooks
-  const isLogged = useSelector(state => state.isLogged);
-  const setLogin = useDispatch(loggedInReducer);
+  const dispatch = useDispatch();
 
   // Helps with programatically changing what page you're on
   let history = useHistory();
@@ -80,7 +79,9 @@ function LoginForm() {
 
     if (isValid) {
       localStorage.setItem('username', responseData.user.username);
-      //dispatch(signIn);
+      dispatch({
+        type: "SIGN_IN"
+      });
       history.push("/profile");
     }
   }
