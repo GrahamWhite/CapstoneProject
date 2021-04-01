@@ -27,9 +27,10 @@ const SelectUsers = async (req, res) => {
     }
 };
 
-
+//POST
+//Update the user 
 const UpdateUser = async (req, res) => {
-    if(req.body.username){
+    if(req.body.username && req.body.email && req.body.email){
         let user = await User.findOne({username: req.body.username});
 
         if(user){
@@ -51,7 +52,7 @@ const UpdateUser = async (req, res) => {
             res.send("Error: User is not defined");
         }
     }
-    res.send("Error: username must be defined")
+    res.send("Error: username, bio and email must be defined")
 }
 
 //GET
