@@ -26,6 +26,22 @@ const SelectUserGames = (req, res) => {
     })
 }
 
+const DeleteUserGame = async (req, res) => {
+    if(req.query.username){
+        if(req.query.game){
+
+           let check = UserGame.findOneAndRemove({username: req.query.username, game: req.query.game});
+
+           if(check){
+                res.send("Record removed");
+           }
+           res.send("Error: record not found");
+        }
+        res.send('Error: game must be defined');
+    }
+    res.send('Error: username must be defined');
+}
+
 const CreateUserGame = async (req, res) => {
     if(req.body.username && req.body.game && req.body.platform){
         let user = await User.findOne({username: req.body.username});
@@ -39,12 +55,18 @@ const CreateUserGame = async (req, res) => {
                         gameId: game._id
                     });
 
-                    try{
-                        userGame.save();
-                    }catch (e){
-                        res.send("Error: could not save record");
+                    let existCheck = await UserGame.find(userGame);
+
+                    if(!existCheck){
+                        try{
+                            userGame.save();
+                        }catch (e){
+                            res.send("Error: could not save record");
+                        }
+
+                        res.send("Record Saved");
                     }
-                    res.send("Record Saved");
+                   res.send("Error: record already exists");
             }
             res.send("Error: game record not found");
         }
@@ -125,5 +147,6 @@ exports.SelectUserGames = SelectUserGames;
 exports.UserGameExists = UserGameExists;
 exports.CreateUserGame= CreateUserGame;
 exports.UserGameMatch = UserGameMatch;
+exports.DeleteUsergame = DeleteUserGame
 
 
