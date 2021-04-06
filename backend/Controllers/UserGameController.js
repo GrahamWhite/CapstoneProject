@@ -27,19 +27,25 @@ const SelectUserGames = (req, res) => {
 }
 
 const DeleteUserGame = async (req, res) => {
-    if(req.query.username){
-        if(req.query.game){
+    if(req.body.username && req.body.game && req.body.platform){
+            
+            let user = await User.findOne({username: req.body.username});
+            let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
-           let check = UserGame.findOneAndRemove({username: req.query.username, game: req.query.game});
+            let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
+            
+            if (user && game && userGame){
+                let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id});
 
-           if(check){
-                res.send("Record removed");
-           }
-           res.send("Error: record not found");
-        }
-        res.send('Error: game must be defined');
+                if(deleteUserGame){
+                     res.send("Record removed");
+                }
+                res.send("Error: record not found");
+            }
+           
+        res.send('Error: game & user must be defined');
     }
-    res.send('Error: username must be defined');
+    res.send('Error: username, game and platform must be defined');
 }
 
 const CreateUserGame = async (req, res) => {
@@ -49,24 +55,24 @@ const CreateUserGame = async (req, res) => {
         if(user){
             let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
-            if(game){
+            if (game){
+                let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
+                
+                if(!userGame){
                     let userGame = new UserGame({
                         userId: user._id,
                         gameId: game._id
                     });
-
-                    let existCheck = await UserGame.find(userGame);
-
-                    if(!existCheck){
-                        try{
-                            userGame.save();
-                        }catch (e){
-                            res.send("Error: could not save record");
-                        }
-
-                        res.send("Record Saved");
+    
+                    try{
+                        userGame.save();
+                    }catch (e){
+                        res.send("Error: could not save record");
                     }
-                   res.send("Error: record already exists");
+    
+                    res.send("Record Saved");  
+                }
+                res.send("Error: record already exists");
             }
             res.send("Error: game record not found");
         }
