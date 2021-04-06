@@ -26,39 +26,32 @@ const SelectUserGames = (req, res) => {
     })
 }
 
-const CreateUserGame = (req, res) => {
-    try{
-        User.find({username: req.body.username}).then(user => {
+const CreateUserGame = async (req, res) => {
+    if(req.body.username && req.body.game && req.body.platform){
+        let user = await User.findOne({username: req.body.username});
 
-            if(user[0]){
+        if(user){
+            let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
-                Game.find({name: req.body.name, platform: req.body.platform}).then(game => {
+            if(game){
 
-                    if(game[0]){
+                    let userGame = new UserGame({
+                        userId: user._id,
+                        gameId: game._id
+                    });
 
-                        let userGame = new UserGame({
-                            userId: user[0]._id,
-                            gameId: game[0]._id,
-                            isFavorite: false
-                        });
-
+                    try{
                         userGame.save();
-
-                        res.send({userGame});
+                    }catch (e){
+                        res.send("Error: could not save record");
                     }
-                    else{
-                        res.send("Game not found");
-                    }
-                })
-            }else {
-
-                res.send("User not found");
+                    res.send("Record Saved")
             }
-        });
-    }catch(err)
-    {
-        res.send({msg: "Error: " + err});
+            res.send("Error: game record not found");
+        }
+        res.send("Error: user not found");
     }
+    res.send("Error: username, platform, and game must be defined");
 };
 
 const UserGameMatch = (req, res) => {

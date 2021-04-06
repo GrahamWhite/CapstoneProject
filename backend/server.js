@@ -107,6 +107,8 @@ app.post('/create_platform', (req, res) => {
     PlatformController.CreatePlatform(req, res);
 })
 
+
+
 //Friend Routes
 app.get('/select_userfriends', (req, res) => {
     FriendController.SelectUserFriends(req, res);

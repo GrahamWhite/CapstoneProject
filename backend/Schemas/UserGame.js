@@ -7,7 +7,6 @@ const Schema = mongoose.Schema;
 const UserGameSchema = new Schema({
     userId: {type: Schema.Types.ObjectId, ref: 'User'},
     gameId: {type: Schema.Types.ObjectId, ref: 'Game'},
-    platformId: {type: Schema.Types.ObjectId, ref: 'Platform'},
     isFavorite: Boolean
 });
 
