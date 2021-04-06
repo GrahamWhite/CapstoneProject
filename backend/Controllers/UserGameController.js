@@ -34,7 +34,6 @@ const CreateUserGame = async (req, res) => {
             let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
             if(game){
-
                     let userGame = new UserGame({
                         userId: user._id,
                         gameId: game._id
@@ -45,7 +44,7 @@ const CreateUserGame = async (req, res) => {
                     }catch (e){
                         res.send("Error: could not save record");
                     }
-                    res.send("Record Saved")
+                    res.send("Record Saved");
             }
             res.send("Error: game record not found");
         }
