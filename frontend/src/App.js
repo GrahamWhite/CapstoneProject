@@ -56,7 +56,7 @@ function App(props) {
           </Switch>
         </div>
         <div className={classes.bottomNavbarSpacer}></div>
-        {props.loggedIn ? <BottomNavbar/> : ''}
+        {props.loggedIn ? <BottomNavbar/> : null}
       </ThemeProvider>
     </Router>
   );
