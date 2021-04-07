@@ -85,7 +85,7 @@ const DeleteFriend = async (req, res) => {
                 let friendship = await Friend.findOne({userId: user._id, friendId: friend._id});
 
                 if(friendship){
-                    let deleteFriend = await Friend.deleteOne({userId: user._id, friendId: friend._id});//????? Does not delete
+                    let deleteFriend = await Friend.deleteOne({userId: user._id, friendId: friend._id});
 
                     console.log(deleteFriend);
 
