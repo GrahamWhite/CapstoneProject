@@ -28,7 +28,7 @@ function AuthNavbar(props) {
   const logout = () => {
     localStorage.setItem('username', '');
     dispatch({
-      type: ''
+      type: 'SIGN_OUT'
     });
     history.push('/login');
   }
@@ -37,9 +37,9 @@ function AuthNavbar(props) {
     <div className={classes.root}>
       <AppBar position='fixed'>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon/>
-          </IconButton>
+          </IconButton> */}
           <Typography variant="h6" className={classes.title}>
             Tink
           </Typography>

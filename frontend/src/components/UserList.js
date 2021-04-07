@@ -26,7 +26,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
 
-function UserItem({ user, index, history }) {
+function UserItem({ user, index, history, isFriend, setRefresh }) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -53,6 +53,25 @@ function UserItem({ user, index, history }) {
 
   const imgPlaceholder = "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
 
+  async function AddFriend(){
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        friendUsername: user.username
+      })
+    }
+
+    fetch(backendURL + "/create_friend", options)
+      .then(response => response.json())
+      .then(() => {
+        setRefresh(true);
+      });
+  }
+
   function goToUserProfile(username) {
     history.push({
       pathname: "/user",
@@ -65,13 +84,6 @@ function UserItem({ user, index, history }) {
       pathname: "/match",
       search: `?username=${username}`
     });
-  }
-
-  function addFriend(){
-    //user.username
-    //Add friend from current session user
-    //send to db
-    //Notify/change state
   }
 
   return (
@@ -104,7 +116,7 @@ function UserItem({ user, index, history }) {
             <Button
               color="primary"
               variant="outlined"
-              onClick={() => addFriend(user.username)}
+              onClick={() => AddFriend(user.username)}
             >
               Add
             </Button>
@@ -143,26 +155,66 @@ function UserList(props) {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [refresh, setRefresh] = useState(true);
 
   let history = useHistory();
 
   const url = backendURL;
 
-  useEffect(() => {
-    if (!search) {
-      fetch(url + "/select_users")
-        .then(response => response.json())
-        .then(data => { setUsers(data); console.log(data);});
-      console.log(users);
-    }
-    else {
-      fetch(url + "/search_users?username=" + search)
-        .then(response => response.json())
-        .then(data => { setUsers(data); console.log(data);});
-      console.log(users);
-    }
+  async function getUsers(search) {
+    let userList = [];
+    let thisUrl = url + (search ? "/search_users?username=" + search : "/select_users");
     
-  }, [search])
+    userList = await fetch(thisUrl)
+      .then(response => response.json())
+      .catch(err => {
+        console.log(err);
+      });
+    
+    return userList;
+  }
+
+  async function getFriendsAndUpdate(search) {
+    let updatedList = [];
+    let friendList = [];
+    
+    let userList = await getUsers(search);
+
+    let thisUrl = url + "/select_userfriends?username=" + localStorage.getItem('username');
+    thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/select_userfriends?username=lynn_varga";
+    friendList = await fetch(thisUrl)
+      .then(response => response.json())
+      .catch(err => {
+        console.log(err);
+      });
+    
+    console.log("userList", userList);
+    console.log("friendList", friendList);
+
+    // userIndex returns the index, NOT the user object as I thought it would
+    for (let userIndex in userList) {
+      let currentUser = userList[userIndex];
+      // console.log("currentUser", currentUser);
+      for (let friendIndex in friendList) {
+        let bool = userList[userIndex]._id === friendList[friendIndex].userId ? true : false;
+        currentUser.isFriend = bool;
+        console.log("bool stuff", bool);
+      }
+      updatedList.push(currentUser);
+    }
+    console.log(updatedList);
+    return updatedList;
+  }
+
+  useEffect(() => {
+
+    getFriendsAndUpdate(search)
+      .then(data => setUsers(data));
+
+    return () => {
+      setRefresh(false);
+    }
+  }, [search, refresh])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
@@ -181,13 +233,18 @@ function UserList(props) {
         </TableHead>
         <TableBody>
           {users.length > 0 ? 
-          users
-            .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
-            .map((user, index) => (
-              <TableRow key={index} className={classes.tableItem}>
-                <UserItem user={user} index={index} history={history} />
-              </TableRow>
-            ))
+            users
+              .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
+              .map((user, index) => (
+                <TableRow key={index} className={classes.tableItem}>
+                  <UserItem 
+                    user={user} 
+                    index={index} 
+                    history={history}
+                    isFriend={user.isFriend}
+                    setRefresh={setRefresh}/>
+                </TableRow>
+              ))
           : 'hmm thats weird, there are no users'}
         </TableBody>
         <TableFooter>

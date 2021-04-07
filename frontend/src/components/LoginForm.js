@@ -11,6 +11,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { Alert } from '@material-ui/lab';
 import { Link, useHistory } from "react-router-dom";
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -50,6 +51,7 @@ function LoginForm() {
 
   // Hooks
   const dispatch = useDispatch();
+  const [error, setError] = useState("");
 
   // Helps with programatically changing what page you're on
   let history = useHistory();
@@ -59,7 +61,8 @@ function LoginForm() {
 
   //Events
   async function sendToServer(values) {
-    let isValid = false;
+    setError("");
+
     const options = {
       method: "POST",
       headers: {
@@ -68,21 +71,19 @@ function LoginForm() {
       body:JSON.stringify(values)
     };
 
-    let responseData = "";
-    try {
-      let response = await fetch(url + "/login", options);
-      responseData = await response.json();
-      isValid = true;
-    } catch (err) {
-      console.log(err);
-    }
+    const response = await fetch(url + "/login", options);
 
-    if (isValid) {
+    if (response.ok) {
+      const responseData = await response.json();
       localStorage.setItem('username', responseData.user.username);
       dispatch({
         type: "SIGN_IN"
       });
       history.push("/profile");
+    }
+    else {
+      console.log(response.statusText);
+      setError(response.statusText);
     }
   }
 
@@ -123,6 +124,9 @@ function LoginForm() {
           >
             Login
           </Typography>
+          { error ? 
+          <Alert severity="error">{error}</Alert>
+          : null }
         <form className={classes.form} onSubmit={formik.handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>

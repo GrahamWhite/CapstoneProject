@@ -163,7 +163,7 @@ function MatchList(props) {
                 siblingCount={0}
                 onChangePage={onChangePage}
               />
-              : ''}
+              : null}
             </div>
           </TableRow>
         </TableFooter>

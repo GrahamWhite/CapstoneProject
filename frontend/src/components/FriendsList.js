@@ -18,7 +18,8 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from 'react-router-dom'
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
@@ -26,7 +27,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
 
-function UserItem({ user, index, history }) {
+function UserItem({ user, index, history, location, setRefresh, isProfile, isFriend }) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -51,8 +52,6 @@ function UserItem({ user, index, history }) {
   }));
   const classes = useStyles();
 
-  const imgPlaceholder = "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
-
   function goToUserProfile(username) {
     history.push({
       pathname: "/user",
@@ -67,11 +66,46 @@ function UserItem({ user, index, history }) {
     });
   }
 
-  function addFriend(){
-    //user.username
-    //Add friend from current session user
-    //send to db
-    //Notify/change state
+  async function addFriend(){
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        friendUsername: user.username
+      })
+    }
+
+    const response = await fetch(backendURL + "/create_friend", options)
+      .then(response => response.json())
+      .then(() => {
+        setRefresh(true);
+      });
+    
+    if (!response.ok) {
+      console.log(response.statusText);
+    }
+  }
+
+  async function removeFriend(){
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        friendUsername: user.username
+      })
+    }
+
+    fetch(backendURL + "/delete_friend", options)
+      .then(response => response.json())
+      .then(() => {
+        setRefresh(true);
+      });
   }
 
   return (
@@ -87,7 +121,7 @@ function UserItem({ user, index, history }) {
             <CardContent>
               <CardMedia
                 className={classes.cover}
-                image={imgPlaceholder /*process.env.PUBLIC_URL + user.img*/}
+                image={ "" /*process.env.PUBLIC_URL + user.img*/}
               />
               <div className={classes.details}>
                 <CardContent className={classes.content}>
@@ -101,14 +135,16 @@ function UserItem({ user, index, history }) {
         </Grid>
         <Grid item width={"30%"}>
           <CardActions>
-          <Button
-              color="primary"
-              variant="outlined"
-              onClick={() => addFriend(user.username)}
-            >
-              Add
-            </Button>
-          <Button
+            { !isProfile ? 
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() => addFriend(user.username)}
+                >
+                Add Friend
+              </Button>
+            : null }
+            <Button
               color="primary"
               variant="outlined"
               onClick={() => goToUserProfile(user.username)}
@@ -122,6 +158,15 @@ function UserItem({ user, index, history }) {
             >
               Match 
             </Button>
+            { isProfile && isFriend ? 
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() => removeFriend(user.username)}
+              >
+                Delete friend
+              </Button>
+            : null }
           </CardActions>
         </Grid>
       </Grid>
@@ -129,7 +174,7 @@ function UserItem({ user, index, history }) {
   );
 }
 
-function FriendsList(props) {
+function FriendsList() {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -141,23 +186,63 @@ function FriendsList(props) {
   const ROWS_PER_PAGE = 5;
 
   const [users, setUsers] = useState([]);
+  const [currentUser] = useState(new URLSearchParams(window.location.search).get('username'));
   const [page, setPage] = useState(0);
+  const [refresh, setRefresh] = useState(true);
   // const [search, setSearch] = useState("");
 
-  let history = useHistory();
+  const history = useHistory();
+  const location = useLocation();
 
   const url = backendURL;
 
   useEffect(() => {
-    fetch(url + "/select_userfriends")
-      .then(response => response.json())
-      .then(data => { setUsers(data); console.log(data);});
-    console.log(users);
-  }, [])
+
+    if (!isProfile()) {
+      let userList = [];
+      let friendList = [];
+
+      fetch(url + "/select_userfriends?username=" + currentUser)
+        .then(response => response.json())
+        .then(data => { userList = data; console.log(data); });
+
+      fetch(url + "/select_userfriends?username=" + localStorage.getItem('username'))
+        .then(response => response.json())
+        .then(data => { friendList = data; console.log(data); });
+      
+      for (let user in userList) {
+        for (let friend in friendList) {
+          user.isFriend = user.username === friend.username ? true : false;
+        }
+      }
+      setUsers(userList);
+    }
+    else {
+      let userList = [];
+
+      fetch(url + "/select_userfriends?username=" + localStorage.getItem('username'))
+        .then(response => response.json())
+        .then(data => { userList = data; console.log(data); });
+
+      for (let user in userList) {
+        user.isFriend = true;
+      }
+
+      setUsers(userList);
+    }
+
+    return () => {
+      setRefresh(false);
+    }
+  }, [refresh])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
+  function isProfile() {
+    return location.pathname.includes('profile') ? true : false;
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -170,16 +255,35 @@ function FriendsList(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.length > 0 ? 
-          users
-            .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
-            .map((user, index) => (
+          { users.length > 0 ? 
+              users
+              .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
+              .map((user, index) => (
               <TableRow key={index} className={classes.tableItem}>
-                <UserItem user={user} index={index} history={history} />
+                <UserItem 
+                  user={user} 
+                  index={index} 
+                  history={history}
+                  location={location}
+                  setRefresh={setRefresh}
+                  isProfile={isProfile}
+                  isFriend={user.isFriend}/>
               </TableRow>
             ))
-          : 'hmm thats weird, there are no users'}
+            : 
+            <div style={{ width: "100%", margin: "auto" }}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                component={Link}
+                to={"/search"}>
+                Find friends
+              </Button>
+            </div>
+          }
         </TableBody>
+        { users.length > 0 ? 
         <TableFooter>
           <TableRow>
             <div style={{ width: "100%", margin: "auto" }}>
@@ -194,6 +298,7 @@ function FriendsList(props) {
             </div>
           </TableRow>
         </TableFooter>
+        : null }
       </Table>
     </TableContainer>
   );
