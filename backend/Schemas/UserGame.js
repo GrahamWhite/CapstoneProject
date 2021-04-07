@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserGameSchema = new Schema({
-    gameId: {type: Schema.Types.ObjectId, ref: 'Game'},
     userId: {type: Schema.Types.ObjectId, ref: 'User'},
+    gameId: {type: Schema.Types.ObjectId, ref: 'Game'},
     isFavorite: Boolean
 });
 

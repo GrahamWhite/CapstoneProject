@@ -26,39 +26,59 @@ const SelectUserGames = (req, res) => {
     })
 }
 
-const CreateUserGame = (req, res) => {
-    try{
-        User.find({username: req.body.username}).then(user => {
+const DeleteUserGame = async (req, res) => {
+    if(req.body.username && req.body.game && req.body.platform){
+            
+            let user = await User.findOne({username: req.body.username});
+            let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
-            if(user[0]){
+            let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
+            
+            if (user && game && userGame){
+                let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id});
 
-                Game.find({name: req.body.name, platform: req.body.platform}).then(game => {
-
-                    if(game[0]){
-
-                        let userGame = new UserGame({
-                            userId: user[0]._id,
-                            gameId: game[0]._id,
-                            isFavorite: false
-                        });
-
-                        userGame.save();
-
-                        res.send({userGame});
-                    }
-                    else{
-                        res.send("Game not found");
-                    }
-                })
-            }else {
-
-                res.send("User not found");
+                if(deleteUserGame){
+                     res.send("Record removed");
+                }
+                res.send("Error: record not found");
             }
-        });
-    }catch(err)
-    {
-        res.send({msg: "Error: " + err});
+           
+        res.send('Error: game & user must be defined');
     }
+    res.send('Error: username, game and platform must be defined');
+}
+
+const CreateUserGame = async (req, res) => {
+    if(req.body.username && req.body.game && req.body.platform){
+        let user = await User.findOne({username: req.body.username});
+
+        if(user){
+            let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
+
+            if (game){
+                let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
+                
+                if(!userGame){
+                    let userGame = new UserGame({
+                        userId: user._id,
+                        gameId: game._id
+                    });
+    
+                    try{
+                        userGame.save();
+                    }catch (e){
+                        res.send("Error: could not save record");
+                    }
+    
+                    res.send("Record Saved");  
+                }
+                res.send("Error: record already exists");
+            }
+            res.send("Error: game record not found");
+        }
+        res.send("Error: user not found");
+    }
+    res.send("Error: username, platform, and game must be defined");
 };
 
 const UserGameMatch = (req, res) => {
@@ -133,5 +153,6 @@ exports.SelectUserGames = SelectUserGames;
 exports.UserGameExists = UserGameExists;
 exports.CreateUserGame= CreateUserGame;
 exports.UserGameMatch = UserGameMatch;
+exports.DeleteUsergame = DeleteUserGame
 
 

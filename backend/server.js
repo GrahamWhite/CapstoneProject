@@ -90,6 +90,10 @@ app.get('/user_game_match', (req, res) => {
     UserGameController.UserGameMatch(req, res);
 })
 
+app.post('/delete_usergame', (req, res) => {
+    UserGameController.DeleteUsergame(req, res);
+})
+
 //Platform Routes
 app.get('/select_platforms', (req, res) => {
     PlatformController.SelectPlatforms(req, res);
@@ -106,6 +110,8 @@ app.post('/delete_platform', (req, res) => {
 app.post('/create_platform', (req, res) => {
     PlatformController.CreatePlatform(req, res);
 })
+
+
 
 //Friend Routes
 app.get('/select_userfriends', (req, res) => {
