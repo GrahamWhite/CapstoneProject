@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes, Button } from '@material-ui/core'
-import { useFetch, useInterval } from '../../util/CustomHooks';
 import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
 import FriendsList from '../FriendsList';

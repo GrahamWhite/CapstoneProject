@@ -181,7 +181,7 @@ function UserList(props) {
     let userList = await getUsers(search);
 
     let thisUrl = url + "/select_userfriends?username=" + localStorage.getItem('username');
-    thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/select_userfriends?username=lynn_varga";
+    //thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/select_userfriends?username=lynn_varga";
     friendList = await fetch(thisUrl)
       .then(response => response.json())
       .catch(err => {

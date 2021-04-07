@@ -62,11 +62,6 @@ function GameItem({game, index, onRemove, onFavourite}) {
     setSelected(game.selected);
   }, [game.favourite])
 
-  function onRemoveItem(index) {
-    setSelected(false);
-    onRemove(index);
-  }
-
   return (
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
       <CardActionArea
@@ -112,7 +107,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
             color="secondary"
             variant="contained"
             startIcon={<DeleteIcon />}
-            onClick={onRemoveItem}
+            onClick={() => onRemove(index)}
           >
             Remove
           </Button>
@@ -149,7 +144,7 @@ function UserGameList({username}) {
     return () => {
       setRefresh(!refresh);
     }
-  }, [refresh])
+  }, [username, refresh])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
@@ -198,12 +193,12 @@ function UserGameList({username}) {
     }
   }
 
-  // const onSelected = (index, selected) => {
-  //   const newGames = [...games];
-  //   for (let game of newGames) game.selected = false;
-  //   newGames[index].selected = selected;
-  //   setGames(newGames);
-  // }
+  const onSelected = (index, selected) => {
+    const newGames = [...games];
+    for (let game of newGames) game.selected = false;
+    newGames[index].selected = selected;
+    setGames(newGames);
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -226,6 +221,7 @@ function UserGameList({username}) {
                   index={index}
                   //onFavourite={favouriteGame}
                   onRemove={removeGame}
+                  onSelected={onSelected}
                 />
               </TableRow>
             ))

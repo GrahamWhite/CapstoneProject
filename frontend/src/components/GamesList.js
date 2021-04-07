@@ -25,7 +25,7 @@ import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL, ReAuthenticate } from "../globals";
 
-function GameItem({game, index, url, onSelected, onFavourite}) {
+function GameItem({game, index, url, onSelected, addToUserGames}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -68,32 +68,6 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
 
   // }
 
-  const addToUserGames = index => {
-    const values = {
-      username: localStorage.getItem('username'),
-      name: game.name
-    }
-
-    const options = {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body:JSON.stringify(values)
-    }
-    fetch(url + "/create_usergame", options)
-      .then(response => response.json())
-      .then(data => {
-        setDisableAddButton(true);
-      })
-      .catch((err) => {
-        if (!localStorage.getItem('username')){
-          ReAuthenticate();
-        }
-        console.log(err);
-      });
-  }
-
   // const onSelected = (index, selected) => {
   //   const newGames = [...games];
   //   for (let game of newGames) game.selected = false;
@@ -132,17 +106,17 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
       </CardActionArea>
       {selected ? (
         <CardActions>
-        <Button
-          size="small"
-          color="primary"
-          variant="contained"
-          disabled={disableAddButton}
-          startIcon={<AddIcon />}
-          onClick={() => addToUserGames(index)}
-        >
-          Add to List
-        </Button>
           <Button
+            size="small"
+            color="primary"
+            variant="contained"
+            disabled={disableAddButton}
+            startIcon={<AddIcon />}
+            onClick={() => addToUserGames(index)}
+          >
+            Add to List
+          </Button>
+          {/* <Button
             size="small"
             color="primary"
             variant="contained"
@@ -150,7 +124,7 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
             onClick={() => onFavourite(index)}
           >
             Favourite
-          </Button>
+          </Button> */}
         </CardActions>
       ) : (
         ""
@@ -216,6 +190,30 @@ function GamesList(props) {
     setGames(newGames);
   }
 
+  async function addGame(index) {
+    let game = games[index];
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        name: game.name,
+        platform: game.platform
+      })
+    }
+    const response = await fetch(url + "/create_usergame", options);
+
+    if (response.ok) {
+      
+    }
+    else {
+      console.log(response.statusText);
+    }
+  }
+
   const onSelected = (index, selected) => {
     const newGames = [...games];
     for (let game of newGames) game.selected = false;
@@ -244,8 +242,8 @@ function GamesList(props) {
                   game={game}
                   index={index}
                   url={url}
+                  addToUserGames={addGame}
                   onSelected={onSelected}
-                  onFavourite={favouriteGame}
                 />
               </TableRow>
             ))
