@@ -30,7 +30,7 @@ const DeleteUserGame = async (req, res) => {
     if(req.query.username){
         if(req.query.game){
 
-           let check = UserGame.findOneAndRemove({username: req.query.username, game: req.query.game, platform: req.query.platform});
+           let check = UserGame.findOneAndRemove({username: req.query.username, game: req.query.game});
 
            if(check){
                 res.send("Record removed");

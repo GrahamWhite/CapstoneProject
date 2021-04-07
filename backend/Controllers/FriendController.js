@@ -8,15 +8,17 @@ const Friend = require('../Schemas/Friend');
 //Create a new friend [username, friendUsername]
 const CreateFriend = async (req, res) => {
     if(req.body.username && req.body.friendUsername){
+        if (req.body.username !== req.body.friendUsername){
+            let user = await User.findOne({username: req.body.username});
+            let friend = await User.findOne({username: req.body.friendUsername});
 
-        let user = await User.findOne({username: req.body.username});
-        let friend = await User.findOne({username: req.body.friendUsername});
+            //If user and friend exist and are not the same person
+            if(user && friend){
 
-        if(user && friend){
             //Check if users are already friends
             let friendship = await Friend.findOne({userId: user._id, friendId: friend._id});
 
-            if(!friendship){
+                if(!friendship){
                     let record = new Friend({
                     userId: user._id,
                     friendId: friend._id
@@ -29,12 +31,13 @@ const CreateFriend = async (req, res) => {
                     }catch (e){
                         res.send("Error: could not save record");
                     }
-            }
+                }
                 res.send("Error: Friend already added")
+            }
+            res.send("Error: User(s) are not valid")
         }
-        res.send("Error: User(s) are not valid")
+        res.send("Error: You cannot be friends with yourself ;)");
     }
-
     res.send("Error: username and friendUsername must be defined");
 }
 
