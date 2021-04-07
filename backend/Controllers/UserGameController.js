@@ -27,19 +27,26 @@ const SelectUserGames = (req, res) => {
 }
 
 const DeleteUserGame = async (req, res) => {
-    if(req.query.username){
-        if(req.query.game){
+    if(req.body.username && req.body.game && req.body.platform){
+        
+        let user = await User.findOne({username: req.body.username});
+        let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
-           let check = UserGame.findOneAndRemove({username: req.query.username, game: req.query.game});
+        let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
 
-           if(check){
-                res.send("Record removed");
-           }
-           res.send("Error: record not found");
+        if (user && game && userGame){
+            let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id})
+
+            console.log(deleteUserGame);
+
+            if (deleteUserGame){
+                res.send('UserGame deleted');
+            }
+            res.send('Error: Could not delete userGame');
         }
-        res.send('Error: game must be defined');
+        res.send('Error: User, game or userGame must be valid');
     }
-    res.send('Error: username must be defined');
+    res.send('Error: username, game and platform must be defined');
 }
 
 const CreateUserGame = async (req, res) => {
