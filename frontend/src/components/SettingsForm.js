@@ -110,8 +110,6 @@ function SettingsForm(props) {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      console.log(JSON.stringify(values));
       sendToServer(values);
     }
   })

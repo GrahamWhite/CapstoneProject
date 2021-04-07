@@ -63,7 +63,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
   }, [game.favourite])
 
   function onRemoveItem(index) {
-    setSelected(!false);
+    setSelected(false);
     onRemove(index);
   }
 
@@ -137,6 +137,7 @@ function UserGameList({username}) {
 
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const [page, setPage] = useState(0);
   
   const url = backendURL;
@@ -145,34 +146,64 @@ function UserGameList({username}) {
     fetch(url + "/select_usergames?username=" + username)
       .then(response => response.json())
       .then(data => setGames(data));
-  }, [username])
+    return () => {
+      setRefresh(!refresh);
+    }
+  }, [refresh])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   // List changing functions
-  const favouriteGame = index => {
-    // fetch(url + "")
-    const newGames = [...games];
-    let favourited = newGames[index].favourite;
-    newGames[index].favourite = !favourited;
-    setGames(newGames);
+  // async function favouriteGame(index){
+  //   let game = games[index];
+  //   const response = await fetch(url + "/favourite_usergame")
+  //     .then(response => response);
+  //   if (response.ok) {
+  //     const newGames = [...games];
+  //     newGames[index].favourite = !newGames[index].favourite;
+  //     setGames(newGames);
+  //   }
+  //   else {
+  //     console.log(response.statusText);
+  //   }
+  // }
+
+  async function removeGame(index) {
+    let game = games[index];
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        name: game.name,
+        platform: game.platform
+      })
+    }
+    const response = await fetch(url + "/delete_usergame", options);
+
+    if (response.ok) {
+      const newGames = [...games];
+      newGames.splice(index, 1);
+      setGames(newGames);
+
+      setRefresh(true);
+    }
+    else {
+      console.log(response.statusText);
+    }
   }
 
-  const removeGame = index => {
-    // fetch(url + "")
-    const newGames = [...games];
-    newGames.splice(index, 1);
-    setGames(newGames);
-  }
-
-  const onSelected = (index, selected) => {
-    const newGames = [...games];
-    for (let game of newGames) game.selected = false;
-    newGames[index].selected = selected;
-    setGames(newGames);
-  }
+  // const onSelected = (index, selected) => {
+  //   const newGames = [...games];
+  //   for (let game of newGames) game.selected = false;
+  //   newGames[index].selected = selected;
+  //   setGames(newGames);
+  // }
 
   return (
     <TableContainer component={Paper}>
@@ -193,7 +224,7 @@ function UserGameList({username}) {
                 <GameItem 
                   game={game}
                   index={index}
-                  onFavourite={favouriteGame}
+                  //onFavourite={favouriteGame}
                   onRemove={removeGame}
                 />
               </TableRow>
@@ -212,7 +243,7 @@ function UserGameList({username}) {
                 siblingCount={0}
                 onChangePage={onChangePage}
               />
-              : ''}
+              : null}
             </div>
           </TableRow>
         </TableFooter>
