@@ -32,6 +32,7 @@ function BottomNavbar(){
     console.log(location);
 
     const [currentTab, setCurrentTab] = useState(0);
+    const [value, setValue] = React.useState(0);
 
     useEffect(() => {
       const pathname = location.pathname.toLowerCase();
@@ -49,10 +50,10 @@ function BottomNavbar(){
 
     return(
         <BottomNavigation
-          // value={value}
-          // onChange={(event, newValue) => {
-          //   setValue(newValue);
-          // }}
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
           values={currentTab}
           showLabels={!matches}
           className={classes.bottomNavbar}
