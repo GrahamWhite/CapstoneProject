@@ -82,6 +82,7 @@ app.get('/search_games', (req, res) => {
 app.get('/select_usergames', (req, res) => {
     UserGameController.SelectUserGames(req, res);
 })
+
 app.post('/create_usergame', (req, res) => {
     UserGameController.CreateUserGame(req, res);
 })
@@ -94,23 +95,26 @@ app.post('/delete_usergame', (req, res) => {
     UserGameController.DeleteUsergame(req, res);
 })
 
-//Platform Routes
-app.get('/select_platforms', (req, res) => {
-    PlatformController.SelectPlatforms(req, res);
+app.post('/add_favorite', (req, res) => {
+    UserGameController.AddFavorite(req, res);
 })
 
-app.get('/select_platform', (req, res) => {
-    PlatformController.SelectPlatform(req, res);
-})
+// //Platform Routes
+// app.get('/select_platforms', (req, res) => {
+//     PlatformController.SelectPlatforms(req, res);
+// })
 
-app.post('/delete_platform', (req, res) => {
-    PlatformController.DeletePlatform(req, res);
-})
+// app.get('/select_platform', (req, res) => {
+//     PlatformController.SelectPlatform(req, res);
+// })
 
-app.post('/create_platform', (req, res) => {
-    PlatformController.CreatePlatform(req, res);
-})
+// app.post('/delete_platform', (req, res) => {
+//     PlatformController.DeletePlatform(req, res);
+// })
 
+// app.post('/create_platform', (req, res) => {
+//     PlatformController.CreatePlatform(req, res);
+// })
 
 
 //Friend Routes
