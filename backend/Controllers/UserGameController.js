@@ -77,19 +77,22 @@ const DeleteUserGame = async (req, res) => {
         let user = await User.findOne({username: req.body.username});
         let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
-        let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
+        if(game){
+            let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
 
-        if (user && game && userGame){
-            let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id})
-
-            console.log(deleteUserGame);
-
-            if (deleteUserGame){
-                res.send('UserGame deleted');
+            if (user && userGame){
+                let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id})
+    
+                console.log(deleteUserGame);
+    
+                if (deleteUserGame){
+                    res.send('UserGame deleted');
+                }
+                res.send('Error: Could not delete userGame');
             }
-            res.send('Error: Could not delete userGame');
+            res.send('Error: User and userGame must be valid');
         }
-        res.send('Error: User, game or userGame must be valid');
+        res.send('Error: Could not find game')   
     }
     res.send('Error: username, game and platform must be defined');
 }
@@ -190,8 +193,8 @@ const UserGameExists = (req, res) => {
     };
 };
 
-const AddFavorite = async (req, res) => {
-    if(req.body.username && req.body.game && req.body.platform){
+const UpdateFavorite = async (req, res) => {
+    if(req.body.username && req.body.game && req.body.platform && req.body.isFavorite){
         let user = await User.findOne({username: req.body.username});
 
         if (user){
@@ -200,10 +203,10 @@ const AddFavorite = async (req, res) => {
             let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
 
             if (game && userGame){
-                let updateUserGame = await UserGame.updateOne({userId: user._id, isFavorite: true});
+                let updateUserGame = await UserGame.updateOne({userId: user._id, isFavorite: req.body.isFavorite});
 
                 if(updateUserGame){
-                    res.send("UserGame is favorited");
+                    res.send("UserGame favorite has been toggled");
                 }
                 res.send("could not favorite game");
             }
@@ -219,6 +222,6 @@ exports.UserGameExists = UserGameExists;
 exports.CreateUserGame= CreateUserGame;
 exports.UserGameMatch = UserGameMatch;
 exports.DeleteUsergame = DeleteUserGame;
-exports.AddFavorite = AddFavorite;
+exports.UpdateFavorite = UpdateFavorite;
 
 
