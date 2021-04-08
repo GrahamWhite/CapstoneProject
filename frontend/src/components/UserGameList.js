@@ -55,17 +55,12 @@ function GameItem({game, index, onRemove, onFavourite}) {
   // const updateHandler = dummyData => onUpdate({ ...props.game, ...props.dummyData});
 
   const [selected, setSelected] = useState(false);
-  const [favourite, setFavourite] = useState(false);
+  //const [favourite, setFavourite] = useState(false);
 
   useEffect(() => {
-    setFavourite(game.favourite);
+    //setFavourite(game.favourite);
     setSelected(game.selected);
   }, [game.favourite])
-
-  function onRemoveItem(index) {
-    setSelected(false);
-    onRemove(index);
-  }
 
   return (
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
@@ -76,9 +71,9 @@ function GameItem({game, index, onRemove, onFavourite}) {
         }}
       >
         <CardContent>
-          {favourite 
+          {/* {favourite 
           ? <StarIcon className={classes.favouriteIcon}/> 
-          : ''}
+          : ''} */}
           
           <CardMedia
             className={classes.cover}
@@ -98,7 +93,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
       </CardActionArea>
       {selected ? (
         <CardActions>
-          <Button
+          {/* <Button
             size="small"
             color="primary"
             variant="contained"
@@ -106,13 +101,13 @@ function GameItem({game, index, onRemove, onFavourite}) {
             onClick={() => onFavourite(index)}
           >
             Favourite
-          </Button>
+          </Button> */}
           <Button
             size="small"
             color="secondary"
             variant="contained"
             startIcon={<DeleteIcon />}
-            onClick={onRemoveItem}
+            onClick={() => onRemove(index)}
           >
             Remove
           </Button>
@@ -137,7 +132,7 @@ function UserGameList({username}) {
 
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(true);
   const [page, setPage] = useState(0);
   
   const url = backendURL;
@@ -149,7 +144,7 @@ function UserGameList({username}) {
     return () => {
       setRefresh(!refresh);
     }
-  }, [refresh])
+  }, [username, refresh])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
@@ -185,6 +180,10 @@ function UserGameList({username}) {
       })
     }
     const response = await fetch(url + "/delete_usergame", options);
+    console.log(response);
+    
+    //const data = await response.json();
+    //console.log(data);
 
     if (response.ok) {
       const newGames = [...games];
@@ -198,12 +197,12 @@ function UserGameList({username}) {
     }
   }
 
-  // const onSelected = (index, selected) => {
-  //   const newGames = [...games];
-  //   for (let game of newGames) game.selected = false;
-  //   newGames[index].selected = selected;
-  //   setGames(newGames);
-  // }
+  const onSelected = (index, selected) => {
+    const newGames = [...games];
+    for (let game of newGames) game.selected = false;
+    newGames[index].selected = selected;
+    setGames(newGames);
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -226,6 +225,7 @@ function UserGameList({username}) {
                   index={index}
                   //onFavourite={favouriteGame}
                   onRemove={removeGame}
+                  onSelected={onSelected}
                 />
               </TableRow>
             ))
@@ -240,7 +240,7 @@ function UserGameList({username}) {
                 count={games.length}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
-                siblingCount={0}
+                siblingcount={0}
                 onChangePage={onChangePage}
               />
               : null}
