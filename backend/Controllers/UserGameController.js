@@ -43,7 +43,7 @@ const SelectUserGames = async (req, res) => {
 
                 user: user.username,
                 game: g,
-                favorite: userGamesId[x].isFavorite
+                isFavorite: userGamesId[x].isFavorite
             }
 
             gameList.push(game);
