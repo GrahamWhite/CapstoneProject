@@ -175,7 +175,7 @@ function UserGameList({username}) {
       },
       body:JSON.stringify({
         username: localStorage.getItem('username'),
-        name: game.name,
+        game: game.name,
         platform: game.platform
       })
     }
