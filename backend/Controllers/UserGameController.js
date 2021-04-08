@@ -14,7 +14,7 @@ const SelectUserGames = async (req, res) => {
         if(user){
             let userGame = await UserGame.find({userId: user._id});
     
-            if(userGame[0]){
+            if(userGame){
                 let gameList = [];
     
                 for(let x = 0; x < userGame.length; x++){
@@ -49,7 +49,7 @@ const DeleteUserGame = async (req, res) => {
             let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
 
             if (user && userGame){
-                let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id})
+                let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id});
     
                 console.log(deleteUserGame);
     
@@ -60,7 +60,7 @@ const DeleteUserGame = async (req, res) => {
             }
             res.send('Error: User and userGame must be valid');
         }
-        res.send('Error: Could not find game')   
+        res.send('Error: Could not find game');  
     }
     res.send('Error: username, game and platform must be defined');
 }
@@ -78,7 +78,8 @@ const CreateUserGame = async (req, res) => {
             if(game && !userGame){
                 let createUserGame = new UserGame({
                     userId: user._id,
-                    gameId: game._id
+                    gameId: game._id,
+                    isFavorite: false
                 });
 
                 try{
