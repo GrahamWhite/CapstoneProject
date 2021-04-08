@@ -130,7 +130,7 @@ function MatchList(props) {
         <TableHead>
           <TableRow colSpan={2}>
           <Typography variant="h5" align="center" className={classes.center}>You have {games.length} games in common!</Typography>
-          <Typography variant="h5" align="center" className={classes.center}>You both play on these platforms: {games.platform}</Typography>
+          {/* <Typography variant="h5" align="center" className={classes.center}>You both play on these platforms: {games.platform}</Typography>*/}
             {/* <SearchBar
                 value={search}
               /> */}
@@ -160,7 +160,7 @@ function MatchList(props) {
                 count={games.length}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
-                siblingCount={0}
+                siblingcount={0}
                 onChangePage={onChangePage}
               />
               : null}
