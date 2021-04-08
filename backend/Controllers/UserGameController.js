@@ -166,7 +166,7 @@ const UpdateFavorite = async (req, res) => {
             let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
 
             if (game && userGame){
-                let updateUserGame = await UserGame.updateOne({userId: user._id, isFavorite: req.body.isFavorite});
+                let updateUserGame = await UserGame.findOne({userId: user._id}).updateOne({isFavorite: req.body.isFavorite});
 
                 if(updateUserGame){
                     res.send("UserGame favorite has been toggled");
