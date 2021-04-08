@@ -90,7 +90,7 @@ function ProfilePage() {
         <div>
           <Grid container justify="flex-end" alignItems="flex-end">
             <IconButton
-              classname={classes.settingsButton}
+              className={classes.settingsButton}
               tooltip="Settings"
               size='large'
               onClick={() => history.push('/settings')}>
@@ -112,7 +112,7 @@ function ProfilePage() {
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
               {/* Friends panel */}
-              <FriendsList username={user}/>
+              <FriendsList username={user} isProfile={true}/>
             </TabPanel>
           </div>
         </div>

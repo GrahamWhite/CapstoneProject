@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes, Button } from '@material-ui/core'
 import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
@@ -47,9 +47,11 @@ function UserPage() {
   const [user, setUser] = useState({});
 
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(true);
   const [currentTab, setCurrentTab] = useState(0);
 
   const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     let queryUsername = new URLSearchParams(window.location.search).get('username');
@@ -65,7 +67,34 @@ function UserPage() {
       .then(data => setUser(data))
       .catch(err => console.log(err));
     console.log(user);
-  }, []);
+
+    return () => {
+      setRefresh(!refresh);
+    }
+  }, [refresh, location.key]);
+
+  async function addFriend(){
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        friendUsername: user.username
+      })
+    }
+
+    const response = await fetch(backendURL + "/create_friend", options)
+      .then(response => response.json())
+      .then(() => {
+        // setRefresh(true);
+      });
+    
+    if (!response.ok) {
+      console.log(response.statusText);
+    }
+  }
 
   function goToMatch(username) {
     localStorage.setItem("searchParams", user.username);
@@ -92,6 +121,15 @@ function UserPage() {
       <div>
         <Grid container justify="flex-end" alignItems="flex-end">
           <Button
+            style={{marginRight: '10px'}}
+            color="primary"
+            variant="outlined"
+            onClick={() => addFriend(user.username)}
+          >
+            Add Friend
+          </Button>
+          <Button
+            style={{marginRight: '10px'}}
             color="primary"
             variant="outlined"
             onClick={() => goToMatch(user.username)}
@@ -114,7 +152,7 @@ function UserPage() {
           </TabPanel>
           <TabPanel value={currentTab} index={1}>
             {/* Friends panel */}
-            <FriendsList user={user}/>
+            <FriendsList user={user} isProfile={false}/>
           </TabPanel>
         </div>
       </div>
