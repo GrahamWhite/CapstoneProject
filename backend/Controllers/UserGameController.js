@@ -115,6 +115,7 @@ const CreateUserGame = async (req, res) => {
 
                 try{
                     createUserGame.save();
+                    res.send(req.body);
                 }catch (e){
                     res.send("Error: could not save record");
                 }
