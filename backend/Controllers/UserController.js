@@ -43,9 +43,9 @@ const UpdateUser = async (req, res) => {
                 }
             }
 
-            let updatedUser = await User.updateOne({username: req.body.username, email: req.body.email, bio: req.body.bio});
+            let updateUser = await User.updateOne({username: req.body.username, email: req.body.email, bio: req.body.bio});
 
-            if(updatedUser){
+            if(updateUser){
                 res.send("user updated");
             }
 
