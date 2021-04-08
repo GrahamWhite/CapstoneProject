@@ -23,11 +23,13 @@ function UserHeader({user}) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
+  const imgPlaceholder = 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg';
+
   return (
     <Grid container className={classes.root} spacing={3} justify="center" alignItems="center">
       <Grid container item spacing={2} justify="center">
         <Grid item className={classes.profileImgContainer} xs={12} sm={3}>
-          <img className={classes.profileImg} src={user.avatarImg} alt="User image"/>
+          <img className={classes.profileImg} src={user.avatarImg || imgPlaceholder} alt="User image"/>
         </Grid>
         <Grid item className={classes.profileUsername} xs={12} sm={9}>
           <Typography variant="h5" align={matches ? 'left' : 'center'}>{user.username}</Typography>
@@ -36,9 +38,9 @@ function UserHeader({user}) {
       <Grid item xs={12} sm={6}>
         <Typography variant="body1" style={{color:"#666"}}>{user.bio}</Typography>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      {/* <Grid item xs={12} sm={6}>
         <Typography variant="h6" color="initial">Here are my steam, origin, etc links!</Typography>
-      </Grid>
+      </Grid> */}
     </Grid>
   )
 }
