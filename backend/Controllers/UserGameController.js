@@ -6,24 +6,51 @@ const User= require('../Schemas/User');
 const Game = require('../Schemas/Game');
 
 
-const SelectUserGames = (req, res) => {
-    let gameList = [];
-    User.findOne({username: req.query.username}).then(user => {
-        if(user){
-            UserGame.find({userId: user._id}).then(async userGames => {
-                for(let userGame of userGames){
-                    let game = await Game.findById(userGame.gameId);
+const SelectUserGames = async (req, res) => {
+    // let gameList = [];
+    // User.findOne({username: req.query.username}).then(user => {
+    //     if(user){
+    //         UserGame.find({userId: user._id}).then(async userGames => {
+    //             for(let userGame of userGames){
+    //                 let game = await Game.findById(userGame.gameId);
+    //
+    //                 gameList.push(game)
+    //             }
+    //
+    //             console.log(gameList.join(','));
+    //             res.send(gameList);
+    //         })
+    //     }else{
+    //         res.send("User not found");
+    //     }
+    // })
 
-                    gameList.push(game)
-                }
 
-                console.log(gameList.join(','));
-                res.send(gameList);
-            })
-        }else{
-            res.send("User not found");
+
+    let user = await User.findOne({username: req.query.username});
+
+    if(user){
+        let userGamesId = await UserGame.find({userId: user._id});
+
+
+        let gameList = [];
+        for(let x = 0; x < userGamesId.length; x++){
+            let g = await Game.findOne({_id: userGamesId[x].gameId});
+
+
+
+            let game = {
+                user: user.username,
+                game: g
+            }
+
+            gameList.push(game);
+            //userGamesId[x].userId = user;
+
         }
-    })
+
+        res.send(gameList);
+    }
 }
 
 // const SelectUserGames = (req, res) => {

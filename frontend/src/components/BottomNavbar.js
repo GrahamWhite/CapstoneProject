@@ -17,10 +17,15 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     position: 'fixed',
     bottom: 0,
+    ':hover' : {
+        backgroundColor: theme.palette.primary.light
+    }
+
   },
   icon:{
     fill: theme.palette.primary.contrastText
   }
+
 }));
 
 //under construction 
