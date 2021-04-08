@@ -95,8 +95,8 @@ app.post('/delete_usergame', (req, res) => {
     UserGameController.DeleteUsergame(req, res);
 })
 
-app.post('/add_favorite', (req, res) => {
-    UserGameController.AddFavorite(req, res);
+app.post('/update_favorite', (req, res) => {
+    UserGameController.UpdateFavorite(req, res);
 })
 
 // //Platform Routes
