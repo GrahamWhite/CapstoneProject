@@ -54,14 +54,15 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
 
   const [selected, setSelected] = useState(false);
 
-  function goToUserProfile(username) {
+  function goToUserProfile() {
     history.push({
       pathname: "/user",
       search: `?username=${user.username}`
     });
+    history.go(0);
   }
 
-  function goToMatch(username) {
+  function goToMatch() {
     history.push({
       pathname: "/match",
       search: `?username=${user.username}`
@@ -107,6 +108,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
       .then(response => response.json())
       .then(() => {
         setRefresh(true);
+        history.go(0);
       });
   }
 
@@ -146,14 +148,14 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
           <Button
             color="primary"
             variant="outlined"
-            onClick={() => goToUserProfile(user.username)}
+            onClick={() => goToUserProfile()}
             >
             Profile
           </Button>
           <Button
             color="primary"
             variant="outlined"
-            onClick={() => goToMatch(user.username)}
+            onClick={() => goToMatch()}
           >
             Match 
           </Button>
@@ -174,7 +176,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
   );
 }
 
-function FriendsList({username}) {
+function FriendsList({username, isProfile}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -199,7 +201,7 @@ function FriendsList({username}) {
 
   useEffect(() => {
 
-    if (!isProfile()) {
+    if (!isProfile) {
       let userList = [];
       let friendList = [];
 
@@ -245,10 +247,6 @@ function FriendsList({username}) {
   const onChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
-  function isProfile() {
-    return location.pathname.includes('profile') ? true : false;
-  }
 
   async function removeFriend(friendUsername) {
     const options = {
@@ -320,7 +318,7 @@ function FriendsList({username}) {
                 count={users.length}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
-                siblingCount={0}
+                siblingcount={0}
                 onChangePage={onChangePage}
               />
             </div>
