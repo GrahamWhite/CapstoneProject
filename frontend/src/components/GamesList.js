@@ -25,7 +25,7 @@ import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL, ReAuthenticate } from "../globals";
 
-function GameItem({game, index, url, onSelected, onFavourite}) {
+function GameItem({game, index, url, onSelected, addToUserGames}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -57,7 +57,7 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
 
   const [selected, setSelected] = useState(false);
   const [favourite, setFavourite] = useState(false);
-  const [disableAddButton, setDisableAddButton] = useState(false)
+  const [disableAddButton, setDisableAddButton] = useState(false);
 
   useEffect(() => {
     setFavourite(game.favourite);
@@ -67,32 +67,6 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
   // function addSelected(index) {
 
   // }
-
-  const addToUserGames = index => {
-    const values = {
-      username: localStorage.getItem('username'),
-      name: game.name
-    }
-
-    const options = {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body:JSON.stringify(values)
-    }
-    fetch(url + "/create_usergame", options)
-      .then(response => response.json())
-      .then(data => {
-        setDisableAddButton(true);
-      })
-      .catch((err) => {
-        if (!localStorage.getItem('username')){
-          ReAuthenticate();
-        }
-        console.log(err);
-      });
-  }
 
   // const onSelected = (index, selected) => {
   //   const newGames = [...games];
@@ -132,17 +106,17 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
       </CardActionArea>
       {selected ? (
         <CardActions>
-        <Button
-          size="small"
-          color="primary"
-          variant="contained"
-          disabled={disableAddButton}
-          startIcon={<AddIcon />}
-          onClick={() => addToUserGames(index)}
-        >
-          Add to List
-        </Button>
           <Button
+            size="small"
+            color="primary"
+            variant="contained"
+            disabled={disableAddButton}
+            startIcon={<AddIcon />}
+            onClick={() => addToUserGames(index)}
+          >
+            Add to List
+          </Button>
+          {/* <Button
             size="small"
             color="primary"
             variant="contained"
@@ -150,7 +124,7 @@ function GameItem({game, index, url, onSelected, onFavourite}) {
             onClick={() => onFavourite(index)}
           >
             Favourite
-          </Button>
+          </Button> */}
         </CardActions>
       ) : (
         ""
@@ -192,7 +166,7 @@ function GamesList(props) {
       console.log(games);
     }
     
-  }, [search])
+  }, [search]);
 
   // useEffect(() => {
   //   if (selectedGames.length > 0) {
@@ -209,12 +183,68 @@ function GamesList(props) {
     setPage(newPage);
   };
 
-  const favouriteGame = index => {
-    const newGames = [...games];
-    let favourited = newGames[index].favourite;
-    newGames[index].favourite = !favourited;
-    setGames(newGames);
+  // const favouriteGame = index => {
+  //   const newGames = [...games];
+  //   let favourited = newGames[index].favourite;
+  //   newGames[index].favourite = !favourited;
+  //   setGames(newGames);
+  // }
+
+  async function addGame(index) {
+    let game = games[index];
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        name: game.name,
+        platform: game.platform
+      })
+    }
+    console.log(options);
+    // backendURL + "/create_usergame"
+    const thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/create_usergame"
+    const response = await fetch(thisUrl, options)
+      .then(response => response.json());
+
+    console.log(response);
+      // .then(() => {
+      //   setRefresh(true);
+      // });
+    // const response = await fetch(url + "/create_usergame", options);
+    // const data = await response.json();
+
+    // console.log(response);
+    // console.log(data);
+    // if (response.ok) {
+      
+    // }
+    // else {
+    //   console.log(response.statusText);
+    // }
   }
+
+  // async function AddFriend(){
+  //   const options = {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body:JSON.stringify({
+  //       username: localStorage.getItem('username'),
+  //       friendUsername: user.username
+  //     })
+  //   }
+
+  //   fetch(backendURL + "/create_friend", options)
+  //     .then(response => response.json())
+  //     .then(() => {
+  //       setRefresh(true);
+  //     });
+  // }
 
   const onSelected = (index, selected) => {
     const newGames = [...games];
@@ -244,8 +274,8 @@ function GamesList(props) {
                   game={game}
                   index={index}
                   url={url}
+                  addToUserGames={addGame}
                   onSelected={onSelected}
-                  onFavourite={favouriteGame}
                 />
               </TableRow>
             ))
@@ -260,7 +290,7 @@ function GamesList(props) {
                 count={games.length}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
-                siblingCount={0}
+                siblingcount={0}
                 onChangePage={onChangePage}
               />
               : ''}

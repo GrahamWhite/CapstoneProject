@@ -38,13 +38,15 @@ function SettingsForm(props) {
 
   const [message, setMessage] = useState('');
   const [user, setUser] = useState({});
+
+  const storedUsername = localStorage.getItem('username');
   
   //Events
   async function sendToServer(values) {
     setMessage('');
     console.log(values);
 
-    if (!localStorage.getItem('username')){
+    if (!storedUsername){
       ReAuthenticate(props);
     }
 
@@ -56,6 +58,8 @@ function SettingsForm(props) {
       },
       body:JSON.stringify(values)
     };
+
+    console.log(values);
 
     let responseData = "";
     try {
@@ -74,17 +78,11 @@ function SettingsForm(props) {
   }
 
   useEffect(() => {
-    let storedUsername = localStorage.getItem('username');
-    let username = '';
-
-    if (storedUsername) {
-      username = storedUsername;
-    }
-    else {
+    if (!storedUsername) {
       history.push('/login');
     }
 
-    let url = `${backendURL}/select_user?username=${username}`;
+    let url = `${backendURL}/select_user?username=${storedUsername}`;
     fetch(url)
       .then(response => response.json())
       .then(data => { setUser(data); console.log(data); })
@@ -105,6 +103,7 @@ function SettingsForm(props) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      username: storedUsername,
       bio: user.bio ? user.bio : '' , 
       email: user.email ? user.email : ''
     },

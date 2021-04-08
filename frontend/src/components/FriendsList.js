@@ -27,14 +27,14 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
 
-function UserItem({ user, index, history, location, setRefresh, isProfile, isFriend }) {
+function UserItem({ user, index, history, location, setRefresh, isProfile, isFriend, removeFriend }) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
-      height: "80px",
+      height: "178px",
     },
     tableItem: {
-      maxHeight: "80px",
+      minHeight: "178px",
     },
     cover: {
       width: "151",
@@ -46,20 +46,23 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
       top: "5%",
       left: "100%",
       transform: "translate(-40px)",
-      color: "red",
-      position: "absolute",
-    },
+      color: 'red',
+      position: 'absolute',
+    }
   }));
   const classes = useStyles();
 
-  function goToUserProfile(username) {
+  const [selected, setSelected] = useState(false);
+
+  function goToUserProfile() {
     history.push({
       pathname: "/user",
       search: `?username=${user.username}`
     });
+    history.go(0);
   }
 
-  function goToMatch(username) {
+  function goToMatch() {
     history.push({
       pathname: "/match",
       search: `?username=${user.username}`
@@ -105,37 +108,35 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
       .then(response => response.json())
       .then(() => {
         setRefresh(true);
+        history.go(0);
       });
   }
 
   return (
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
-      <Grid container spacing={1} >
-        <Grid item width={"70%"}>
-          {/* <CardActionArea
-            className={classes.fullHeight}
-            onClick={() => {
-              goToUserProfile(user.username);
-            }}
-          > */}
-            <CardContent>
-              <CardMedia
-                className={classes.cover}
-                image={ "" /*process.env.PUBLIC_URL + user.img*/}
-              />
-              <div className={classes.details}>
-                <CardContent className={classes.content}>
-                  <Typography component="h6" variant="h6">
-                    {user.username}
-                  </Typography>
-                </CardContent>
-              </div>
+      <CardActionArea
+        className={!selected ? classes.fullHeight : ""}
+        onClick={() => {
+          setSelected(!selected);
+        }}
+      >
+        <CardContent>
+          <CardMedia
+            className={classes.cover}
+            image={""}
+          />
+          <div className={classes.details}>
+            <CardContent className={classes.content}>
+              <Typography component="h5" variant="h5">
+                {user.username}
+              </Typography>
             </CardContent>
-          {/* </CardActionArea> */}
-        </Grid>
-        <Grid item width={"30%"}>
-          <CardActions>
-            { !isProfile ? 
+          </div>
+        </CardContent>
+      </CardActionArea>
+      {selected ? (
+        <CardActions>
+          { !isProfile ? 
               <Button
                 color="primary"
                 variant="outlined"
@@ -144,37 +145,38 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
                 Add Friend
               </Button>
             : null }
-            <Button
-              color="primary"
-              variant="outlined"
-              onClick={() => goToUserProfile(user.username)}
-              >
-              Profile
-            </Button>
-            <Button
-              color="primary"
-              variant="outlined"
-              onClick={() => goToMatch(user.username)}
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => goToUserProfile()}
             >
-              Match 
+            Profile
+          </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => goToMatch()}
+          >
+            Match 
+          </Button>
+          { isProfile ? 
+            <Button
+              color="primary"
+              variant="outlined"
+              onClick={() => removeFriend(user.username)}
+            >
+              Delete friend
             </Button>
-            { isProfile && isFriend ? 
-              <Button
-                color="primary"
-                variant="outlined"
-                onClick={() => removeFriend(user.username)}
-              >
-                Delete friend
-              </Button>
-            : null }
-          </CardActions>
-        </Grid>
-      </Grid>
+          : null }
+        </CardActions>
+      ) : (
+        ""
+      )}
     </Card>
   );
 }
 
-function FriendsList() {
+function FriendsList({username, isProfile}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -186,6 +188,7 @@ function FriendsList() {
   const ROWS_PER_PAGE = 5;
 
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [currentUser] = useState(new URLSearchParams(window.location.search).get('username'));
   const [page, setPage] = useState(0);
   const [refresh, setRefresh] = useState(true);
@@ -198,13 +201,13 @@ function FriendsList() {
 
   useEffect(() => {
 
-    if (!isProfile()) {
+    if (!isProfile) {
       let userList = [];
       let friendList = [];
 
       fetch(url + "/select_userfriends?username=" + currentUser)
         .then(response => response.json())
-        .then(data => { userList = data; console.log(data); });
+        .then(data => { setUsers(data); console.log(data); });
 
       fetch(url + "/select_userfriends?username=" + localStorage.getItem('username'))
         .then(response => response.json())
@@ -216,32 +219,54 @@ function FriendsList() {
         }
       }
       setUsers(userList);
+      console.log('loaded users', userList);
     }
     else {
       let userList = [];
 
       fetch(url + "/select_userfriends?username=" + localStorage.getItem('username'))
         .then(response => response.json())
-        .then(data => { userList = data; console.log(data); });
+        .then(data => { setUsers(data); console.log(data); });
 
       for (let user in userList) {
         user.isFriend = true;
       }
 
       setUsers(userList);
+      console.log('loaded users', userList);
     }
 
+    
+    console.log('new users', users);
+    
     return () => {
-      setRefresh(false);
+      setRefresh(!refresh);
     }
-  }, [refresh])
+  }, [username, refresh])
 
   const onChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  function isProfile() {
-    return location.pathname.includes('profile') ? true : false;
+  async function removeFriend(friendUsername) {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        friendUsername: friendUsername
+      })
+    }
+    const response = await fetch(url + "/delete_friend", options);
+
+    if (response.ok) {
+      setRefresh(true);
+    }
+    else {
+      console.log(response.statusText);
+    }
   }
 
   return (
@@ -267,7 +292,8 @@ function FriendsList() {
                   location={location}
                   setRefresh={setRefresh}
                   isProfile={isProfile}
-                  isFriend={user.isFriend}/>
+                  isFriend={user.isFriend}
+                  removeFriend={removeFriend}/>
               </TableRow>
             ))
             : 
@@ -292,7 +318,7 @@ function FriendsList() {
                 count={users.length}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
-                siblingCount={0}
+                siblingcount={0}
                 onChangePage={onChangePage}
               />
             </div>

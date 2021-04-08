@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes, Button, IconButton } from '@material-ui/core'
-import { useFetch, useInterval } from '../../util/CustomHooks';
 import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
 import FriendsList from '../FriendsList';
@@ -91,7 +90,7 @@ function ProfilePage() {
         <div>
           <Grid container justify="flex-end" alignItems="flex-end">
             <IconButton
-              classname={classes.settingsButton}
+              className={classes.settingsButton}
               tooltip="Settings"
               size='large'
               onClick={() => history.push('/settings')}>
@@ -113,7 +112,7 @@ function ProfilePage() {
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
               {/* Friends panel */}
-              <FriendsList user={user}/>
+              <FriendsList username={user} isProfile={true}/>
             </TabPanel>
           </div>
         </div>
