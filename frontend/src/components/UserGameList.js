@@ -55,10 +55,10 @@ function GameItem({game, index, onRemove, onFavourite}) {
   // const updateHandler = dummyData => onUpdate({ ...props.game, ...props.dummyData});
 
   const [selected, setSelected] = useState(false);
-  const [favourite, setFavourite] = useState(false);
+  //const [favourite, setFavourite] = useState(false);
 
   useEffect(() => {
-    setFavourite(game.favourite);
+    //setFavourite(game.favourite);
     setSelected(game.selected);
   }, [game.favourite])
 
@@ -71,9 +71,9 @@ function GameItem({game, index, onRemove, onFavourite}) {
         }}
       >
         <CardContent>
-          {favourite 
+          {/* {favourite 
           ? <StarIcon className={classes.favouriteIcon}/> 
-          : ''}
+          : ''} */}
           
           <CardMedia
             className={classes.cover}
@@ -93,7 +93,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
       </CardActionArea>
       {selected ? (
         <CardActions>
-          <Button
+          {/* <Button
             size="small"
             color="primary"
             variant="contained"
@@ -101,7 +101,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
             onClick={() => onFavourite(index)}
           >
             Favourite
-          </Button>
+          </Button> */}
           <Button
             size="small"
             color="secondary"
@@ -132,7 +132,7 @@ function UserGameList({username}) {
 
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(true);
   const [page, setPage] = useState(0);
   
   const url = backendURL;
@@ -180,6 +180,10 @@ function UserGameList({username}) {
       })
     }
     const response = await fetch(url + "/delete_usergame", options);
+    console.log(response);
+    
+    //const data = await response.json();
+    //console.log(data);
 
     if (response.ok) {
       const newGames = [...games];
@@ -236,7 +240,7 @@ function UserGameList({username}) {
                 count={games.length}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
-                siblingCount={0}
+                siblingcount={0}
                 onChangePage={onChangePage}
               />
               : null}

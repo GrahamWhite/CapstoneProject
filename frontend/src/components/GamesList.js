@@ -57,7 +57,7 @@ function GameItem({game, index, url, onSelected, addToUserGames}) {
 
   const [selected, setSelected] = useState(false);
   const [favourite, setFavourite] = useState(false);
-  const [disableAddButton, setDisableAddButton] = useState(false)
+  const [disableAddButton, setDisableAddButton] = useState(false);
 
   useEffect(() => {
     setFavourite(game.favourite);
@@ -166,7 +166,7 @@ function GamesList(props) {
       console.log(games);
     }
     
-  }, [search])
+  }, [search]);
 
   // useEffect(() => {
   //   if (selectedGames.length > 0) {
@@ -183,12 +183,12 @@ function GamesList(props) {
     setPage(newPage);
   };
 
-  const favouriteGame = index => {
-    const newGames = [...games];
-    let favourited = newGames[index].favourite;
-    newGames[index].favourite = !favourited;
-    setGames(newGames);
-  }
+  // const favouriteGame = index => {
+  //   const newGames = [...games];
+  //   let favourited = newGames[index].favourite;
+  //   newGames[index].favourite = !favourited;
+  //   setGames(newGames);
+  // }
 
   async function addGame(index) {
     let game = games[index];
@@ -204,15 +204,47 @@ function GamesList(props) {
         platform: game.platform
       })
     }
-    const response = await fetch(url + "/create_usergame", options);
+    console.log(options);
+    // backendURL + "/create_usergame"
+    const thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/create_usergame"
+    const response = await fetch(thisUrl, options)
+      .then(response => response.json());
 
-    if (response.ok) {
+    console.log(response);
+      // .then(() => {
+      //   setRefresh(true);
+      // });
+    // const response = await fetch(url + "/create_usergame", options);
+    // const data = await response.json();
+
+    // console.log(response);
+    // console.log(data);
+    // if (response.ok) {
       
-    }
-    else {
-      console.log(response.statusText);
-    }
+    // }
+    // else {
+    //   console.log(response.statusText);
+    // }
   }
+
+  // async function AddFriend(){
+  //   const options = {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body:JSON.stringify({
+  //       username: localStorage.getItem('username'),
+  //       friendUsername: user.username
+  //     })
+  //   }
+
+  //   fetch(backendURL + "/create_friend", options)
+  //     .then(response => response.json())
+  //     .then(() => {
+  //       setRefresh(true);
+  //     });
+  // }
 
   const onSelected = (index, selected) => {
     const newGames = [...games];
@@ -258,7 +290,7 @@ function GamesList(props) {
                 count={games.length}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
-                siblingCount={0}
+                siblingcount={0}
                 onChangePage={onChangePage}
               />
               : ''}
