@@ -36,12 +36,14 @@ const SelectUserGames = async (req, res) => {
         let gameList = [];
         for(let x = 0; x < userGamesId.length; x++){
             let g = await Game.findOne({_id: userGamesId[x].gameId});
-
+            let ug = await UserGame.findOne()
 
 
             let game = {
+
                 user: user.username,
-                game: g
+                game: g,
+                favorite: userGamesId[x].isFavorite
             }
 
             gameList.push(game);
