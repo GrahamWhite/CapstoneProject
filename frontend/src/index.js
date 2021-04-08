@@ -8,7 +8,7 @@ import { createStore } from 'redux';
 import allReducers from './reducers';
 import { loadState, saveState } from './globals'
 
-const persistedStore = JSON.parse(loadState());
+const persistedStore = loadState();
 console.log("persistedStore", persistedStore);
 
 const store = createStore(
