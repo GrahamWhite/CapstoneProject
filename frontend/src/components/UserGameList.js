@@ -17,6 +17,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  Link
 } from "@material-ui/core";
 import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
@@ -229,7 +230,16 @@ function UserGameList({username}) {
                 />
               </TableRow>
             ))
-          : 'Uh oh, no games loaded'}
+          :
+          <Button 
+            fullWidth
+            className={classes.center} 
+            component={Link} 
+            to={"/games"} 
+            variant="contained" 
+            color="primary">
+              Add Games to your Library</Button>
+          }
         </TableBody>
         <TableFooter>
           <TableRow>
