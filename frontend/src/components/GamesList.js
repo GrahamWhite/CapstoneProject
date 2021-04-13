@@ -200,17 +200,18 @@ function GamesList(props) {
       },
       body:JSON.stringify({
         username: localStorage.getItem('username'),
-        name: game.name,
+        game: game.name,
         platform: game.platform
       })
     }
     console.log(options);
-    // backendURL + "/create_usergame"
-    const thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/create_usergame"
-    const response = await fetch(thisUrl, options)
-      .then(response => response.json());
 
-    console.log(response);
+    // backendURL + "/create_usergame"
+    // const thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/create_usergame"
+    const response = await fetch(backendURL + "/create_usergame", options)
+      //.then(response => response.json());
+
+    console.log('response', response);
       // .then(() => {
       //   setRefresh(true);
       // });

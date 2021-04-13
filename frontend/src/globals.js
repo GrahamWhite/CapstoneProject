@@ -14,10 +14,10 @@ export const loadState = () => {
     try {
       if (serializedState === "{\"loggedIn\":true}"){
         console.log("success", "you did it!");
-        return serializedState;
+        return JSON.parse(serializedState);
       }
       else {
-        console.log("fail", "you dun goofed");
+        return JSON.parse("{\"loggedIn\":false}");
       }
     }
     catch (e) {

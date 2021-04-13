@@ -72,6 +72,7 @@ function LoginForm() {
     };
 
     const response = await fetch(url + "/login", options);
+    console.log(response);
 
     if (response.ok) {
       const responseData = await response.json();
