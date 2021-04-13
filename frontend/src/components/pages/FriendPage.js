@@ -22,7 +22,7 @@ function FriendPage() {
 
   return (
     <div>
-        <h1 className={classes.center}>Friends list coming Soon!</h1>
+        <h1 className={classes.center}>Friends list</h1>
         <FriendsList/>
     </div>
   )
