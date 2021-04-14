@@ -108,7 +108,7 @@ function ProfilePage() {
           <div className={classes.tabPanelsContainer}>
             <TabPanel value={currentTab} index={0}>
               {/* Games panel */}
-              <UserGameList username={user.username}/>
+              <UserGameList username={user.username} isProfile={true}/>
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
               {/* Friends panel */}

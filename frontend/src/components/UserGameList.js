@@ -120,7 +120,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
   );
 }
 
-function UserGameList({username}) {
+function UserGameList({username, isProfile}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -230,15 +230,16 @@ function UserGameList({username}) {
                 />
               </TableRow>
             ))
-          :
-          <Button 
-            fullWidth
-            className={classes.center} 
-            component={Link} 
-            to={"/games"} 
+          : isProfile ?
+            <Button 
+            fullWidth 
             variant="contained" 
-            color="primary">
-              Add Games to your Library</Button>
+            color="primary"
+            component={Link} 
+            to={"/games"}>
+              Add Games to your Library
+            </Button>
+            : null
           }
         </TableBody>
         <TableFooter>

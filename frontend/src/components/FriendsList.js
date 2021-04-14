@@ -296,7 +296,7 @@ function FriendsList({username, isProfile}) {
                   removeFriend={removeFriend}/>
               </TableRow>
             ))
-            : 
+            : isProfile ?
             <div style={{ width: "100%", margin: "auto" }}>
               <Button
                 fullWidth
@@ -306,7 +306,8 @@ function FriendsList({username, isProfile}) {
                 to={"/search"}>
                 Find friends
               </Button>
-            </div>
+            </div> 
+            : null
           }
         </TableBody>
         { users.length > 0 ? 
