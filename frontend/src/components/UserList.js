@@ -48,6 +48,15 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
       color: "red",
       position: "absolute",
     },
+    userIcon: {
+      width: theme.spacing(7),
+      height: theme.spacing(7),
+      // backgroundColor: theme.palette.primary.main,
+      // color: theme.palette.primary.contrastText,
+
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.contrastText,
+    }
   }));
   const classes = useStyles();
 
