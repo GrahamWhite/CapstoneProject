@@ -146,8 +146,6 @@ const CreateUser = async (req, res) => {
                         try{
                             const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
 
-
-
                             let user = new User({
                                 username: req.body.username,
                                 password: encryptedPwd,
