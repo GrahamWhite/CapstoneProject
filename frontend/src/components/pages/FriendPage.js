@@ -22,8 +22,8 @@ function FriendPage() {
 
   return (
     <div>
-        <h1 className={classes.center}>Friends list</h1>
-        <FriendsList/>
+        <h1 className={classes.center}>My Friends</h1>
+        <FriendsList isProfile={true}/>
     </div>
   )
 }

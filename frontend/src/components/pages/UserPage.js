@@ -36,7 +36,15 @@ const useStyles = makeStyles((theme) => ({
   },
   tabPanelsContainer: {
     
-  }
+  },
+  center: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '75%',
+    margin: 'auto',
+    marginBottom: '2%'
+}
 }));
 
 function UserPage() {
@@ -117,6 +125,7 @@ function UserPage() {
 
   return (
     <div>
+      <h1 className={classes.center}>{user.username}'s Profile</h1>
       { user ? 
       <div>
         <Grid container justify="flex-end" alignItems="flex-end">

@@ -39,7 +39,14 @@ const useStyles = makeStyles((theme) => ({
   },
   settingsButton: {
     right: '3%'
-  }
+  },
+  center: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '75%',
+    margin: 'auto',
+}
 }));
 
 function ProfilePage() {
@@ -87,8 +94,9 @@ function ProfilePage() {
   return (
     <div>
       { user ? 
-        <div>
+        <div>          
           <Grid container justify="flex-end" alignItems="flex-end">
+          <h1 className={classes.center}>My Profile</h1>
             <IconButton
               className={classes.settingsButton}
               tooltip="Settings"
