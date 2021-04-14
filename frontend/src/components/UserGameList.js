@@ -16,9 +16,9 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
-  Link
+  Typography
 } from "@material-ui/core";
+import { Link, useLocation } from 'react-router-dom'
 import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
 import StarIcon from "@material-ui/icons/Star";
@@ -232,13 +232,13 @@ function UserGameList({username}) {
             ))
           :
           <Button 
-            fullWidth
-            className={classes.center} 
-            component={Link} 
-            to={"/games"} 
+            fullWidth 
             variant="contained" 
-            color="primary">
-              Add Games to your Library</Button>
+            color="primary"
+            component={Link} 
+            to={"/games"}>
+              Add Games to your Library
+            </Button>
           }
         </TableBody>
         <TableFooter>
