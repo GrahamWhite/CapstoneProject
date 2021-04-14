@@ -59,17 +59,16 @@ const SearchUsers = async (req, res) => {
 
     if(req.query.username){
 
-            let RegExUsername = RegExp(req.query.username);
+        let RegExUsername = RegExp(req.query.username);
 
-            let users = await User.find({username: {$regex: RegExUsername, $options: 'i'}});
+        let users = await User.find({username: {$regex: RegExUsername, $options: 'i'}});
 
-            if(users[0]){
-                res.send(users);
-            }else {
-                res.send("No users found with username " + req.query.username);
-            }
+        if(users[0]){
+            res.send(users);
+        }else {
+            res.send("No users found with username " + req.query.username);
+        }
     }
-
     res.send("Error: username must be defined");
 
 }
@@ -159,25 +158,14 @@ const CreateUser = async (req, res) => {
                             res.send(e.toString());
                         }
                 }
-
                     res.send("Error: valid email required");
-
-
                 }
-
                 res.send("Error: user already exists with username: " + req.body.username);
-
-
-
             }
-
             res.send("Error: password must be defined");
         }
-
         res.send("Error: username must be defined");
         let user = User.findOne({username: req.body.username})
-
-
     } catch (err) {
         res.send(err);
     }
@@ -190,8 +178,7 @@ const UserExists = (req, res) => {
         });
     } catch (err) {
         res.send(err);
-    }
-    ;
+    };
 };
 
 
