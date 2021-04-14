@@ -19,6 +19,7 @@ import AuthNavbar from './components/AuthNavbar.js';
 import { connect } from 'react-redux';
 import UserPage from './components/pages/UserPage.js';
 import SettingsPage from './components/pages/SettingsPage.js';
+import HelpPage from './components/pages/HelpPage.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,6 +54,8 @@ function App(props) {
             <Route path='/user' component={UserPage}/>
             <Route path='/games' component={GamesPage}/>
             <Route path='/settings' component={SettingsPage}/>
+
+            <Route path='/help' component={HelpPage}/>
           </Switch>
         </div>
         <div className={classes.bottomNavbarSpacer}></div>
