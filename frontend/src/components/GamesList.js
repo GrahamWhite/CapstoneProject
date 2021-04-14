@@ -51,6 +51,8 @@ function GameItem({game, index, url, onSelected, addToUserGames}) {
     gameIcon: {
       width: theme.spacing(7),
       height: theme.spacing(7),
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
     }
   }));
   const classes = useStyles();
