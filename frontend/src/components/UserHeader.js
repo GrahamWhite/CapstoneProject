@@ -33,11 +33,12 @@ function UserHeader({user}) {
         </Grid>
         <Grid item className={classes.profileUsername} xs={12} sm={9}>
           <Typography variant="h5" align={matches ? 'left' : 'center'}>{user.username}</Typography>
+          <Typography variant="body1" align={matches ? 'left' : 'center'} style={{color:"#666", marginTop:"2.5%"}}>{user.bio ? `Bio: ${user.bio}` : `${user.username} doesn't have a bio`}</Typography>
         </Grid>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      {/* <Grid item xs={12} sm={9}>
         <Typography variant="body1" style={{color:"#666"}}>{user.bio}</Typography>
-      </Grid>
+      </Grid> */}
       {/* <Grid item xs={12} sm={6}>
         <Typography variant="h6" color="initial">Here are my steam, origin, etc links!</Typography>
       </Grid> */}
