@@ -30,8 +30,10 @@ function MainPage() {
           // onRequestSearch={() => doSomethingWith(this.state.value)}
           className={classes.center}/> */}
           <Button className={classes.center} component={Link} to={"/Help"} variant="contained" color="secondary">Learn how to use Tink</Button>
+          <Button className={classes.center} component={Link} to={"/profile"} variant="contained" color="primary">See your profile</Button>
           <Button className={classes.center} component={Link} to={"/search"} variant="contained" color="primary">Search for a user</Button>
-          <Button className={classes.center} component={Link} to={"/games"} variant="contained" color="primary">Manage your library</Button>
+          <Button className={classes.center} component={Link} to={"/friend"} variant="contained" color="primary">See your friends list</Button>
+          <Button className={classes.center} component={Link} to={"/games"} variant="contained" color="secondary">Manage your library</Button>
     </div>
   )
 }
