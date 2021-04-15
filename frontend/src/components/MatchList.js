@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   CardActionArea,
@@ -46,6 +47,15 @@ function GameItem({game, index}) {
       transform: "translate(-40px)",
       color: 'red',
       position: 'absolute',
+    },
+    gameIcon: {
+      width: theme.spacing(7),
+      height: theme.spacing(7),
+      // backgroundColor: theme.palette.primary.main,
+      // color: theme.palette.primary.contrastText,
+
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.contrastText,
     }
   }));
   const classes = useStyles();
@@ -66,12 +76,19 @@ function GameItem({game, index}) {
           />
           <div className={classes.details}>
             <CardContent className={classes.content}>
-              <Typography component="h5" variant="h5">
+            <Grid container item spacing={3}>
+                <Grid item xs={12} sm={1}>
+                  <Avatar className={classes.gameIcon}>{game.name.substr(0,2)}</Avatar>
+                </Grid>
+                <Grid item xs={12} sm={10}>
+                <Typography component="h5" variant="h5">
                 {game.name}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {game.platform}
-              </Typography>
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {game.platform}
+                </Typography>
+                </Grid>
+              </Grid>
             </CardContent>
           </div>
         </CardContent>
