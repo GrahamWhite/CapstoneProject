@@ -132,7 +132,7 @@ function UserPage() {
           <Button
             style={{marginRight: '10px'}}
             color="primary"
-            variant="outlined"
+            variant="contained"
             onClick={() => addFriend(user.username)}
           >
             Add Friend
@@ -140,7 +140,7 @@ function UserPage() {
           <Button
             style={{marginRight: '10px'}}
             color="primary"
-            variant="outlined"
+            variant="contained"
             onClick={() => goToMatch(user.username)}
           >
             Match 
