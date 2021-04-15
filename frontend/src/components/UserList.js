@@ -297,7 +297,7 @@ function UserList(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.length > 0 ? 
+          {users && users.length > 0 ? 
             users
               .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
               .map((user, index) => (

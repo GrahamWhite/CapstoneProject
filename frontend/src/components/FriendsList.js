@@ -29,6 +29,8 @@ import { useHistory } from "react-router";
 import { backendURL } from "../globals";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { sendAlert } from "../actions";
+import { useDispatch } from "react-redux";
 
 function UserItem({ user, index, history, location, setRefresh, isProfile, isFriend, removeFriend }) {
   const useStyles = makeStyles((theme) => ({
@@ -65,6 +67,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
   const classes = useStyles();
 
   const [selected, setSelected] = useState(false);
+  const dispatch = useDispatch();
 
   function goToUserProfile() {
     history.push({
@@ -99,8 +102,12 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
         setRefresh(true);
       });
     
-    if (!response.ok) {
+    if (response.ok) {
+      dispatch(sendAlert(user.username + ' is now your friend!', "success"));
+    }
+    else {
       console.log(response.statusText);
+      dispatch(sendAlert(response.statusText, ""));
     }
   }
 
