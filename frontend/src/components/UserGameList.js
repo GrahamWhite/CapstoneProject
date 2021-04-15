@@ -249,7 +249,6 @@ function UserGameList({username, isProfile}) {
             ))
           : isProfile ?
             <Button 
-          :
             fullWidth 
             variant="contained" 
             color="primary"
