@@ -23,6 +23,13 @@ function HelpPage() {
     <div>
         <h1 className={classes.center}>Need Help using Tink?</h1>
         
+        <Button
+        color="primary"
+        variant="contained"
+        href="https://drive.google.com/file/d/1RhdFJcZF5CEPl2Evn2pQpTTboiw8GU6A/view?usp=sharing"
+        >
+        View our documentation
+        </Button>
     </div>
   )
 }
