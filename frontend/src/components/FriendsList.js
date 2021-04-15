@@ -27,6 +27,8 @@ import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 function UserItem({ user, index, history, location, setRefresh, isProfile, isFriend, removeFriend }) {
   const useStyles = makeStyles((theme) => ({
@@ -146,6 +148,9 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
                   {user.username}
                   </Typography>
                 </Grid>
+                <Grid item xs={12} sm={1}>
+                {selected ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
+                </Grid>
               </Grid>
             </CardContent>
           </div>
@@ -156,7 +161,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
           { !isProfile ? 
               <Button
                 color="primary"
-                variant="outlined"
+                variant="contained"
                 onClick={() => addFriend(user.username)}
                 >
                 Add Friend
@@ -164,14 +169,14 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
             : null }
           <Button
             color="primary"
-            variant="outlined"
+            variant="contained"
             onClick={() => goToUserProfile()}
             >
             Profile
           </Button>
           <Button
             color="primary"
-            variant="outlined"
+            variant="contained"
             onClick={() => goToMatch()}
           >
             Match 
@@ -179,7 +184,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
           { isProfile ? 
             <Button
               color="primary"
-              variant="outlined"
+              variant="contained"
               onClick={() => removeFriend(user.username)}
             >
               Delete friend

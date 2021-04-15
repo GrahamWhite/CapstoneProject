@@ -27,6 +27,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
 import { useDispatch } from 'react-redux';
 import { sendAlert } from "../actions";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
@@ -99,12 +101,15 @@ function GameItem({game, index, onRemove, onFavourite}) {
                   <Avatar className={classes.gameIcon}>{game.name.substr(0,2)}</Avatar>
                 </Grid>
                 <Grid item xs={12} sm={10}>
-                <Typography component="h5" variant="h5">
-                {game.name}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {game.platform}
-              </Typography>
+                  <Typography component="h5" variant="h5">
+                    {game.name}
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    {game.platform}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                {selected ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
                 </Grid>
               </Grid>
             </CardContent>
@@ -253,12 +258,12 @@ function UserGameList({username, isProfile}) {
               </TableRow>
             ))
           : isProfile ?
-            <Button
-              fullWidth 
-              variant="contained" 
-              color="primary"
-              component={Link} 
-              to={"/games"}>
+            <Button 
+            fullWidth 
+            variant="contained" 
+            color="primary"
+            component={Link} 
+            to={"/games"}>
               Add Games to your Library
             </Button>
             : null

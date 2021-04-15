@@ -25,8 +25,10 @@ import AddIcon from "@material-ui/icons/Add";
 import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL, ReAuthenticate } from "../globals";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-function GameItem({game, index, url, onSelected, addToUserGames}) {
+function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -111,14 +113,15 @@ function GameItem({game, index, url, onSelected, addToUserGames}) {
                 <Grid item xs={12} sm={10}>
                 <Typography component="h5" variant="h5">
                 {game.name}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {game.platform}
-              </Typography>
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {game.platform}
+                </Typography>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                {selected ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
                 </Grid>
               </Grid>
-           
-              
             </CardContent>
           </div>
         </CardContent>
@@ -134,6 +137,15 @@ function GameItem({game, index, url, onSelected, addToUserGames}) {
             onClick={() => addToUserGames(index)}
           >
             Add to List
+          </Button>
+          <Button
+            size="small"
+            color="secondary"
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={() => onRemove(index)}
+          >
+            Remove
           </Button>
           {/* <Button
             size="small"
@@ -168,6 +180,7 @@ function GamesList(props) {
   // const [allGamesButton, setAllGamesButton] = useState(false);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [refresh, setRefresh] = useState(true);
 
   const url = backendURL;
 
@@ -266,6 +279,27 @@ function GamesList(props) {
   //     });
   // }
 
+  async function removeGame(index) {
+    let game = games[index];
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        game: game.name,
+        platform: game.platform
+      })
+    }
+    const response = await fetch(url + "/delete_usergame", options);
+    console.log(response);
+    
+    //const data = await response.json();
+    //console.log(data);
+  }
+
   const onSelected = (index, selected) => {
     const newGames = [...games];
     for (let game of newGames) game.selected = false;
@@ -291,11 +325,11 @@ function GamesList(props) {
             .map((game, index) => (
               <TableRow key={index} className={classes.tableItem}>
                 <GameItem 
-                
                   game={game}
                   index={index}
                   url={url}
                   addToUserGames={addGame}
+                  onRemove={removeGame}
                   onSelected={onSelected}
                 />
               </TableRow>
