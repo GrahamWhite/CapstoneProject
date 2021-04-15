@@ -126,21 +126,21 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
           <CardActions>
             <Button
               color="primary"
-              variant="outlined"
+              variant="contained"
               onClick={() => addFriend(user.username)}
             >
               Add
             </Button>
             <Button
               color="primary"
-              variant="outlined"
+              variant="contained"
               onClick={() => goToUserProfile(user.username)}
               >
               Profile
             </Button>
             <Button
               color="primary"
-              variant="outlined"
+              variant="contained"
               onClick={() => goToMatch(user.username)}
             >
               Match 

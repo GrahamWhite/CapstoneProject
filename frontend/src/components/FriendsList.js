@@ -161,7 +161,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
           { !isProfile ? 
               <Button
                 color="primary"
-                variant="outlined"
+                variant="contained"
                 onClick={() => addFriend(user.username)}
                 >
                 Add Friend
@@ -169,14 +169,14 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
             : null }
           <Button
             color="primary"
-            variant="outlined"
+            variant="contained"
             onClick={() => goToUserProfile()}
             >
             Profile
           </Button>
           <Button
             color="primary"
-            variant="outlined"
+            variant="contained"
             onClick={() => goToMatch()}
           >
             Match 
@@ -184,7 +184,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
           { isProfile ? 
             <Button
               color="primary"
-              variant="outlined"
+              variant="contained"
               onClick={() => removeFriend(user.username)}
             >
               Delete friend
