@@ -25,6 +25,8 @@ import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package
 import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
+import { useDispatch } from 'react-redux';
+import { sendAlert } from "../actions";
 
 function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
@@ -152,6 +154,8 @@ function UserGameList({username, isProfile}) {
   const [selectedGame, setSelectedGame] = useState(null);
   const [refresh, setRefresh] = useState(true);
   const [page, setPage] = useState(0);
+
+  const dispatch = useDispatch();
   
   const url = backendURL;
 
@@ -184,7 +188,9 @@ function UserGameList({username, isProfile}) {
   // }
 
   async function removeGame(index) {
-    let game = games[index];
+    const game = games[index];
+
+    let alertMessage = "";
 
     const options = {
       method: "POST",
@@ -197,17 +203,16 @@ function UserGameList({username, isProfile}) {
         platform: game.platform
       })
     }
-    const response = await fetch(url + "/delete_usergame", options);
-    console.log(response);
-    
-    //const data = await response.json();
-    //console.log(data);
+    const response = await fetch(url + "/delete_usergame", options)
+      .catch(err => {
+        alertMessage = err;
+      });
 
     if (response.ok) {
       const newGames = [...games];
       newGames.splice(index, 1);
       setGames(newGames);
-
+      dispatch(sendAlert(game.name + " deleted from library", "success"));
       setRefresh(true);
     }
     else {
@@ -248,13 +253,12 @@ function UserGameList({username, isProfile}) {
               </TableRow>
             ))
           : isProfile ?
-            <Button 
-          :
-            fullWidth 
-            variant="contained" 
-            color="primary"
-            component={Link} 
-            to={"/games"}>
+            <Button
+              fullWidth 
+              variant="contained" 
+              color="primary"
+              component={Link} 
+              to={"/games"}>
               Add Games to your Library
             </Button>
             : null

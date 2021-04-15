@@ -233,6 +233,7 @@ function UserList(props) {
       .then(response => response.json())
       .catch(err => {
         console.log(err);
+        setUsers([]);
       });
     
     return userList;
