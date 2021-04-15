@@ -25,6 +25,8 @@ import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package
 import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
+import { useDispatch } from 'react-redux';
+import { sendAlert } from "../actions";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
@@ -157,6 +159,8 @@ function UserGameList({username, isProfile}) {
   const [selectedGame, setSelectedGame] = useState(null);
   const [refresh, setRefresh] = useState(true);
   const [page, setPage] = useState(0);
+
+  const dispatch = useDispatch();
   
   const url = backendURL;
 
@@ -189,7 +193,9 @@ function UserGameList({username, isProfile}) {
   // }
 
   async function removeGame(index) {
-    let game = games[index];
+    const game = games[index];
+
+    let alertMessage = "";
 
     const options = {
       method: "POST",
@@ -202,17 +208,16 @@ function UserGameList({username, isProfile}) {
         platform: game.platform
       })
     }
-    const response = await fetch(url + "/delete_usergame", options);
-    console.log(response);
-    
-    //const data = await response.json();
-    //console.log(data);
+    const response = await fetch(url + "/delete_usergame", options)
+      .catch(err => {
+        alertMessage = err;
+      });
 
     if (response.ok) {
       const newGames = [...games];
       newGames.splice(index, 1);
       setGames(newGames);
-
+      dispatch(sendAlert(game.name + " deleted from library", "success"));
       setRefresh(true);
     }
     else {
