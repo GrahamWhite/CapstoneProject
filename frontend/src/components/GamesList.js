@@ -28,7 +28,7 @@ import { backendURL, ReAuthenticate } from "../globals";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-function GameItem({game, index, url, onSelected, addToUserGames}) {
+function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -138,6 +138,15 @@ function GameItem({game, index, url, onSelected, addToUserGames}) {
           >
             Add to List
           </Button>
+          <Button
+            size="small"
+            color="secondary"
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={() => onRemove(index)}
+          >
+            Remove
+          </Button>
           {/* <Button
             size="small"
             color="primary"
@@ -171,6 +180,7 @@ function GamesList(props) {
   // const [allGamesButton, setAllGamesButton] = useState(false);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [refresh, setRefresh] = useState(true);
 
   const url = backendURL;
 
@@ -269,6 +279,27 @@ function GamesList(props) {
   //     });
   // }
 
+  async function removeGame(index) {
+    let game = games[index];
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        game: game.name,
+        platform: game.platform
+      })
+    }
+    const response = await fetch(url + "/delete_usergame", options);
+    console.log(response);
+    
+    //const data = await response.json();
+    //console.log(data);
+  }
+
   const onSelected = (index, selected) => {
     const newGames = [...games];
     for (let game of newGames) game.selected = false;
@@ -294,11 +325,11 @@ function GamesList(props) {
             .map((game, index) => (
               <TableRow key={index} className={classes.tableItem}>
                 <GameItem 
-                
                   game={game}
                   index={index}
                   url={url}
                   addToUserGames={addGame}
+                  onRemove={removeGame}
                   onSelected={onSelected}
                 />
               </TableRow>
