@@ -51,10 +51,21 @@ const SelectUserFriends = async (req, res) => {
         if(user){
             let friends = await Friend.find({userId: user._id});
 
-            if(friends[0]){
-                res.send(friends);//Needs to send back friend usernames not ids - get usernames for each id
+            let updatedFriendsList = [];
+
+            for(let x = 0; x < friends.length; x++){
+
+                let fr = await User.findOne({_id: friends[x].friendId});
+
+                updatedFriendsList.push(fr);
             }
-            res.send("error: no friends");
+
+            if(updatedFriendsList[0]){
+
+
+                res.send(updatedFriendsList);//Needs to send back friend usernames not ids - get usernames for each id
+            }
+            res.send("Error: no friends");
         }
         res.send("Error: user not found");
     }
@@ -74,7 +85,7 @@ const DeleteFriend = async (req, res) => {
                 let friendship = await Friend.findOne({userId: user._id, friendId: friend._id});
 
                 if(friendship){
-                    let deleteFriend = await Friend.deleteOne({userId: user._id, friendId: friend._id});//????? Does not delete
+                    let deleteFriend = await Friend.deleteOne({userId: user._id, friendId: friend._id});
 
                     console.log(deleteFriend);
 

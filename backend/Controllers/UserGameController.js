@@ -5,74 +5,90 @@ const UserGame = require('../Schemas/UserGame');
 const User= require('../Schemas/User');
 const Game = require('../Schemas/Game');
 
+//GET
+//Gets a list of userGames with a [username]
+const SelectUserGames = async (req, res) => {
+    if(req.query.username){
+        let user = await User.findOne({username: req.query.username});
 
-const SelectUserGames = (req, res) => {
-    let gameList = [];
-    User.findOne({username: req.query.username}).then(user => {
         if(user){
-            UserGame.find({userId: user._id}).then(async userGames => {
-                for(let userGame of userGames){
-                    let game = await Game.findById(userGame.gameId);
-
-                    gameList.push(game)
+            let userGame = await UserGame.find({userId: user._id});
+    
+            if(userGame){
+                let gameList = [];
+    
+                for(let x = 0; x < userGame.length; x++){
+                    let game = await Game.findOne({_id: userGame[x].gameId});
+        
+                    let record = {
+                        name: game.name,
+                        platform: game.platform,
+                        isFavorite: userGame[x].isFavorite
+                    }
+        
+                    gameList.push(record);
                 }
-
-                console.log(gameList.join(','));
                 res.send(gameList);
-            })
-        }else{
-            res.send("User not found");
+            }
+            res.send('Error: userGame not found');
         }
-    })
+        res.send('Error: user not found');
+    }
+    res.send('Error: user must be defined');
 }
 
+//POST
+//Deletes a userGame using [username, game, platform]
 const DeleteUserGame = async (req, res) => {
     if(req.body.username && req.body.game && req.body.platform){
-            
-            let user = await User.findOne({username: req.body.username});
-            let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
+        
+        let user = await User.findOne({username: req.body.username});
+        let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
 
+        if(game){
             let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
-            
-            if (user && game && userGame){
-                let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id});
 
-                if(deleteUserGame){
-                     res.send("Record removed");
+            if (user && userGame){
+                let deleteUserGame = await UserGame.deleteOne({userId: user._id, gameId: game._id});
+    
+                console.log(deleteUserGame);
+    
+                if (deleteUserGame){
+                    res.send('UserGame deleted');
                 }
-                res.send("Error: record not found");
+                res.send('Error: Could not delete userGame');
             }
-           
-        res.send('Error: game & user must be defined');
+            res.send('Error: User and userGame must be valid');
+        }
+        res.send('Error: Could not find game');  
     }
     res.send('Error: username, game and platform must be defined');
 }
 
+//POST
+//Create User game using [username, game, platform]
 const CreateUserGame = async (req, res) => {
     if(req.body.username && req.body.game && req.body.platform){
         let user = await User.findOne({username: req.body.username});
 
         if(user){
             let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
+            let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
 
-            if (game){
-                let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
-                
-                if(!userGame){
-                    let userGame = new UserGame({
-                        userId: user._id,
-                        gameId: game._id
-                    });
-    
-                    try{
-                        userGame.save();
-                    }catch (e){
-                        res.send("Error: could not save record");
-                    }
-    
-                    res.send("Record Saved");  
+            if(game && !userGame){
+                let createUserGame = new UserGame({
+                    userId: user._id,
+                    gameId: game._id,
+                    isFavorite: false
+                });
+
+                try{
+                    createUserGame.save();
+                    res.send(req.body);
+                }catch (e){
+                    res.send("Error: could not save record");
                 }
-                res.send("Error: record already exists");
+                res.send("Record Saved");
             }
             res.send("Error: game record not found");
         }
@@ -81,6 +97,8 @@ const CreateUserGame = async (req, res) => {
     res.send("Error: username, platform, and game must be defined");
 };
 
+//GET
+//Compare userGame lists and display same games using [username, matchedUsername]
 const UserGameMatch = (req, res) => {
     try{
     if(!req.query.username || !req.query.matchedUsername){
@@ -136,6 +154,34 @@ const UserGameMatch = (req, res) => {
     }
 }
 
+//POST
+//Change if a game can be favorited using [username, game, platform, isFavorite]
+const UpdateFavorite = async (req, res) => {
+    if(req.body.username && req.body.game && req.body.platform && req.body.isFavorite){
+        let user = await User.findOne({username: req.body.username});
+
+        if (user){
+           
+            let game = await Game.findOne({name: req.body.game, platform: req.body.platform});
+            let userGame = await UserGame.findOne({userId: user._id, gameId: game._id});
+
+            if (game && userGame){
+                let updateUserGame = await UserGame.findOne({userId: user._id}).updateOne({isFavorite: req.body.isFavorite});
+
+                if(updateUserGame){
+                    res.send("UserGame favorite has been toggled");
+                }
+                res.send("could not favorite game");
+            }
+            res.send("Error: game or userGame not found");
+        }
+        res.send("Error: user not found");
+    }
+    res.send("Error: username, platform, and game must be defined");
+};
+
+//Internal function
+//Check if a usergame exists
 const UserGameExists = (req, res) => {
     try {
         User.exists({username: req.body.username}).then(user => {
@@ -153,6 +199,7 @@ exports.SelectUserGames = SelectUserGames;
 exports.UserGameExists = UserGameExists;
 exports.CreateUserGame= CreateUserGame;
 exports.UserGameMatch = UserGameMatch;
-exports.DeleteUsergame = DeleteUserGame
+exports.DeleteUsergame = DeleteUserGame;
+exports.UpdateFavorite = UpdateFavorite;
 
 

@@ -28,14 +28,12 @@ const SelectUsers = async (req, res) => {
 };
 
 //POST
-//Update the user 
+//Update the user given the lookup [username] and modify [email, bio]
 const UpdateUser = async (req, res) => {
-    if(req.body.username && req.body.email && req.body.email){
+    if(req.body.username && req.body.email && req.body.bio){
         let user = await User.findOne({username: req.body.username});
 
         if(user){
-
-            let valid = false;
 
             if(req.body.email){
                 if(!validateEmail(req.body.email)){
@@ -43,9 +41,9 @@ const UpdateUser = async (req, res) => {
                 }
             }
 
-            let updatedUser = await User.updateOne({username: req.body.username, email: req.body.email, bio: req.body.bio});
+            let updateUser = await User.findOne({username: req.body.username}).updateOne({email: req.body.email, bio: req.body.bio});
 
-            if(updatedUser){
+            if(updateUser){
                 res.send("user updated");
             }
 
@@ -61,17 +59,16 @@ const SearchUsers = async (req, res) => {
 
     if(req.query.username){
 
-            let RegExUsername = RegExp(req.query.username);
+        let RegExUsername = RegExp(req.query.username);
 
-            let users = await User.find({username: {$regex: RegExUsername, $options: 'i'}});
+        let users = await User.find({username: {$regex: RegExUsername, $options: 'i'}});
 
-            if(users[0]){
-                res.send(users);
-            }else {
-                res.send("No users found with username " + req.query.username);
-            }
+        if(users[0]){
+            res.send(users);
+        }else {
+            res.send("No users found with username " + req.query.username);
+        }
     }
-
     res.send("Error: username must be defined");
 
 }
@@ -129,6 +126,7 @@ const GetUserId = (req, res) => {
         res.send(err);
     }
 };
+
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -147,8 +145,6 @@ const CreateUser = async (req, res) => {
                         try{
                             const encryptedPwd = ePwd(req.body.password, process.env.SECRET);
 
-
-
                             let user = new User({
                                 username: req.body.username,
                                 password: encryptedPwd,
@@ -162,25 +158,14 @@ const CreateUser = async (req, res) => {
                             res.send(e.toString());
                         }
                 }
-
                     res.send("Error: valid email required");
-
-
                 }
-
                 res.send("Error: user already exists with username: " + req.body.username);
-
-
-
             }
-
             res.send("Error: password must be defined");
         }
-
         res.send("Error: username must be defined");
         let user = User.findOne({username: req.body.username})
-
-
     } catch (err) {
         res.send(err);
     }
@@ -193,8 +178,7 @@ const UserExists = (req, res) => {
         });
     } catch (err) {
         res.send(err);
-    }
-    ;
+    };
 };
 
 

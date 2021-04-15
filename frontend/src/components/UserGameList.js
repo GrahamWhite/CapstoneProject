@@ -17,9 +17,9 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
-  Link
+  Typography
 } from "@material-ui/core";
+import { Link, useLocation } from 'react-router-dom'
 import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
 import StarIcon from "@material-ui/icons/Star";
@@ -249,6 +249,7 @@ function UserGameList({username, isProfile}) {
             ))
           : isProfile ?
             <Button 
+          :
             fullWidth 
             variant="contained" 
             color="primary"
