@@ -25,6 +25,8 @@ import AddIcon from "@material-ui/icons/Add";
 import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL, ReAuthenticate } from "../globals";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 function GameItem({game, index, url, onSelected, addToUserGames}) {
   const useStyles = makeStyles((theme) => ({
@@ -111,14 +113,15 @@ function GameItem({game, index, url, onSelected, addToUserGames}) {
                 <Grid item xs={12} sm={10}>
                 <Typography component="h5" variant="h5">
                 {game.name}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {game.platform}
-              </Typography>
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {game.platform}
+                </Typography>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                {selected ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
                 </Grid>
               </Grid>
-           
-              
             </CardContent>
           </div>
         </CardContent>

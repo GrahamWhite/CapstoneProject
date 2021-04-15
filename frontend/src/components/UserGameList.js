@@ -25,6 +25,8 @@ import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package
 import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 function GameItem({game, index, onRemove, onFavourite}) {
   const useStyles = makeStyles((theme) => ({
@@ -97,12 +99,15 @@ function GameItem({game, index, onRemove, onFavourite}) {
                   <Avatar className={classes.gameIcon}>{game.name.substr(0,2)}</Avatar>
                 </Grid>
                 <Grid item xs={12} sm={10}>
-                <Typography component="h5" variant="h5">
-                {game.name}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {game.platform}
-              </Typography>
+                  <Typography component="h5" variant="h5">
+                    {game.name}
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    {game.platform}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                {selected ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
                 </Grid>
               </Grid>
             </CardContent>

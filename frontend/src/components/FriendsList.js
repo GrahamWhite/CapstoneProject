@@ -27,6 +27,8 @@ import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 function UserItem({ user, index, history, location, setRefresh, isProfile, isFriend, removeFriend }) {
   const useStyles = makeStyles((theme) => ({
@@ -145,6 +147,9 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
                   <Typography component="h5" variant="h5">
                   {user.username}
                   </Typography>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                {selected ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
                 </Grid>
               </Grid>
             </CardContent>
