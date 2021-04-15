@@ -4,7 +4,7 @@ import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/co
 import { Link, useHistory } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
 import { useDispatch, useSelector } from 'react-redux';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import HelpIcon from '@material-ui/icons/Help';
 import { ReAuthenticate } from '../globals';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +44,7 @@ function AuthNavbar(props) {
             Tink
           </Typography>
           <Button onClick={logout} color="inherit">Logout</Button>
-          {/* <NotificationsIcon/> */}
+          <Button component={Link} to={"/help"} color="inherit"><HelpIcon/></Button>
         </Toolbar>
       </AppBar>
     </div>

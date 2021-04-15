@@ -80,7 +80,7 @@ function LoginForm() {
       dispatch({
         type: "SIGN_IN"
       });
-      history.push("/profile");
+      history.push("/main");
     }
     else {
       console.log(response.statusText);

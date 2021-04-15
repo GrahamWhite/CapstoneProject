@@ -50,7 +50,7 @@ function BottomNavbar(){
       else if (pathname.includes('main'))
         setCurrentTab('main');
       else
-        setCurrentTab('');
+        setCurrentTab('main');
     }, [location])
 
     return(
