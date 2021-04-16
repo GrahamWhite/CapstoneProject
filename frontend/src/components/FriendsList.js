@@ -74,7 +74,6 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
       pathname: "/user",
       search: `?username=${user.username}`
     });
-    history.go(0);
   }
 
   function goToMatch() {
@@ -106,7 +105,6 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
       dispatch(sendAlert(user.username + ' is now your friend!', "success"));
     }
     else {
-      console.log(response.statusText);
       dispatch(sendAlert(response.statusText, ""));
     }
   }
@@ -123,12 +121,15 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
       })
     }
 
-    fetch(backendURL + "/delete_friend", options)
-      .then(response => response.json())
-      .then(() => {
-        setRefresh(true);
-        dispatch(sendAlert(user.username + ' successfully removed from your friends list', "success"))
-      });
+    const response = await fetch(backendURL + "/delete_friend", options);
+
+    if (response.ok) {
+      dispatch(sendAlert(user.username + ' successfully removed from your friends list', "success"));
+      setRefresh(true);
+    }
+    else {
+      dispatch(sendAlert(response.statusText, ''));
+    }
   }
 
   return (
@@ -236,11 +237,17 @@ function FriendsList({username, isProfile}) {
 
       fetch(url + "/select_userfriends?username=" + currentUser)
         .then(response => response.json())
-        .then(data => { setUsers(data); console.log(data); });
+        .then(data => { 
+          setUsers(data); 
+          // console.log(data); 
+        });
 
       fetch(url + "/select_userfriends?username=" + localStorage.getItem('username'))
         .then(response => response.json())
-        .then(data => { friendList = data; console.log(data); });
+        .then(data => { 
+          friendList = data; 
+          // console.log(data); 
+        });
       
       for (let user in userList) {
         for (let friend in friendList) {
@@ -248,25 +255,21 @@ function FriendsList({username, isProfile}) {
         }
       }
       setUsers(userList);
-      console.log('loaded users', userList);
+      // console.log('loaded users', userList);
     }
     else {
       let userList = [];
 
       fetch(url + "/select_userfriends?username=" + localStorage.getItem('username'))
         .then(response => response.json())
-        .then(data => { setUsers(data); console.log(data); });
+        .then(data => { setUsers(data); });
 
       for (let user in userList) {
         user.isFriend = true;
       }
 
       setUsers(userList);
-      console.log('loaded users', userList);
     }
-
-    
-    console.log('new users', users);
     
     return () => {
       setRefresh(!refresh);
@@ -277,26 +280,26 @@ function FriendsList({username, isProfile}) {
     setPage(newPage);
   };
 
-  async function removeFriend(friendUsername) {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body:JSON.stringify({
-        username: localStorage.getItem('username'),
-        friendUsername: friendUsername
-      })
-    }
-    const response = await fetch(url + "/delete_friend", options);
+  // async function removeFriend(friendUsername) {
+  //   const options = {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body:JSON.stringify({
+  //       username: localStorage.getItem('username'),
+  //       friendUsername: friendUsername
+  //     })
+  //   }
+  //   const response = await fetch(url + "/delete_friend", options);
 
-    if (response.ok) {
-      setRefresh(true);
-    }
-    else {
-      console.log(response.statusText);
-    }
-  }
+  //   if (response.ok) {
+  //     setRefresh(true);
+  //   }
+  //   else {
+  //     console.log(response.statusText);
+  //   }
+  // }
 
   return (
     <TableContainer component={Paper}>
@@ -321,8 +324,7 @@ function FriendsList({username, isProfile}) {
                   location={location}
                   setRefresh={setRefresh}
                   isProfile={isProfile}
-                  isFriend={user.isFriend}
-                  removeFriend={removeFriend}/>
+                  isFriend={user.isFriend}/>
               </TableRow>
             ))
             : isProfile ?
