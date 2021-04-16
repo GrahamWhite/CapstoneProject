@@ -96,16 +96,13 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
     }
 
     const response = await fetch(backendURL + "/create_friend", options)
-      .then(response => response.json())
-      .then(() => {
-        setRefresh(true);
-      });
-    
+
     if (response.ok) {
-      dispatch(sendAlert(user.username + ' is now your friend!', "success"));
+      dispatch(sendAlert(user.username + ' added to your friends list!', 'success'));
+      setRefresh(true);
     }
     else {
-      dispatch(sendAlert(response.statusText, ""));
+      dispatch(sendAlert(response.statusText, ''));
     }
   }
 

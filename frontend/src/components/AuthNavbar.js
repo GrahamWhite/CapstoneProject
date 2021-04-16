@@ -6,6 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useDispatch, useSelector } from 'react-redux';
 import HelpIcon from '@material-ui/icons/Help';
 import { ReAuthenticate } from '../globals';
+import { sendAlert, signOut } from '../actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,9 +28,8 @@ function AuthNavbar(props) {
 
   const logout = () => {
     localStorage.setItem('username', '');
-    dispatch({
-      type: 'SIGN_OUT'
-    });
+    dispatch(signOut());
+    dispatch(sendAlert('Successfully logged out!', 'success'));
     history.push('/login');
   }
 

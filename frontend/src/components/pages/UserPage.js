@@ -5,6 +5,8 @@ import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
 import FriendsList from '../FriendsList';
 import { backendURL } from '../../globals';
+import { useDispatch } from 'react-redux';
+import { sendAlert } from '../../actions';
 
 
 function TabPanel(props) {
@@ -60,6 +62,7 @@ function UserPage() {
 
   const history = useHistory();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let queryUsername = new URLSearchParams(window.location.search).get('username');
@@ -94,13 +97,12 @@ function UserPage() {
     }
 
     const response = await fetch(backendURL + "/create_friend", options)
-      .then(response => response.json())
-      .then(() => {
-        // setRefresh(true);
-      });
-    
-    if (!response.ok) {
-      // console.log(response.statusText);
+
+    if (response.ok) {
+      dispatch(sendAlert(user.username + ' added to your friends list!', 'success'));
+    }
+    else {
+      dispatch(sendAlert(response.statusText, ''));
     }
   }
 
