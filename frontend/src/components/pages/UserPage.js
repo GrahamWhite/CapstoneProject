@@ -74,7 +74,7 @@ function UserPage() {
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(err => console.log(err));
-    console.log(user);
+    // console.log(user);
 
     return () => {
       setRefresh(!refresh);
@@ -100,7 +100,7 @@ function UserPage() {
       });
     
     if (!response.ok) {
-      console.log(response.statusText);
+      // console.log(response.statusText);
     }
   }
 

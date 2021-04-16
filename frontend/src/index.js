@@ -9,7 +9,7 @@ import allReducers from './reducers';
 import { loadState, saveState } from './globals'
 
 const persistedStore = loadState();
-console.log("persistedStore", persistedStore);
+// console.log("persistedStore", persistedStore);
 
 const store = createStore(
   allReducers, 
@@ -17,7 +17,7 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-console.log("store", store.getState());
+// console.log("store", store.getState());
 
 ReactDOM.render(
   <Provider store={store}>

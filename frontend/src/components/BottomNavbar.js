@@ -34,7 +34,7 @@ function BottomNavbar(){
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const location = useLocation();
-    console.log(location);
+    // console.log(location);
 
     const [currentTab, setCurrentTab] = useState(0);
     const [value, setValue] = React.useState(0);
