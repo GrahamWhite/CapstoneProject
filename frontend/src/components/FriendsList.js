@@ -127,7 +127,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
       .then(response => response.json())
       .then(() => {
         setRefresh(true);
-        history.go(0);
+        dispatch(sendAlert(user.username + ' successfully removed from your friends list', "success"))
       });
   }
 

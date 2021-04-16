@@ -119,7 +119,7 @@ function GameItem({game, index, addGame, onRemove, onFavourite, isProfile}) {
       </CardActionArea>
       {selected ? (
         <CardActions>
-          { isProfile ? 
+          { !isProfile ? 
             <Button
               size="small"
               color="secondary"
