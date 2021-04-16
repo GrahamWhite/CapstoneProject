@@ -30,7 +30,7 @@ import { sendAlert } from "../actions";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-function GameItem({game, index, onRemove, onFavourite}) {
+function GameItem({game, index, onRemove, onFavourite, isProfile}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -138,7 +138,7 @@ function GameItem({game, index, onRemove, onFavourite}) {
           </Button>
         </CardActions>
       ) : (
-        ""
+        null
       )}
     </Card>
   );
