@@ -99,7 +99,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
 
     if (response.ok) {
       dispatch(sendAlert(user.username + ' added to your friends list!', 'success'));
-      setRefresh(true);
+      setRefresh();
     }
     else {
       dispatch(sendAlert(response.statusText, ''));
@@ -122,7 +122,7 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
 
     if (response.ok) {
       dispatch(sendAlert(user.username + ' successfully removed from your friends list', "success"));
-      setRefresh(true);
+      setRefresh();
     }
     else {
       dispatch(sendAlert(response.statusText, ''));
@@ -273,6 +273,10 @@ function FriendsList({username, isProfile}) {
     }
   }, [username, refresh])
 
+  const toggleRefresh = () => {
+    setRefresh(!refresh);
+  }
+
   const onChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -319,7 +323,7 @@ function FriendsList({username, isProfile}) {
                   index={index} 
                   history={history}
                   location={location}
-                  setRefresh={setRefresh}
+                  setRefresh={toggleRefresh}
                   isProfile={isProfile}
                   isFriend={user.isFriend}/>
               </TableRow>
