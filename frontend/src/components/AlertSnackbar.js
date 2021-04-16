@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
 import { connect, useDispatch } from 'react-redux';
+import { sendAlert } from '../actions';
 
 const useStyles = makeStyles((theme) => ({
   close: {
@@ -23,8 +24,6 @@ function AlertSnackbar(props) {
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState(undefined);
   const [alertMessage, setAlertMessage] = useState(undefined);
-
-  const dispatch = useDispatch();
 
   /*
   messageInfo = {
@@ -59,19 +58,13 @@ function AlertSnackbar(props) {
     console.log('snackPack', snackPack);
   }
 
-  const handleClick = (message, severity) => {
-    addAlert(message, severity);
-  };
+  // const handleClick = (message, severity) => {
+  //   addAlert(message, severity);
+  // };
 
-  const reduxDispatch = () => {
-    dispatch({
-      type: 'SEND_ALERT',
-      payload: {
-        message: 'Message!!!',
-        severity: "success"
-      }
-    });
-  }
+  // const reduxDispatch = () => {
+  //   dispatch(sendAlert("Message!!!", "success"));
+  // }
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -87,7 +80,7 @@ function AlertSnackbar(props) {
   const classes = useStyles();
   return (
     <div>
-      <Button onClick={reduxDispatch}>Redux Test</Button>
+      {/* <Button onClick={reduxDispatch}>Redux Test</Button> */}
       <Snackbar
         className={classes.snackbar}
         key={messageInfo ? messageInfo.key : undefined}

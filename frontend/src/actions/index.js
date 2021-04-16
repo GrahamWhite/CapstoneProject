@@ -4,6 +4,12 @@ export const signIn = () => {
   }
 }
 
+export const signOut = () => {
+  return {
+    type: 'SIGN_OUT'
+  }
+}
+
 export const sendAlert = (message, severity) => {
   return {
     type: 'SEND_ALERT',
