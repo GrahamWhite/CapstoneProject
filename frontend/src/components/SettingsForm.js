@@ -48,7 +48,7 @@ function SettingsForm(props) {
   //Events
   async function sendToServer(values) {
     setMessage('');
-    console.log(values);
+    // console.log(values);
 
     if (!storedUsername){
       ReAuthenticate(props);
@@ -63,7 +63,7 @@ function SettingsForm(props) {
       body:JSON.stringify(values)
     };
 
-    console.log(values);
+    // console.log(values);
 
     let responseData = "";
     try {
@@ -89,9 +89,12 @@ function SettingsForm(props) {
     let url = `${backendURL}/select_user?username=${storedUsername}`;
     fetch(url)
       .then(response => response.json())
-      .then(data => { setUser(data); console.log(data); })
+      .then(data => { 
+        setUser(data); 
+        // console.log(data); 
+      })
       .catch(err => console.log(err));
-    console.log(user);
+    // console.log(user);
   }, [])
 
   const validationSchema = yup.object({

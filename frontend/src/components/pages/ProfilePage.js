@@ -77,7 +77,7 @@ function ProfilePage() {
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(err => console.log(err));
-    console.log(user);
+    // console.log(user);
   }, [])
 
   const handleChange = (event, newValue) => {

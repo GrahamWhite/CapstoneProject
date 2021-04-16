@@ -13,7 +13,7 @@ export const loadState = () => {
     const serializedState = localStorage.getItem("state");
     try {
       if (serializedState === "{\"loggedIn\":true}"){
-        console.log("success", "you did it!");
+        // console.log("success", "you did it!");
         return JSON.parse(serializedState);
       }
       else {

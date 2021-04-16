@@ -17,7 +17,6 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux'
 import { backendURL } from "../globals";
-import loggedInReducer from "../reducers/loginReducer";
 import { sendAlert, signIn } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -72,14 +71,13 @@ function LoginForm() {
     };
 
     const response = await fetch(url + "/login", options);
-    console.log(response);
+    // console.log(response);
 
     if (response.ok) {
       const responseData = await response.json();
       localStorage.setItem('username', responseData.user.username);
-      dispatch({
-        type: "SIGN_IN"
-      });
+      dispatch(signIn());
+      dispatch(sendAlert('Successfully logged in as ' + localStorage.getItem('username'), 'success'))
       history.push("/main");
     }
     else {
@@ -91,6 +89,7 @@ function LoginForm() {
     username: yup
       .string('Username must be a string')
       .min(5, 'Username must be at least 5 characters long')
+      .max(30, "Username cannot be more then 30 characters")
       .required('Enter your username'),
     password: yup
       .string('Enter a new password')
@@ -100,13 +99,13 @@ function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'tyler_mills',
-      password: 'password',
+      username: '',
+      password: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      console.log(JSON.stringify(values));
+      // console.log(values);
+      // console.log(JSON.stringify(values));
       sendToServer(values);
     }
   })

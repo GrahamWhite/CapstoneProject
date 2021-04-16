@@ -55,7 +55,7 @@ function AlertSnackbar(props) {
 
   function addAlert(message, severity) {
     setSnackPack((prev) => [...prev, { message, severity, key: new Date().getTime() }]);
-    console.log('snackPack', snackPack);
+    // console.log('snackPack', snackPack);
   }
 
   // const handleClick = (message, severity) => {

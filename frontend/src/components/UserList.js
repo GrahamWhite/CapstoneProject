@@ -25,6 +25,8 @@ import StarBorderIcon from "@material-ui/icons/StarBorder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
+import { sendAlert } from "../actions";
+import { useDispatch } from "react-redux";
 
 function UserItem({ user, index, history, isFriend, setRefresh }) {
   const useStyles = makeStyles((theme) => ({
@@ -64,6 +66,8 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
 
   const [selected, setSelected] = useState(false);
 
+  const dispatch = useDispatch();
+
   async function addFriend(){
     const options = {
       method: "POST",
@@ -76,11 +80,15 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
       })
     }
 
-    fetch(backendURL + "/create_friend", options)
-      .then(response => response.json())
-      .then(() => {
-        setRefresh(true);
-      });
+    const response = await fetch(backendURL + "/create_friend", options)
+
+    if (response.ok) {
+      dispatch(sendAlert(user.username + ' added to your friends list!', 'success'));
+      setRefresh(true);
+    }
+    else {
+      dispatch(sendAlert(response.statusText, ''));
+    }
   }
 
   function goToUserProfile(username) {

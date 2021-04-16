@@ -192,14 +192,20 @@ function GamesList(props) {
     if (!search) {
       fetch(url + "/select_games")
         .then(response => response.json())
-        .then(data => { setGames(data); console.log(data);});
-      console.log(games);
+        .then(data => { 
+          setGames(data); 
+          // console.log(data);
+        });
+      // console.log(games);
     }
     else {
       fetch(url + "/search_games?name=" + search)
         .then(response => response.json())
-        .then(data => { setGames(data); console.log(data);});
-      console.log(games);
+        .then(data => { 
+          setGames(data); 
+          // console.log(data);
+        });
+      // console.log(games);
     }
     
   }, [search]);
@@ -240,14 +246,14 @@ function GamesList(props) {
         platform: game.platform
       })
     }
-    console.log(options);
+    // console.log(options);
 
     // backendURL + "/create_usergame"
     // const thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/create_usergame"
     const response = await fetch(backendURL + "/create_usergame", options)
       //.then(response => response.json());
 
-    console.log('response', response);
+    // console.log('response', response);
       // .then(() => {
       //   setRefresh(true);
       // });
@@ -298,7 +304,7 @@ function GamesList(props) {
       })
     }
     const response = await fetch(url + "/delete_usergame", options);
-    console.log(response);
+    // console.log(response);
     
     //const data = await response.json();
     //console.log(data);

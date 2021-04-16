@@ -15,6 +15,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { backendURL } from "../globals";
+import { useDispatch } from "react-redux";
+import { sendAlert } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +48,9 @@ function RegisterForm() {
   const url = backendURL;
 
   // Helps with programatically changing what page you're on
-  let history = useHistory();
+  const history = useHistory();
+
+  const dispatch = useDispatch();
 
   // Custom CSS
   const classes = useStyles();
@@ -72,7 +76,11 @@ function RegisterForm() {
 
     if (isValid) {
       localStorage.setItem('username', responseData.username);
+      dispatch(sendAlert(values.username + ' registered!', 'success'));
       history.push("/login");
+    }
+    else {
+      dispatch(sendAlert('Failed to register user', 'error'));
     }
   }
 
@@ -80,6 +88,7 @@ function RegisterForm() {
     username: yup
       .string('Username must be a string')
       .min(5, 'Username must be at least 5 characters long')
+      .max(30, "Username cannot be more then 30 characters")
       .required('Enter your username'),
     email: yup
       .string('Enter your email')
@@ -93,14 +102,14 @@ function RegisterForm() {
 
   const formik = useFormik({
     initialValues: {
-      username: 'jebroni',
-      email: 'test@test.co',
-      password: 'password',
+      username: '',
+      email: '',
+      password: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      console.log(JSON.stringify(values));
+      // console.log(values);
+      // console.log(JSON.stringify(values));
       sendToServer(values);
     }
   })
