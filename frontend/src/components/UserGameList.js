@@ -142,7 +142,7 @@ function GameItem({game, index, addGame, onRemove, onFavourite, isProfile}) {
           }
         </CardActions>
       ) : (
-        null
+        ""
       )}
     </Card>
   );
@@ -209,7 +209,7 @@ function UserGameList({username, isProfile}) {
         platform: game.platform
       })
     }
-    console.log(options);
+    // console.log(options);
 
     const response = await fetch(backendURL + "/create_usergame", options)
 
@@ -250,7 +250,7 @@ function UserGameList({username, isProfile}) {
       setRefresh(true);
     }
     else {
-      console.log(response.statusText);
+      // console.log(response.statusText);
       dispatch(sendAlert(response.statusText, ""));
     }
   }
