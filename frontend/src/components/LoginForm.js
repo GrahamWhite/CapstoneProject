@@ -18,7 +18,7 @@ import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux'
 import { backendURL } from "../globals";
 import loggedInReducer from "../reducers/loginReducer";
-import { signIn } from "../actions";
+import { sendAlert, signIn } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,8 +83,7 @@ function LoginForm() {
       history.push("/main");
     }
     else {
-      console.log(response.statusText);
-      setError(response.statusText);
+      dispatch(sendAlert(response.error, "error"));
     }
   }
 

@@ -21,7 +21,7 @@ export const loadState = () => {
       }
     }
     catch (e) {
-      console.log("error", "you fucked up");
+      console.log("global.js loadState", "something wrong with persisting state");
     }
     
   } catch(err) {

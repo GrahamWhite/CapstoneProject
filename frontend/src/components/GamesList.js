@@ -27,6 +27,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL, ReAuthenticate } from "../globals";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { sendAlert } from "../actions";
+import { useDispatch } from "react-redux";
 
 function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
   const useStyles = makeStyles((theme) => ({
@@ -182,6 +184,8 @@ function GamesList(props) {
   const [search, setSearch] = useState("");
   const [refresh, setRefresh] = useState(true);
 
+  const dispatch = useDispatch();
+
   const url = backendURL;
 
   useEffect(() => {
@@ -252,12 +256,12 @@ function GamesList(props) {
 
     // console.log(response);
     // console.log(data);
-    // if (response.ok) {
-      
-    // }
-    // else {
-    //   console.log(response.statusText);
-    // }
+    if (response.ok) {
+      dispatch(sendAlert(game.name + ' added to your library!', "success"));
+    }
+    else {
+      dispatch(sendAlert(response.statusText, "success"));
+    }
   }
 
   // async function AddFriend(){

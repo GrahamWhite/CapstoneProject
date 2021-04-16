@@ -23,6 +23,7 @@ import { Link, useLocation } from 'react-router-dom'
 import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
 import StarIcon from "@material-ui/icons/Star";
+import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
 import { useDispatch } from 'react-redux';
@@ -30,7 +31,7 @@ import { sendAlert } from "../actions";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-function GameItem({game, index, onRemove, onFavourite}) {
+function GameItem({game, index, addGame, onRemove, onFavourite, isProfile}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -118,24 +119,27 @@ function GameItem({game, index, onRemove, onFavourite}) {
       </CardActionArea>
       {selected ? (
         <CardActions>
-          {/* <Button
-            size="small"
-            color="primary"
-            variant="contained"
-            startIcon={<StarIcon />}
-            onClick={() => onFavourite(index)}
-          >
-            Favourite
-          </Button> */}
-          <Button
-            size="small"
-            color="secondary"
-            variant="contained"
-            startIcon={<DeleteIcon />}
-            onClick={() => onRemove(index)}
-          >
-            Remove
-          </Button>
+          { !isProfile ? 
+            <Button
+              size="small"
+              color="secondary"
+              variant="contained"
+              startIcon={<AddIcon/>}
+              onClick={() => addGame(index)}
+            >
+              Add Game
+            </Button> 
+            : 
+            <Button
+              size="small"
+              color="secondary"
+              variant="contained"
+              startIcon={<DeleteIcon />}
+              onClick={() => onRemove(index)}
+            >
+              Remove
+            </Button>
+          }
         </CardActions>
       ) : (
         ""
@@ -191,6 +195,31 @@ function UserGameList({username, isProfile}) {
   //     console.log(response.statusText);
   //   }
   // }
+  async function addGame(index) {
+    let game = games[index];
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        username: localStorage.getItem('username'),
+        game: game.name,
+        platform: game.platform
+      })
+    }
+    console.log(options);
+
+    const response = await fetch(backendURL + "/create_usergame", options)
+
+    if (response.ok) {
+      dispatch(sendAlert(game.name + ' added to your library!', "success"));
+    }
+    else {
+      dispatch(sendAlert(response.statusText, "success"));
+    }
+  }
 
   async function removeGame(index) {
     const game = games[index];
@@ -222,6 +251,7 @@ function UserGameList({username, isProfile}) {
     }
     else {
       console.log(response.statusText);
+      dispatch(sendAlert(response.statusText, ""));
     }
   }
 
@@ -251,13 +281,14 @@ function UserGameList({username, isProfile}) {
                 <GameItem 
                   game={game}
                   index={index}
-                  //onFavourite={favouriteGame}
+                  addGame={addGame}
                   onRemove={removeGame}
                   onSelected={onSelected}
+                  isProfile={isProfile}
                 />
               </TableRow>
             ))
-          : isProfile ?
+          : (isProfile ?
             <Button 
             fullWidth 
             variant="contained" 
@@ -266,7 +297,7 @@ function UserGameList({username, isProfile}) {
             to={"/games"}>
               Add Games to your Library
             </Button>
-            : null
+            : null)
           }
         </TableBody>
         <TableFooter>

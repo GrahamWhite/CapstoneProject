@@ -5,6 +5,8 @@ import { backendURL, ReAuthenticate } from '../globals';
 import { useHistory } from 'react-router';
 import { Container, CssBaseline, Grid, makeStyles, Paper, Button, TextField, Avatar, Typography, TextareaAutosize } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { sendAlert } from '../actions';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +41,8 @@ function SettingsForm(props) {
   const [message, setMessage] = useState('');
   const [user, setUser] = useState({});
 
+  const dispatch = useDispatch();
+
   const storedUsername = localStorage.getItem('username');
   
   //Events
@@ -68,12 +72,12 @@ function SettingsForm(props) {
       isValid = true;
     } catch (err) {
       console.log(err);
-      setMessage('Error! Something went wrong');
+      dispatch(sendAlert(err, "error"));
     }
 
     if (isValid) {
       setMessage('Changes successfully saved!');
-      //dispatch(signIn);
+      dispatch(sendAlert('Changes successfully saved!', "success"));
     }
   }
 
