@@ -181,7 +181,7 @@ function LoginForm() {
             component={Link}
             to={"/register"}
           >
-            Dont have an account? Sign Up
+            Don't have an account? Sign Up
           </Button>
         </form>
       </div>
