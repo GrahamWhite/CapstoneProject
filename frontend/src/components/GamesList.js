@@ -308,6 +308,12 @@ function GamesList(props) {
     
     //const data = await response.json();
     //console.log(data);
+    if (response.ok) {
+      dispatch(sendAlert(game.name + ' removed from your library!', "success"));
+    }
+    else {
+      dispatch(sendAlert(response.statusText, "success"));
+    }
   }
 
   const onSelected = (index, selected) => {
