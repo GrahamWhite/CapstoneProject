@@ -19,3 +19,13 @@ export const sendAlert = (message, severity) => {
     }
   }
 }
+
+export const clearAlert = (message, severity) => {
+  return {
+    type: 'CLEAR_ALERT',
+    payload: {
+      message: "",
+      severity: ""
+    }
+  }
+}

@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
 import { connect, useDispatch } from 'react-redux';
-import { sendAlert } from '../actions';
+import { clearAlert } from '../actions';
 
 const useStyles = makeStyles((theme) => ({
   close: {
@@ -18,19 +18,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AlertSnackbar(props) {
-  
 
   const [snackPack, setSnackPack] = useState([]);
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState(undefined);
   const [alertMessage, setAlertMessage] = useState(undefined);
 
-  /*
-  messageInfo = {
-    message:
-    severity: 
-  }
-  */
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!props.alertMessage) return;
@@ -43,34 +37,24 @@ function AlertSnackbar(props) {
 
   useEffect(() => {
     if (snackPack.length && !messageInfo) {
-      // Set a new snack when we don't have an active one
       setMessageInfo({ ...snackPack[0] });
       setSnackPack((prev) => prev.slice(1));
       setOpen(true);
     } else if (snackPack.length && messageInfo && open) {
-      // Close an active snack when a new one is added
       setOpen(false);
     }
   }, [snackPack, messageInfo, open]);
 
   function addAlert(message, severity) {
     setSnackPack((prev) => [...prev, { message, severity, key: new Date().getTime() }]);
-    // console.log('snackPack', snackPack);
   }
-
-  // const handleClick = (message, severity) => {
-  //   addAlert(message, severity);
-  // };
-
-  // const reduxDispatch = () => {
-  //   dispatch(sendAlert("Message!!!", "success"));
-  // }
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
     setOpen(false);
+    dispatch(clearAlert());
   };
 
   const handleExited = () => {

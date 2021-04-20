@@ -24,7 +24,7 @@ import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package
 import AddIcon from "@material-ui/icons/Add";
 import StarIcon from "@material-ui/icons/Star";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { backendURL, ReAuthenticate } from "../globals";
+import { backendURL } from "../globals";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { sendAlert } from "../actions";
