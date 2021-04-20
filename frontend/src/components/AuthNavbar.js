@@ -5,7 +5,6 @@ import { Link, useHistory } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
 import { useDispatch, useSelector } from 'react-redux';
 import HelpIcon from '@material-ui/icons/Help';
-import { ReAuthenticate } from '../globals';
 import { sendAlert, signOut } from '../actions';
 
 const useStyles = makeStyles((theme) => ({
