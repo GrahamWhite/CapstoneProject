@@ -1,3 +1,11 @@
+/*
+ *  AlertSnackbar.js
+ *  Bottom nav bar that is render when logged in
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, useLocation } from 'react-router-dom';

@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+/*
+ *  RegisterForm.js
+ *  The register form to create a new account in. 
+ *  Upon successful registration, the user is redirected to the login page.
+ *  This uses formik for form handling and yup for validation.
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
+import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -108,8 +115,6 @@ function RegisterForm() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      // console.log(values);
-      // console.log(JSON.stringify(values));
       sendToServer(values);
     }
   })
@@ -144,27 +149,6 @@ function RegisterForm() {
                 helperText={formik.touched.username && formik.errors.username}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid> */}
             <Grid item xs={12}>
               <TextField
                 variant="outlined"

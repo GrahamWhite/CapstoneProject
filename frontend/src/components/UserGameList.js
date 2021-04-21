@@ -1,3 +1,12 @@
+/*
+ *  UserGameList.js
+ *  Renders the list of the users games. 
+ *  Takes in a username prop to load the data.
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import {
   Avatar,
   Button,
@@ -11,18 +20,14 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableFooter,
-  TableHead,
   TablePagination,
   TableRow,
   Typography
 } from "@material-ui/core";
-import { Link, useLocation } from 'react-router-dom'
-import React, { useEffect, useState, useCallback } from "react";
-import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
-import StarIcon from "@material-ui/icons/Star";
+import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
@@ -31,7 +36,7 @@ import { sendAlert } from "../actions";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-function GameItem({game, index, addGame, onRemove, onFavourite, isProfile}) {
+function GameItem({game, index, addGame, onRemove, isProfile}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -56,8 +61,6 @@ function GameItem({game, index, addGame, onRemove, onFavourite, isProfile}) {
     gameIcon: {
       width: theme.spacing(7),
       height: theme.spacing(7),
-      // backgroundColor: theme.palette.primary.main,
-      // color: theme.palette.primary.contrastText,
 
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.primary.contrastText,
@@ -68,13 +71,9 @@ function GameItem({game, index, addGame, onRemove, onFavourite, isProfile}) {
   const imgPlaceholder =
     "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
 
-  // const updateHandler = dummyData => onUpdate({ ...props.game, ...props.dummyData});
-
   const [selected, setSelected] = useState(false);
-  //const [favourite, setFavourite] = useState(false);
 
   useEffect(() => {
-    //setFavourite(game.favourite);
     setSelected(game.selected);
   }, [game.favourite])
 
@@ -87,13 +86,9 @@ function GameItem({game, index, addGame, onRemove, onFavourite, isProfile}) {
         }}
       >
         <CardContent>
-          {/* {favourite 
-          ? <StarIcon className={classes.favouriteIcon}/> 
-          : ''} */}
-          
           <CardMedia
             className={classes.cover}
-            image={imgPlaceholder /*process.env.PUBLIC_URL + game.img*/}
+            image={imgPlaceholder}
           />
           <div className={classes.details}>
             <CardContent className={classes.content}>
@@ -160,7 +155,6 @@ function UserGameList({username, isProfile}) {
   const ROWS_PER_PAGE = 5;
 
   const [games, setGames] = useState([]);
-  const [selectedGame, setSelectedGame] = useState(null);
   const [refresh, setRefresh] = useState(true);
   const [page, setPage] = useState(0);
 
@@ -181,20 +175,6 @@ function UserGameList({username, isProfile}) {
     setPage(newPage);
   };
 
-  // List changing functions
-  // async function favouriteGame(index){
-  //   let game = games[index];
-  //   const response = await fetch(url + "/favourite_usergame")
-  //     .then(response => response);
-  //   if (response.ok) {
-  //     const newGames = [...games];
-  //     newGames[index].favourite = !newGames[index].favourite;
-  //     setGames(newGames);
-  //   }
-  //   else {
-  //     console.log(response.statusText);
-  //   }
-  // }
   async function addGame(index) {
     let game = games[index];
 
@@ -209,7 +189,6 @@ function UserGameList({username, isProfile}) {
         platform: game.platform
       })
     }
-    // console.log(options);
 
     const response = await fetch(backendURL + "/create_usergame", options)
 
@@ -250,7 +229,6 @@ function UserGameList({username, isProfile}) {
       setRefresh(true);
     }
     else {
-      // console.log(response.statusText);
       dispatch(sendAlert(response.statusText, ""));
     }
   }
@@ -265,13 +243,6 @@ function UserGameList({username, isProfile}) {
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow colSpan={2}>
-            {/* <SearchBar
-                value={search}
-              /> */}
-          </TableRow>
-        </TableHead>
         <TableBody>
           {games.length > 0 ? 
             games

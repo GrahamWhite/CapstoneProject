@@ -1,9 +1,15 @@
+/*
+ *  FriendPage.js
+ *  The page that renders on the /friend route
+ *  accessed by clicking the people icon in the bottom navigation
+ *  Shows the logged in users friends and allows the user to interact with them.
+ *
+ *  Revision History
+ *      Lynn Varga, 4-20-2021: Init
+ */
+
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { makeStyles, ThemeProvider } from '@material-ui/core';
-//import Typography from '@material-ui/core/Typography'
-import BottomNavbar from '../BottomNavbar';
-import AuthNavbar from '../AuthNavbar';
+import { makeStyles } from '@material-ui/core';
 import FriendsList from '../FriendsList';
 
 const useStyles = makeStyles((theme) => ({

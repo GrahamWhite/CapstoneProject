@@ -1,5 +1,13 @@
+/*
+ *  RegisterPage.js
+ *  The page that renders on the /register route
+ *  allows users who havent logged on to register via the register form provided on the page
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import React from 'react'
-import { Typography } from '@material-ui/core';
 import RegisterForm from '../RegisterForm';
 
 function RegisterPage() {

@@ -1,11 +1,17 @@
+/*
+ *  Navbar.js
+ *  Initial top navigation bar when the user is not logged in.
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
 import { useSelector } from 'react-redux';
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,15 +48,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-{/* /* <AppBar position="static">
-        <Toolbar> className={classes.root}
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>  */}

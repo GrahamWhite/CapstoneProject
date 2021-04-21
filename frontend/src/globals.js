@@ -1,4 +1,11 @@
-
+/*
+ *  globals.js
+ *  General functions used throughout the app.
+ *  loadState and saveState are used to persist the redux state between sessions.
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
 
 export const backendURL = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
 

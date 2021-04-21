@@ -1,10 +1,17 @@
+/*
+ *  MainPage.js
+ *  The page that renders on the /main route
+ *  The user is taken here upon logging in and acts as a home page to access site functionality
+ *  not present in the bottom navigation bar.
+ *
+ *  Revision History
+ *      Lynn Varga, 4-20-2021: Init
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
-import { makeStyles, ThemeProvider } from '@material-ui/core';
-import BottomNavbar from '../BottomNavbar';
-import AuthNavbar from '../AuthNavbar';
-import SearchBar from "material-ui-search-bar";
+import { Typography, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     center: {
@@ -29,11 +36,6 @@ function MainPage() {
     <div>
         <h1 className={classes.center}>Welcome to Tink, {storedUsername}!</h1>
         <Typography variant="body1" className={classes.center} style={{color:"#666", marginTop:"2.5%"}}>With Tink you can keep track of your game library over all your platforms, find friends to play games with and see common games with friends!</Typography>
-        {/* <SearchBar 
-          // value={this.state.value}
-          // onChange={(newValue) => this.setState({ value: newValue })}
-          // onRequestSearch={() => doSomethingWith(this.state.value)}
-          className={classes.center}/> */}
           <Button className={`${classes.center} ${classes.button}`} component={Link} to={"/Help"} variant="contained" color="secondary">Learn how to use Tink</Button>
           <Typography variant="body1" className={classes.center} style={{color:"#666", marginTop:"2.5%"}}>To see your library of games, friends, and edit your profile:</Typography>
           <Button className={`${classes.center} ${classes.button}`} component={Link} to={"/profile"} variant="contained" color="primary">See your profile</Button>
@@ -48,7 +50,3 @@ function MainPage() {
 }
 
 export default MainPage
-
-/* className={`${classes.half} ${classes.center}`} */
-
-/* <Button component={Link} to={"/search"} color="inherit" className={classes.center}>Search</Button> */

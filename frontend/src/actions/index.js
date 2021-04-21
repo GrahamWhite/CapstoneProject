@@ -1,3 +1,12 @@
+/*
+ *  actions.js
+ *  Predetermined actions for redux reducers.
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
+// loginReducer
 export const signIn = () => {
   return {
     type: 'SIGN_IN'
@@ -10,6 +19,7 @@ export const signOut = () => {
   }
 }
 
+// alertMessageReducer
 export const sendAlert = (message, severity) => {
   return {
     type: 'SEND_ALERT',

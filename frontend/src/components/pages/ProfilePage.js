@@ -1,6 +1,16 @@
+/*
+ *  ProfilePage.js
+ *  The page that renders on the /profile route
+ *  Unlike the User page, the profile page renders separate options 
+ *  tailored to the logged in and authorized user.
+ *
+ *  Revision History
+ *      Lynn Varga, 4-20-2021: Init
+ */
+
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes, Button, IconButton } from '@material-ui/core'
+import { useHistory } from 'react-router-dom';
+import { Tabs, Typography, Tab, makeStyles, Grid, useTheme, Box, IconButton } from '@material-ui/core'
 import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
 import FriendsList from '../FriendsList';
@@ -52,13 +62,9 @@ const useStyles = makeStyles((theme) => ({
 function ProfilePage() {
   const classes = useStyles();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
-
-  const [loading, setLoading] = useState(true);
-  const [currentTab, setCurrentTab] = useState(0);
-
   const history = useHistory();
 
+  const [currentTab, setCurrentTab] = useState(0);
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -77,7 +83,6 @@ function ProfilePage() {
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(err => console.log(err));
-    // console.log(user);
   }, [])
 
   const handleChange = (event, newValue) => {

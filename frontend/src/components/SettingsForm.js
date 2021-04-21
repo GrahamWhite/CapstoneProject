@@ -1,9 +1,19 @@
+/*
+ *  SettingsForm.js
+ *  The Settings form, only used for changing your account email and bio at the moment.
+ *  Should redirect you to the login page if you are not logged in.
+ *  Uses formik for form handling and yup for validation
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { backendURL, ReAuthenticate } from '../globals';
 import { useHistory } from 'react-router';
-import { Container, CssBaseline, Grid, makeStyles, Paper, Button, TextField, Avatar, Typography, TextareaAutosize } from '@material-ui/core';
+import { Container, CssBaseline, Grid, makeStyles, Button, TextField, Avatar, Typography } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { sendAlert } from '../actions';
 import { useDispatch } from 'react-redux';
@@ -48,7 +58,6 @@ function SettingsForm(props) {
   //Events
   async function sendToServer(values) {
     setMessage('');
-    // console.log(values);
 
     if (!storedUsername){
       ReAuthenticate(props);
@@ -62,8 +71,6 @@ function SettingsForm(props) {
       },
       body:JSON.stringify(values)
     };
-
-    // console.log(values);
 
     let responseData = "";
     try {
@@ -91,10 +98,8 @@ function SettingsForm(props) {
       .then(response => response.json())
       .then(data => { 
         setUser(data); 
-        // console.log(data); 
       })
       .catch(err => console.log(err));
-    // console.log(user);
   }, [])
 
   const validationSchema = yup.object({
