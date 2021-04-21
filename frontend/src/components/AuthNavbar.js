@@ -1,9 +1,16 @@
+/*
+ *  AuthNavbar.js
+ *  The top nav bar that renders when the user is logged in
+ *
+ *  Revision History
+ *      Lynn Varga, 4-20-2021: Init
+ */
+
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom'
-import MenuIcon from '@material-ui/icons/Menu';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import HelpIcon from '@material-ui/icons/Help';
 import { sendAlert, signOut } from '../actions';
 
@@ -36,9 +43,6 @@ function AuthNavbar(props) {
     <div className={classes.root}>
       <AppBar position='fixed'>
         <Toolbar>
-          {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon/>
-          </IconButton> */}
           <Typography variant="h6" className={classes.title}>
             Tink
           </Typography>

@@ -1,4 +1,13 @@
-import { Container, Grid, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core';
+/*
+ *  UserHeader.js
+ *  Displays the username, profile picture and bio of the user.
+ *  Takes in a user prop to load the data
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
+import { Grid, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
@@ -36,12 +45,6 @@ function UserHeader({user}) {
           <Typography variant="body1" align={matches ? 'left' : 'center'} style={{color:"#666", marginTop:"2.5%"}}>{user.bio ? `Bio: ${user.bio}` : `${user.username} doesn't have a bio`}</Typography>
         </Grid>
       </Grid>
-      {/* <Grid item xs={12} sm={9}>
-        <Typography variant="body1" style={{color:"#666"}}>{user.bio}</Typography>
-      </Grid> */}
-      {/* <Grid item xs={12} sm={6}>
-        <Typography variant="h6" color="initial">Here are my steam, origin, etc links!</Typography>
-      </Grid> */}
     </Grid>
   )
 }

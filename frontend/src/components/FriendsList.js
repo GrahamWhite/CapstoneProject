@@ -1,3 +1,12 @@
+/*
+ *  FriendsList.js
+ *  Lists the friends of a user, determined by the username passed into the props
+ *  Also renders the add and remove buttons depending on whether the user is on their own profile page.
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import {
   Avatar,
   Button,
@@ -11,7 +20,6 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableFooter,
   TableHead,
@@ -21,10 +29,6 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from 'react-router-dom'
-import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
-import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -32,7 +36,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { sendAlert } from "../actions";
 import { useDispatch } from "react-redux";
 
-function UserItem({ user, index, history, location, setRefresh, isProfile, isFriend, removeFriend }) {
+function UserItem({ user, history, setRefresh, isProfile, removeFriend }) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -57,8 +61,6 @@ function UserItem({ user, index, history, location, setRefresh, isProfile, isFri
     friendIcon: {
       width: theme.spacing(7),
       height: theme.spacing(7),
-      // backgroundColor: theme.palette.primary.main,
-      // color: theme.palette.primary.contrastText,
 
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.primary.contrastText,
@@ -215,11 +217,9 @@ function FriendsList({username, isProfile}) {
   const ROWS_PER_PAGE = 5;
 
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [currentUser] = useState(new URLSearchParams(window.location.search).get('username'));
   const [page, setPage] = useState(0);
   const [refresh, setRefresh] = useState(true);
-  // const [search, setSearch] = useState("");
 
   const history = useHistory();
   const location = useLocation();
@@ -236,14 +236,12 @@ function FriendsList({username, isProfile}) {
         .then(response => response.json())
         .then(data => { 
           setUsers(data); 
-          // console.log(data); 
         });
 
       fetch(url + "/select_userfriends?username=" + localStorage.getItem('username'))
         .then(response => response.json())
         .then(data => { 
           friendList = data; 
-          // console.log(data); 
         });
       
       for (let user in userList) {
@@ -252,7 +250,6 @@ function FriendsList({username, isProfile}) {
         }
       }
       setUsers(userList);
-      // console.log('loaded users', userList);
     }
     else {
       let userList = [];
@@ -281,37 +278,9 @@ function FriendsList({username, isProfile}) {
     setPage(newPage);
   };
 
-  // async function removeFriend(friendUsername) {
-  //   const options = {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body:JSON.stringify({
-  //       username: localStorage.getItem('username'),
-  //       friendUsername: friendUsername
-  //     })
-  //   }
-  //   const response = await fetch(url + "/delete_friend", options);
-
-  //   if (response.ok) {
-  //     setRefresh(true);
-  //   }
-  //   else {
-  //     console.log(response.statusText);
-  //   }
-  // }
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow colSpan={2}>
-            {/* <SearchBar
-                value={search}
-              /> */}
-          </TableRow>
-        </TableHead>
         <TableBody>
           { users.length > 0 ? 
               users

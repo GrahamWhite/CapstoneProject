@@ -1,10 +1,16 @@
+/*
+ *  HelpPage.js
+ *  The page that renders on the /help route
+ *  documentation and help guide on how to use the app
+ *  accessed
+ *
+ *  Revision History
+ *      Lynn Varga, Graham White, 4-20-2021: Init
+ */
+
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
-import { makeStyles, ThemeProvider } from '@material-ui/core';
-import BottomNavbar from '../BottomNavbar';
-import AuthNavbar from '../AuthNavbar';
-import SearchBar from "material-ui-search-bar";
+import { Typography, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     center: {

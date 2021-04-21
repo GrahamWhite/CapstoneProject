@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box } from '@material-ui/core'
-import BottomNavbar from '../BottomNavbar';
-import AuthNavbar from '../AuthNavbar';
+/*
+ *  MainPage.js
+ *  The page that renders on the /match route
+ *  The user is taken here upon logging in and acts as a home page to access site functionality
+ *  not present in the bottom navigation bar.
+ *
+ *  Revision History
+ *      Lynn Varga, 4-20-2021: Init
+ */
+
+import React, { useState } from 'react';
+import { makeStyles, Grid } from '@material-ui/core'
 import MatchHeader from '../MatchHeader';
-import UserGameList from '../UserGameList';
-import { backendURL } from '../../globals';
 import MatchList from '../MatchList';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,45 +34,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MatchPage() {
-  const url = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
-  const storedUsername = localStorage.getItem('username');
-
   const classes = useStyles();
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
-  const [loading, setLoading] = useState(true);
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const [user, setUser] = useState({
+  const [user] = useState({
     username: localStorage.getItem('username') ? localStorage.getItem('username') : 'Invalid User',
-    // email: 'tmills9208@conestogac.on.ca',
-    // bio: 'Hi, i am a person!',
     avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder
-
   });
-
-  const [matchedUser, setMatchedUser] = useState({
+  const [matchedUser] = useState({
     username: new URLSearchParams(window.location.search).get('username') ?
       new URLSearchParams(window.location.search).get('username') : 'Invalid User 2',
-    // email: 'notaemail@gmail.com',
-    // bio: "I'm a gamer and I love games",
     avatarImg: 'https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg', // basic img placeholder,
-    
   });
-
-  useEffect(() => {
-    //fetch(backendURL + '/user')
-  }, [])
 
   return (
     <div>
       <Grid container className={classes.root} spacing={2}>
         <Grid item xs={12}>
         <MatchHeader user={user} matchedUser={matchedUser}/>
-        </Grid>
-        <Grid item xs={12}>
-        {/* <Typography variant="h5" className={classes.center}>{user.username} + {matchedUser.username}</Typography> */}
         </Grid>
         <Grid item xs={12}>
           <MatchList/>

@@ -1,9 +1,14 @@
+/*
+ *  AlertSnackbar.js
+ *  Popup message system for the web app
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
 import { connect, useDispatch } from 'react-redux';
 import { clearAlert } from '../actions';
@@ -64,7 +69,6 @@ function AlertSnackbar(props) {
   const classes = useStyles();
   return (
     <div>
-      {/* <Button onClick={reduxDispatch}>Redux Test</Button> */}
       <Snackbar
         className={classes.snackbar}
         key={messageInfo ? messageInfo.key : undefined}
@@ -95,5 +99,3 @@ const mapState = (state) => {
 
 const connectedComponent = connect(mapState, null)(AlertSnackbar);
 export { connectedComponent as AlertSnackbar };
-
-// export default AlertSnackbar;

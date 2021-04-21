@@ -1,3 +1,11 @@
+/*
+ *  GamesList.js
+ *  Lists all available games saved to the database for the user to interact with.
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import {
   Avatar,
   Button,
@@ -11,15 +19,12 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
-  TableFooter,
   TableHead,
-  TablePagination,
   TableRow,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
 import AddIcon from "@material-ui/icons/Add";
 import StarIcon from "@material-ui/icons/Star";
@@ -30,7 +35,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { sendAlert } from "../actions";
 import { useDispatch } from "react-redux";
 
-function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
+function GameItem({game, index, addToUserGames, onRemove}) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -55,8 +60,6 @@ function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
     gameIcon: {
       width: theme.spacing(7),
       height: theme.spacing(7),
-      // backgroundColor: theme.palette.primary.main,
-      // color: theme.palette.primary.contrastText,
 
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.primary.contrastText,
@@ -67,8 +70,6 @@ function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
   const imgPlaceholder =
     "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
 
-  // const updateHandler = dummyData => onUpdate({ ...props.game, ...props.dummyData});
-
   const [selected, setSelected] = useState(false);
   const [favourite, setFavourite] = useState(false);
   const [disableAddButton, setDisableAddButton] = useState(false);
@@ -77,17 +78,6 @@ function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
     setFavourite(game.favourite);
     setSelected(game.selected);
   }, [game.favourite])
-
-  // function addSelected(index) {
-
-  // }
-
-  // const onSelected = (index, selected) => {
-  //   const newGames = [...games];
-  //   for (let game of newGames) game.selected = false;
-  //   newGames[index].selected = selected;
-  //   setGames(newGames);
-  // }
 
   return (
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
@@ -103,7 +93,7 @@ function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
           : ''}
           <CardMedia
             className={classes.cover}
-            image={imgPlaceholder /*process.env.PUBLIC_URL + game.img*/}
+            image={imgPlaceholder}
             
           />
           <div className={classes.details}>
@@ -149,15 +139,6 @@ function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
           >
             Remove
           </Button>
-          {/* <Button
-            size="small"
-            color="primary"
-            variant="contained"
-            startIcon={<StarIcon />}
-            onClick={() => onFavourite(index)}
-          >
-            Favourite
-          </Button> */}
         </CardActions>
       ) : (
         ""
@@ -166,7 +147,7 @@ function GameItem({game, index, url, onSelected, addToUserGames, onRemove}) {
   );
 }
 
-function GamesList(props) {
+function GamesList() {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -175,14 +156,8 @@ function GamesList(props) {
   }));
   const classes = useStyles();
 
-  const ROWS_PER_PAGE = 5;
-
   const [games, setGames] = useState([]);
-  const [selectedGames, setSelectedGames] = useState([]);
-  // const [allGamesButton, setAllGamesButton] = useState(false);
-  const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
-  const [refresh, setRefresh] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -193,44 +168,18 @@ function GamesList(props) {
       fetch(url + "/select_games")
         .then(response => response.json())
         .then(data => { 
-          setGames(data); 
-          // console.log(data);
+          setGames(data);
         });
-      // console.log(games);
     }
     else {
       fetch(url + "/search_games?name=" + search)
         .then(response => response.json())
         .then(data => { 
           setGames(data); 
-          // console.log(data);
         });
-      // console.log(games);
     }
     
   }, [search]);
-
-  // useEffect(() => {
-  //   if (selectedGames.length > 0) {
-  //     setAllGamesButton(true);
-  //   }
-  //   else {
-  //     setAllGamesButton(false);
-  //   }
-  // }, [selectedGames]);
-
-  // List changing functions
-
-  const onChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  // const favouriteGame = index => {
-  //   const newGames = [...games];
-  //   let favourited = newGames[index].favourite;
-  //   newGames[index].favourite = !favourited;
-  //   setGames(newGames);
-  // }
 
   async function addGame(index) {
     let game = games[index];
@@ -246,22 +195,9 @@ function GamesList(props) {
         platform: game.platform
       })
     }
-    // console.log(options);
 
-    // backendURL + "/create_usergame"
-    // const thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/create_usergame"
     const response = await fetch(backendURL + "/create_usergame", options)
-      //.then(response => response.json());
 
-    // console.log('response', response);
-      // .then(() => {
-      //   setRefresh(true);
-      // });
-    // const response = await fetch(url + "/create_usergame", options);
-    // const data = await response.json();
-
-    // console.log(response);
-    // console.log(data);
     if (response.ok) {
       dispatch(sendAlert(game.name + ' added to your library!', "success"));
     }
@@ -269,25 +205,6 @@ function GamesList(props) {
       dispatch(sendAlert(response.statusText, "success"));
     }
   }
-
-  // async function AddFriend(){
-  //   const options = {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body:JSON.stringify({
-  //       username: localStorage.getItem('username'),
-  //       friendUsername: user.username
-  //     })
-  //   }
-
-  //   fetch(backendURL + "/create_friend", options)
-  //     .then(response => response.json())
-  //     .then(() => {
-  //       setRefresh(true);
-  //     });
-  // }
 
   async function removeGame(index) {
     let game = games[index];
@@ -304,10 +221,7 @@ function GamesList(props) {
       })
     }
     const response = await fetch(url + "/delete_usergame", options);
-    // console.log(response);
-    
-    //const data = await response.json();
-    //console.log(data);
+
     if (response.ok) {
       dispatch(sendAlert(game.name + ' removed from your library!', "success"));
     }
@@ -337,7 +251,6 @@ function GamesList(props) {
         <TableBody>
           {games.length > 0 ? 
             games
-            // .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
             .map((game, index) => (
               <TableRow key={index} className={classes.tableItem}>
                 <GameItem 
@@ -352,22 +265,7 @@ function GamesList(props) {
             ))
           : 'Uh oh, no games loaded'}
         </TableBody>
-        {/* <TableFooter>
-          <TableRow>
-            <div style={{ width: "100%", margin: "auto" }}>
-              { games.length > 0 ? 
-              <TablePagination
-                rowsPerPageOptions={[5]}
-                count={games.length}
-                page={page}
-                rowsPerPage={ROWS_PER_PAGE}
-                siblingcount={0}
-                onChangePage={onChangePage}
-              />
-              : ''}
-            </div>
-          </TableRow>
-        </TableFooter> */}
+
       </Table>
     </TableContainer>
   );

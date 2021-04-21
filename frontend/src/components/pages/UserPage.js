@@ -1,6 +1,16 @@
+/*
+ *  UserPage.js
+ *  The page that renders on the /user route
+ *  loads the specified username in the URL search query
+ *  not to be confused with the profile page which loads based on the logged in user
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Tabs, Typography, Paper, Tab, AppBar, makeStyles, Grid, useMediaQuery, useTheme, Box, responsiveFontSizes, Button } from '@material-ui/core'
+import { useHistory, useLocation } from 'react-router-dom';
+import { Tabs, Typography, Tab, makeStyles, Grid, useMediaQuery, useTheme, Box, Button } from '@material-ui/core'
 import UserHeader from '../UserHeader';
 import UserGameList from '../UserGameList';
 import FriendsList from '../FriendsList';
@@ -51,12 +61,9 @@ const useStyles = makeStyles((theme) => ({
 
 function UserPage() {
   const classes = useStyles();
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   const [user, setUser] = useState({});
 
-  const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(true);
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -77,7 +84,6 @@ function UserPage() {
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(err => console.log(err));
-    // console.log(user);
 
     return () => {
       setRefresh(!refresh);

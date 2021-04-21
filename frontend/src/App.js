@@ -1,14 +1,20 @@
-import {React, useState, useEffect} from 'react'
-//import './App.css';
-import { darkTheme, lightTheme } from './components/PrimaryTheme.js';
+/*
+ *  App.js
+ *  The main application loaded by src/index.js
+ *  Handles routing to the different pages with the use of react-router
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
+import React from 'react'
+import { lightTheme } from './components/PrimaryTheme.js';
 import Navbar from './components/Navbar';
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
-import HomePage from './components/pages/HomePage';
 import RegisterPage from './components/pages/RegisterPage'
 import LoginPage from './components/pages/LoginPage';
 import MainPage from './components/pages/MainPage';
 import SearchPage from './components/pages/SearchPage';
-import NotificationPage from './components/pages/NotificationPage';
 import FriendPage from './components/pages/FriendPage';
 import MatchPage from './components/pages/MatchPage';
 import ProfilePage from './components/pages/ProfilePage';
@@ -32,13 +38,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App(props) {
-
-  const [isDarkTheme, setTheme] = useState(true);
   const classes = useStyles();
 
   return (
     <Router className="App">
-      <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+      <ThemeProvider theme={lightTheme}>
        {props.loggedIn ? <AuthNavbar/> : <Navbar/>}
         <div style={{marginTop:'5rem'}}>
           <Switch>
@@ -47,10 +51,8 @@ function App(props) {
             </Route>
             <Route path='/login' exact component={LoginPage}/>
             <Route path='/register' exact component={RegisterPage}/>
-
             <Route path='/main' exact component={MainPage}/>
             <Route path='/search' exact component={SearchPage}/>
-            {/* <Route path='/notification' exact component={NotificationPage}/> */}
             <Route path='/friend' exact component={FriendPage}/>
             <Route path='/match' exact component={MatchPage}/>
             <Route path='/profile' component={ProfilePage}/>

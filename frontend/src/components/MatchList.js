@@ -1,9 +1,17 @@
+/*
+ *  MatchList.js
+ *  Renders the list of matched games and platforms. 
+ *  Requires the user to be logged in and to have searched for a user to 
+ *  match with in the URL Search Parameters
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import {
   Avatar,
-  Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   Grid,
@@ -11,7 +19,6 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableFooter,
   TableHead,
@@ -19,14 +26,11 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState, useCallback } from "react";
-import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
+import React, { useEffect, useState } from "react";
 import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { backendURL } from "../globals";
 
-function GameItem({game, index}) {
+function GameItem({ game }) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -51,8 +55,6 @@ function GameItem({game, index}) {
     gameIcon: {
       width: theme.spacing(7),
       height: theme.spacing(7),
-      // backgroundColor: theme.palette.primary.main,
-      // color: theme.palette.primary.contrastText,
 
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.primary.contrastText,
@@ -72,7 +74,7 @@ function GameItem({game, index}) {
           
           <CardMedia
             className={classes.cover}
-            image={imgPlaceholder /*process.env.PUBLIC_URL + game.img*/}
+            image={imgPlaceholder}
           />
           <div className={classes.details}>
             <CardContent className={classes.content}>
@@ -106,7 +108,6 @@ function MatchList(props) {
   const ROWS_PER_PAGE = 5;
 
   const [games, setGames] = useState([]);
-  const [selectedGame, setSelectedGame] = useState(null);
   const [page, setPage] = useState(0);
 
   const [user, setUser] = useState(localStorage.getItem('username'));
@@ -132,25 +133,12 @@ function MatchList(props) {
     setPage(newPage);
   };
 
-  // List changing functions
-  // Idea to display additional info for matched games on click
-  const onSelected = (index, selected) => {
-    const newGames = [...games];
-    for (let game of newGames) game.selected = false;
-    newGames[index].selected = selected;
-    setGames(newGames);
-  }
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow colSpan={2}>
-          <Typography variant="h5" align="center" className={classes.center}>You have {games.length} games in common!</Typography>
-          {/* <Typography variant="h5" align="center" className={classes.center}>You both play on these platforms: {games.platform}</Typography>*/}
-            {/* <SearchBar
-                value={search}
-              /> */}
+            <Typography variant="h5" align="center" className={classes.center}>You have {games.length} games in common!</Typography>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -162,7 +150,6 @@ function MatchList(props) {
                 <GameItem 
                   game={game}
                   index={index}
-                  //Add platform into array
                 />
               </TableRow>
             ))

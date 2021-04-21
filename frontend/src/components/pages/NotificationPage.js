@@ -1,8 +1,15 @@
+/*
+ *  NotificationPage.js
+ *  The page that renders on the /notification route
+ *  This is an incomplete feature and is currently replaced by the AlertSnackbar
+ *  component in order to let users know of any updates to their account, games, friends, etc.
+ *
+ *  Revision History
+ *      Lynn Varga, 4-20-2021: Init
+ */
+
 import React from 'react'
-import { Typography } from '@material-ui/core';
-import BottomNavbar from '../BottomNavbar';
-import AuthNavbar from '../AuthNavbar';
-import { makeStyles, ThemeProvider } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   center: {

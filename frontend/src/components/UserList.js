@@ -1,7 +1,15 @@
+/*
+ *  UserList.js
+ *  Renders the list of all users on the database.
+ *  Allows users to lookup, send friend requests to, and match the selected user
+ *
+ *  Revision History
+ *      Tyler Mills, 4-20-2021: Init
+ */
+
 import {
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
@@ -10,7 +18,6 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableFooter,
   TableHead,
@@ -18,17 +25,14 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "material-ui-search-bar"; // https://www.npmjs.com/package/material-ui-search-bar
-import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { useHistory } from "react-router";
 import { backendURL } from "../globals";
 import { sendAlert } from "../actions";
 import { useDispatch } from "react-redux";
 
-function UserItem({ user, index, history, isFriend, setRefresh }) {
+function UserItem({ user, history, setRefresh }) {
   const useStyles = makeStyles((theme) => ({
     root: {},
     fullHeight: {
@@ -53,8 +57,6 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
     userIcon: {
       width: theme.spacing(7),
       height: theme.spacing(7),
-      // backgroundColor: theme.palette.primary.main,
-      // color: theme.palette.primary.contrastText,
 
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.primary.contrastText,
@@ -63,8 +65,6 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
   const classes = useStyles();
 
   const imgPlaceholder = "https://st3.depositphotos.com/13159112/17145/v/600/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg";
-
-  const [selected, setSelected] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -109,26 +109,19 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
     <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
       <Grid container spacing={1} >
         <Grid item width={"70%"}>
-          {/* <CardActionArea
-            className={classes.fullHeight}
-            onClick={() => {
-              goToUserProfile(user.username);
-            }}
-          > */}
-            <CardContent>
-              <CardMedia
-                className={classes.cover}
-                image={imgPlaceholder /*process.env.PUBLIC_URL + user.img*/}
-              />
-              <div className={classes.details}>
-                <CardContent className={classes.content}>
-                  <Typography component="h6" variant="h6">
-                    {user.username}
-                  </Typography>
-                </CardContent>
-              </div>
-            </CardContent>
-          {/* </CardActionArea> */}
+          <CardContent>
+            <CardMedia
+              className={classes.cover}
+              image={imgPlaceholder}
+            />
+            <div className={classes.details}>
+              <CardContent className={classes.content}>
+                <Typography component="h6" variant="h6">
+                  {user.username}
+                </Typography>
+              </CardContent>
+            </div>
+          </CardContent>
         </Grid>
         <Grid item width={"30%"}>
           <CardActions>
@@ -158,62 +151,9 @@ function UserItem({ user, index, history, isFriend, setRefresh }) {
       </Grid>
     </Card>
   );
-
-  // new one. selecting doesnt work for some reason.
-  // return (
-  //   <Card className={`${classes.card} ${classes.tableItem}`} variant="outlined">
-  //     <CardActionArea
-  //       className={!selected ? classes.fullHeight : ""}
-  //       onClick={() => {
-  //         setSelected(!selected);
-  //       }}
-  //     >
-  //       <CardContent>
-  //         <CardMedia
-  //           className={classes.cover}
-  //           image={""}
-  //         />
-  //         <div className={classes.details}>
-  //           <CardContent className={classes.content}>
-  //             <Typography component="h5" variant="h5">
-  //               {user.username}
-  //             </Typography>
-  //           </CardContent>
-  //         </div>
-  //       </CardContent>
-  //     </CardActionArea>
-  //     {selected ?
-  //       <CardActions>
-  //         <Button
-  //           color="primary"
-  //           variant="outlined"
-  //           onClick={() => addFriend(user.username)}
-  //           >
-  //           Add Friend
-  //         </Button>
-  //         <Button
-  //           color="primary"
-  //           variant="outlined"
-  //           onClick={() => goToUserProfile()}
-  //           >
-  //           Profile
-  //         </Button>
-  //         <Button
-  //           color="primary"
-  //           variant="outlined"
-  //           onClick={() => goToMatch()}
-  //         >
-  //           Match 
-  //         </Button>
-  //       </CardActions>
-  //       :
-  //       ""
-  //     }
-  //   </Card>
-  // );
 }
 
-function UserList(props) {
+function UserList() {
   const useStyles = makeStyles((theme) => ({
     root: {},
     cover: {
@@ -246,38 +186,6 @@ function UserList(props) {
     
     return userList;
   }
-
-  // async function getFriendsAndUpdate(search) {
-  //   let updatedList = [];
-  //   let friendList = [];
-    
-  //   let userList = await getUsers(search);
-
-  //   let thisUrl = url + "/select_userfriends?username=" + localStorage.getItem('username');
-  //   //thisUrl = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000/select_userfriends?username=lynn_varga";
-  //   friendList = await fetch(thisUrl)
-  //     .then(response => response.json())
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-    
-  //   console.log("userList", userList);
-  //   console.log("friendList", friendList);
-
-  //   // userIndex returns the index, NOT the user object as I thought it would
-  //   for (let userIndex in userList) {
-  //     let currentUser = userList[userIndex];
-  //     // console.log("currentUser", currentUser);
-  //     for (let friendIndex in friendList) {
-  //       let bool = userList[userIndex]._id === friendList[friendIndex].userId ? true : false;
-  //       currentUser.isFriend = bool;
-  //       console.log("bool stuff", bool);
-  //     }
-  //     updatedList.push(currentUser);
-  //   }
-  //   console.log(updatedList);
-  //   return updatedList;
-  // }
 
   useEffect(() => {
 
