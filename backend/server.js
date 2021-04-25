@@ -99,22 +99,22 @@ app.post('/update_favorite', (req, res) => {
     UserGameController.UpdateFavorite(req, res);
 })
 
-// //Platform Routes
-// app.get('/select_platforms', (req, res) => {
-//     PlatformController.SelectPlatforms(req, res);
-// })
+//Platform Routes
+app.get('/select_platforms', (req, res) => {
+    PlatformController.SelectPlatforms(req, res);
+})
 
-// app.get('/select_platform', (req, res) => {
-//     PlatformController.SelectPlatform(req, res);
-// })
+app.get('/select_platform', (req, res) => {
+    PlatformController.SelectPlatform(req, res);
+})
 
-// app.post('/delete_platform', (req, res) => {
-//     PlatformController.DeletePlatform(req, res);
-// })
+app.post('/delete_platform', (req, res) => {
+    PlatformController.DeletePlatform(req, res);
+})
 
-// app.post('/create_platform', (req, res) => {
-//     PlatformController.CreatePlatform(req, res);
-// })
+app.post('/create_platform', (req, res) => {
+    PlatformController.CreatePlatform(req, res);
+})
 
 
 //Friend Routes
