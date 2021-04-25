@@ -162,7 +162,7 @@ function UserList() {
   }));
   const classes = useStyles();
 
-  const ROWS_PER_PAGE = 5;
+  const ROWS_PER_PAGE = 10;
 
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
