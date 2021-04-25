@@ -65,34 +65,32 @@ const CreateGame = async (req, res) => {
 
     if(req.body.name && req.body.platform) {
 
-        let platform = await Platform.find({name: req.body.platform});
+        let platform = await Platform.findOne({name: req.body.platform});
 
-        if(platform[0]){
+        if(platform){
 
-            let exist = await Game.find({name: req.body.name, platform: platform[0]._id});
+            let game = await Game.findOne({name: req.body.name, platform: platform.name});
 
-            if(!exist[0]){
-
-
-                let game = new Game({
+            if(!game){
+                let newGame = new Game({
                     name: req.body.name,
-                    platform: platform[0]._id
+                    platform: platform.name
                 });
 
-                game.save();
-
-                res.send(game);
+                try{
+                    newGame.save();
+                }
+                catch(e){
+                    res.send("Could not save game");
+                }
+                
+                res.send("New game added");
             }
             res.send("Error: game record already exists");
-
         }
-
         res.send("Error: platform not found");
-
     }
-
     res.send("Error: name and platform must be defined");
-
 }
 
 exports.SelectGames = SelectGames;
