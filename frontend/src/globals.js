@@ -7,7 +7,8 @@
  *      Tyler Mills, 4-20-2021: Init
  */
 
-export const backendURL = "http://ec2-35-183-39-123.ca-central-1.compute.amazonaws.com:3000";
+export const backendURL = "http://ec2-15-222-253-45.ca-central-1.compute.amazonaws.com:3000";
+//export const backendURL = "http://localhost:3000";
 
 export const ReAuthenticate = (props) => {
   localStorage.setItem('username', '');
