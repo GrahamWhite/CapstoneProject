@@ -226,14 +226,14 @@ function UserList() {
                     setRefresh={setRefresh}/>
                 </TableRow>
               ))
-          : 'hmm thats weird, there are no users'}
+          : 'Your search did not return any results'}
         </TableBody>
         <TableFooter>
           <TableRow>
             <div style={{ width: "100%", margin: "auto" }}>
               <TablePagination
                 rowsPerPageOptions={[ROWS_PER_PAGE]}
-                count={users.length}
+                count={users && users.length > 0 ? users.length : 0}
                 page={page}
                 rowsPerPage={ROWS_PER_PAGE}
                 siblingcount={0}
